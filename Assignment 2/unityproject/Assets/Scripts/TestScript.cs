@@ -6,6 +6,7 @@ public class TestScript : MonoBehaviour
 {
     [SerializeField]
     GameObject obj;
+    public Material mat;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,14 +21,14 @@ public class TestScript : MonoBehaviour
 
     public void changeColorGreen()
     {
-        obj.GetComponent<Material>().color = Color.green;
+        mat.color = Color.green;
     }
     public void changeColorRed()
     {
-        obj.GetComponent<Material>().color = Color.red;
+        mat.color = Color.red;
     }
      public void changeColorBlue()
     {
-        obj.GetComponent<Material>().color = Color.blue;
+        mat.color = Color.blue;
     }
 }

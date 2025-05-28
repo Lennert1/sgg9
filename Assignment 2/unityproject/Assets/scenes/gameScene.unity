@@ -599,6 +599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj: {fileID: 298012773}
+  mat: {fileID: 2100000, guid: 61e2a0a3ec293e84eab6f030d06e6327, type: 2}
 --- !u!65 &298012775
 BoxCollider:
   m_ObjectHideFlags: 0
