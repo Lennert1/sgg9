@@ -7,34 +7,40 @@ using UnityEngine;
 using UnityEngine.Networking;
 using WebSocketSharp;
 
-public class RestServerCaller : SingletonPersistant<RestServerCaller>
+
+namespace gamelogic.ServerClasses
 {
-    //delegate für eigens definierte Funktionen: parameter ServerMessage, return void
-    //werden nach dem fertigen ausführen eines REST-Calls aufgerufen, dürfen weggelassen werden
-    public delegate void ServerRequestCallBack(ServerMessage response);
-    
-    
-    //Coroutine-Starter für Rest-Calls
-    public void GenericSendCall(string url, Dictionary<string, object> values,
-        ServerRequestCallBack callback = null)
-    {
-        StartCoroutine(GenericSend(url, values, callback));
-    }
 
-    public void GenericSendCall(string url, WWWForm form, ServerRequestCallBack callback = null)
-    {
-        StartCoroutine(GenericSend(url, form, callback));
-    }
 
-    public void GenericRequestCall(string url, ServerRequestCallBack callback = null)
+    public class RestServerCaller : SingletonPersistant<RestServerCaller>
     {
-        StartCoroutine(GenericRequest(url, callback));
-    }
-    
-    
-    //Tatsächliche REST_Calls, als Coroutine Aufrufen
-    
-    public IEnumerator GenericSend(string url, Dictionary<string, object> values,
+
+        //delegate für eigens definierte Funktionen: parameter ServerMessage, return void
+        //werden nach dem fertigen ausführen eines REST-Calls aufgerufen, dürfen weggelassen werden
+        public delegate void ServerRequestCallBack(ServerMessage response);
+
+
+        //Coroutine-Starter für Rest-Calls
+        public void GenericSendCall(string url, Dictionary<string, object> values,
+            ServerRequestCallBack callback = null)
+        {
+            StartCoroutine(GenericSend(url, values, callback));
+        }
+
+        public void GenericSendCall(string url, WWWForm form, ServerRequestCallBack callback = null)
+        {
+            StartCoroutine(GenericSend(url, form, callback));
+        }
+
+        public void GenericRequestCall(string url, ServerRequestCallBack callback = null)
+        {
+            StartCoroutine(GenericRequest(url, callback));
+        }
+
+
+        //Tatsächliche REST_Calls, als Coroutine Aufrufen
+
+        public IEnumerator GenericSend(string url, Dictionary<string, object> values,
             ServerRequestCallBack callback = null)
         {
             //little safety check
@@ -55,7 +61,7 @@ public class RestServerCaller : SingletonPersistant<RestServerCaller>
             //little safety check
             if (!url.StartsWith(TemplateSettings.url))
                 url = TemplateSettings.url + url;
-       
+
             using (var www = UnityWebRequest.Post(url, form))
             {
                 yield return www.SendWebRequest();
@@ -80,5 +86,6 @@ public class RestServerCaller : SingletonPersistant<RestServerCaller>
                 callback?.Invoke(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
             }
         }
-    
+
+    }
 }
