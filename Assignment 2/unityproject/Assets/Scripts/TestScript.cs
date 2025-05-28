@@ -17,4 +17,17 @@ public class TestScript : MonoBehaviour
     {
         obj.transform.Rotate(new Vector3(0, 1, 0));
     }
+
+    void changeColorGreen()
+    {
+        obj.GetComponent<Material>().color = Color.green;
+    }
+    void changeColorRed()
+    {
+        obj.GetComponent<Material>().color = Color.red;
+    }
+    void changeColorBlue()
+    {
+        obj.GetComponent<Material>().color = Color.blue;
+    }
 }
