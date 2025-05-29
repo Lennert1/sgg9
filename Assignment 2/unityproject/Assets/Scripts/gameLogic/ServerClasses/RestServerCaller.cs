@@ -38,9 +38,11 @@ namespace gamelogic.ServerClasses
         }
 
 
+        
+        
         //Tatsächliche REST_Calls, als Coroutine Aufrufen
 
-        public IEnumerator GenericSend(string url, Dictionary<string, object> values,
+        private IEnumerator GenericSend(string url, Dictionary<string, object> values,
             ServerRequestCallBack callback = null)
         {
             //little safety check
@@ -56,7 +58,7 @@ namespace gamelogic.ServerClasses
             }
         }
 
-        public IEnumerator GenericSend(string url, WWWForm form, ServerRequestCallBack callback = null)
+        private IEnumerator GenericSend(string url, WWWForm form, ServerRequestCallBack callback = null)
         {
             //little safety check
             if (!url.StartsWith(TemplateSettings.url))
@@ -72,7 +74,7 @@ namespace gamelogic.ServerClasses
             }
         }
 
-        public IEnumerator GenericRequest(string url, ServerRequestCallBack callback = null)
+        private IEnumerator GenericRequest(string url, ServerRequestCallBack callback = null)
         {
             //little safety check
             if (!url.StartsWith(TemplateSettings.url))
