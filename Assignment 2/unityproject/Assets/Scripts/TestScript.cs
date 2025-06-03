@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using gamelogic.ServerClasses;
+using Newtonsoft.Json;
 using UnityEngine;
 using Object = System.Object;
 
@@ -10,6 +11,8 @@ public class TestScript : MonoBehaviour
     [SerializeField]
     GameObject obj;
     public Material mat;
+
+    User usr;
     
     Dictionary<String, Object> greenColor = new Dictionary<String, Object>();
     Dictionary<String, Object> redColor = new Dictionary<String, Object>();
@@ -20,6 +23,8 @@ public class TestScript : MonoBehaviour
         greenColor.Add("color", 0);
         redColor.Add("color", 1);
         blueColor.Add("color", 2);
+
+        usr = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(new User(1234, "Pony")));
     }
     void Update()
     {
