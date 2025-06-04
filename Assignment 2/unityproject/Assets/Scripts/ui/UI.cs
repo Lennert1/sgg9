@@ -18,7 +18,7 @@ public class UI : MonoBehaviour
     void LoadUserData()
     {
         RestServerCaller.Instance.GenericRequestCall("", UserCallback);
-        Debug.LogWarning("Missing URL in method LoadUserData() in class UI");
+        Debug.LogWarning("URL in method LoadUserData() in class UI not yet added!");
     }
 
     public void UserCallback(ServerMessage response)
