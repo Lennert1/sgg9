@@ -34,16 +34,16 @@ public class TestScript : MonoBehaviour
     public void changeColorGreen()
     {
         mat.color = Color.green;
-        RestServerCaller.Instance.GenericSendCall("url", greenColor,null);
+        RestServerCaller.Instance.GenericSendCall("api/change_color/", greenColor,null);
     }
     public void changeColorRed()
     {
         mat.color = Color.red;
-        RestServerCaller.Instance.GenericSendCall("url", redColor,null);
+        RestServerCaller.Instance.GenericSendCall("api/change_color/", redColor,null);
     }
      public void changeColorBlue()
     {
         mat.color = Color.blue;
-        RestServerCaller.Instance.GenericSendCall("url", blueColor,null);
+        RestServerCaller.Instance.GenericSendCall("api/change_color/", blueColor,null);
     }
 }
