@@ -15,9 +15,11 @@ public class Card
 
     // ========== //
 
-    public Card(int type)
+    public Card(int type, int lvl = 1, int count = 1)
     {
         this.type = type;
+        this.lvl = lvl;
+        this.count = count;
     }
 }
 
@@ -29,7 +31,7 @@ public class User
     public int lvl = 1;
     public int gold;
     public int armorpoints;
-    public List<Card> inventory;
+    public List<Card> cards;
 
     // ========== //
 
@@ -38,25 +40,14 @@ public class User
         this.uid = uid;
         this.name = name;
 
-        inventory = new List<Card>();
-
-        inventory.Add(new Card(23));
-        inventory.Add(new Card(7));
-        inventory.Add(new Card(320));
+        cards = new List<Card>();
     }
 
-    // ========== //
-
-    public RestServerCaller.ServerRequestCallBack callback()
+    public User(int uid, string name, List<Card> cards)
     {
-        return (ServerMessage serverMessage) =>
-        {
-            if (serverMessage.IsError())
-            {
-                Debug.Log("Error");
-                return;
-            }
-            var serverData = JsonConvert.DeserializeObject<User>(serverMessage.message);
-        };
+        this.uid = uid;
+        this.name = name;
+
+        this.cards = cards;
     }
 }
