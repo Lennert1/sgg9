@@ -24,8 +24,10 @@ public class TestScript : MonoBehaviour
         redColor.Add("color", 1);
         blueColor.Add("color", 2);
 
-        User t = new User(1234, "Pony", new List<Card>() {new Card(3,1,1), new Card(17,1,4), new Card(4,3,1)});
+        User t = new User(1234, "Pony", new List<Card>() { new Card(3, 1, 1), new Card(17, 1, 4), new Card(4, 3, 1) });
         usr = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(t));
+
+        RestServerCaller.Instance.GenericSendCall("api/login/", t);
     }
     void Update()
     {

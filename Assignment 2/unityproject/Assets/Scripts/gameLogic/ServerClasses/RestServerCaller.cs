@@ -27,6 +27,12 @@ namespace gamelogic.ServerClasses
             StartCoroutine(GenericSend(url, values, callback));
         }
 
+        public void GenericSendCall(string url, System.Object values,
+            ServerRequestCallBack callback = null)
+        {
+            StartCoroutine(GenericSend(url, values, callback));
+        }
+
         public void GenericSendCall(string url, WWWForm form, ServerRequestCallBack callback = null)
         {
             StartCoroutine(GenericSend(url, form, callback));
@@ -43,6 +49,23 @@ namespace gamelogic.ServerClasses
         //Tatsächliche REST_Calls, als Coroutine Aufrufen
 
         private IEnumerator GenericSend(string url, Dictionary<string, object> values,
+            ServerRequestCallBack callback = null)
+        {
+            //little safety check
+            if (!url.StartsWith(TemplateSettings.url))
+                url = TemplateSettings.url + url;
+            using (var www = UnityWebRequest.Post(url, JsonConvert.SerializeObject(values), "application/json"))
+            {
+                yield return www.SendWebRequest();
+                if (www.downloadHandler.text.IsNullOrEmpty())
+                    throw new Exception("Server did not respond. Is the server up? or does it receive the request?");
+                Debug.Log(www.downloadHandler.text);
+                Debug.Log(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
+                callback?.Invoke(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
+            }
+        }
+
+        private IEnumerator GenericSend(string url, System.Object values,
             ServerRequestCallBack callback = null)
         {
             //little safety check
