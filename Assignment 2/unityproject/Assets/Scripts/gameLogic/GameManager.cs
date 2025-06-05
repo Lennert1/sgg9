@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     #region fields
 
     [SerializeField] private UI activeUI;
+    [SerializeField] private UI[] allUIs;
     public User usrData;
 
     #endregion
@@ -22,6 +23,12 @@ public class GameManager : MonoBehaviour
     {
         if (gameManager != null) Debug.LogError("Multiple Instances of GameManager!");
         else gameManager = this;
+
+        foreach (UI u in allUIs)
+        {
+            u.SetActive(false);
+        }
+        activeUI.SetActive(true);
     }
 
     #endregion
@@ -30,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     public void SetUIActive(UI ui)
     {
-        activeUI.SetActive(false);
+        activeUI.Unload();
 
         ui.SetActive(true);
         activeUI = ui;
@@ -54,9 +61,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        usrData = JsonConvert.DeserializeObject<User>(response.message);
-
-        
+        usrData = JsonConvert.DeserializeObject<User>(response.message);        
     }
 
     #endregion

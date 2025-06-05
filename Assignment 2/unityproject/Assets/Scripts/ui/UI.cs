@@ -13,20 +13,18 @@ public class UI : MonoBehaviour
         gameManager = GameManager.GetGameManager();
     }
 
-    public void SetActive(bool v)
+    public void SetActive(bool b)
     {
-        if (v) // activate
-        {
-            gameObject.SetActive(true);
-        }
-        else // deavtivate
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(b);
     }
 
     public void LoadUI(UI ui)
     {
         gameManager.SetUIActive(ui);
+    }
+
+    public void Unload()
+    {
+        SetActive(false);
     }
 }
