@@ -11,4 +11,13 @@ def change_color(request):
     color_data = json.loads(request.body).get("color")
     ServerClass.color = int(color_data)
     print("Empfangene Farbe (REST):", color_data)
-    return  JsonResponse({'status': 'ok'})
+    return  JsonResponse({'color': f"{color_data}"})
+
+@csrf_exempt
+def login(request):
+    name = json.loads(request.body).get("name")
+    uid = json.loads(request.body).get("uid")
+
+    print("Name: ", name)
+    print("UID: ", uid)
+    return  JsonResponse({'status': "ok"})
