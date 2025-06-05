@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/DjangoCore/utilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/ServerClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/ServerClass.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/ServerClasses/RestServerCaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/ServerClasses/RestServerCaller.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -119,7 +122,7 @@
       <workItem from="1749049647995" duration="4229000" />
       <workItem from="1749071995967" duration="2295000" />
       <workItem from="1749074731366" duration="609000" />
-      <workItem from="1749113946320" duration="1145000" />
+      <workItem from="1749113946320" duration="5103000" />
     </task>
     <servers />
   </component>

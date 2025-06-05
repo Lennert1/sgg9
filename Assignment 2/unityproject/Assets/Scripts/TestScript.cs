@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using gamelogic.ServerClasses;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -36,17 +37,44 @@ public class TestScript : MonoBehaviour
 
     public void changeColorGreen()
     {
-        mat.color = Color.green;
+        
         RestServerCaller.Instance.GenericSendCall("api/change_color/", greenColor,null);
     }
     public void changeColorRed()
     {
-        mat.color = Color.red;
+        
         RestServerCaller.Instance.GenericSendCall("api/change_color/", redColor,null);
     }
      public void changeColorBlue()
     {
-        mat.color = Color.blue;
+        
         RestServerCaller.Instance.GenericSendCall("api/change_color/", blueColor,null);
+    }
+
+    public void updateColor()
+    {
+        RestServerCaller.Instance.GenericRequestCall("api/change_color/",changecolor);
+    }
+
+    public void changecolor(ServerMessage response)
+    {
+        if (response.IsError())
+        {
+            Debug.Log("Error");
+            return;
+        }
+
+        Debug.Log(response);
+        Debug.Log(JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message));
+        JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message)
+            .TryGetValue("color", out var value);
+        Debug.Log(value);
+        switch ((int)value)
+        {
+            case 0: mat.color = Color.green; break;
+            case 1: mat.color = Color.red; break;
+            case 2: mat.color = Color.blue; break;
+        }
+        
     }
 }

@@ -59,7 +59,7 @@ namespace gamelogic.ServerClasses
                 yield return www.SendWebRequest();
                 if (www.downloadHandler.text.IsNullOrEmpty())
                     throw new Exception("Server did not respond. Is the server up? or does it receive the request?");
-                Debug.Log(www.downloadHandler.text);
+                ///Debug.Log(www.downloadHandler.text);
                 Debug.Log(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
                 callback?.Invoke(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
             }
