@@ -28,5 +28,4 @@ def login(request):
 
 @csrf_exempt
 def get_color(request):
-    json.loads()
-    return  utilities.server_message_response("{\"color\": \""+"1"+"\"}","DATA")
+    return  utilities.server_message_response("{\"color\": \""+color+"\"}","DATA")
