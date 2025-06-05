@@ -64,8 +64,7 @@ public class TestScript : MonoBehaviour
             return;
         }
 
-        Debug.LogWarning(response);
-        //Debug.Log(JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message));
+        Debug.Log(response);
         JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message)
             .TryGetValue("color", out var value);
         Debug.Log(value);
