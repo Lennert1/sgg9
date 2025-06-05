@@ -53,7 +53,7 @@ public class TestScript : MonoBehaviour
 
     public void updateColor()
     {
-        RestServerCaller.Instance.GenericRequestCall("api/change_color/",changecolor);
+        RestServerCaller.Instance.GenericRequestCall("api/update_color/",changecolor);
     }
 
     public void changecolor(ServerMessage response)
@@ -64,16 +64,17 @@ public class TestScript : MonoBehaviour
             return;
         }
 
-        Debug.Log(response);
-        Debug.Log(JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message));
+        Debug.LogWarning(response);
+        //Debug.Log(JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message));
         JsonConvert.DeserializeObject<Dictionary<String, Object>>(response.message)
             .TryGetValue("color", out var value);
         Debug.Log(value);
-        switch ((int)value)
+        switch (value)
         {
-            case 0: mat.color = Color.green; break;
-            case 1: mat.color = Color.red; break;
-            case 2: mat.color = Color.blue; break;
+            case "0": mat.color = Color.green; break;
+            case "1": mat.color = Color.red; break;
+            case "2": mat.color = Color.blue; break;
+            default: Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAh!"); break;
         }
         
     }
