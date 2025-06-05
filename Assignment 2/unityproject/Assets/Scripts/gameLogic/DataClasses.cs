@@ -35,6 +35,7 @@ public class User
 
     // ========== //
 
+    [JsonConstructor]
     public User(int uid, string name)
     {
         this.uid = uid;

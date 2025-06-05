@@ -8,29 +8,25 @@ public class UI : MonoBehaviour
 {
     protected GameManager gameManager;
 
-    User data;
-
     void Awake()
     {
         gameManager = GameManager.GetGameManager();
     }
 
-    void LoadUserData()
+    public void SetActive(bool v)
     {
-        RestServerCaller.Instance.GenericRequestCall("", UserCallback);
-        Debug.LogWarning("URL in method LoadUserData() in class UI not yet added!");
+        if (v) // activate
+        {
+            gameObject.SetActive(true);
+        }
+        else // deavtivate
+        {
+            gameObject.SetActive(false);
+        }
     }
 
-    public void UserCallback(ServerMessage response)
+    public void LoadUI(UI ui)
     {
-        if (response.IsError())
-        {
-            Debug.Log("Error");
-            return;
-        }
-
-        User usr = JsonConvert.DeserializeObject<User>(response.message);
-
-        // process received data
+        gameManager.SetUIActive(ui);
     }
 }
