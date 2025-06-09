@@ -7,6 +7,8 @@
 	using UnityEngine;
 	using UnityEngine.UI;
 
+	/* This is a script to track the player's location 
+	 */
 	public class LocationStatus : MonoBehaviour
 	{
 
@@ -14,7 +16,11 @@
 		Text _statusText;
 
 		private AbstractLocationProvider _locationProvider = null;
-		void Start()
+
+		Location currLoc;
+
+
+        void Start()
 		{
 			if (null == _locationProvider)
 			{
@@ -22,10 +28,9 @@
 			}
 		}
 
-
 		void Update()
 		{
-			Location currLoc = _locationProvider.CurrentLocation;
+			currLoc = _locationProvider.CurrentLocation;
 
 			if (currLoc.IsLocationServiceInitializing)
 			{
@@ -51,5 +56,16 @@
 			}
 
 		}
-	}
+
+		/* Functions to access the player's location */
+		public double GetLocationLatitude()
+		{
+			return currLoc.LatitudeLongitude.x;
+		}
+        public double GetLocationLongitude()
+        {
+            return currLoc.LatitudeLongitude.y;
+        }
+
+    }
 }
