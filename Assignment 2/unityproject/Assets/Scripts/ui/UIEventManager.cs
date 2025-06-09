@@ -1,10 +1,12 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/* This is a script that handles the button animations using Tweening
+    Drag this script to the canvas of your UI 
+    and add your buttons to the Selectables in the Editor */
 public class UIEventManager : MonoBehaviour
 {
     [Header("References")]
