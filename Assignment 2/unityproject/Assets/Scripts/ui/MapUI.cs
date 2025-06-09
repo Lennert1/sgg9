@@ -14,9 +14,7 @@ public class MapUI : MonoBehaviour
 
     public void Awake()
     {
-        Assert.IsNotNull(levelText);
-        Assert.IsNotNull(usernameText);
-        Assert.IsNotNull(goToMenuButton);
+       
     }
 
     public void updateLevel(int level)
