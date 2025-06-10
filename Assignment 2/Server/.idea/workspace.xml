@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="" />
+    <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/consumers_basic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/consumers_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/routing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -116,6 +121,7 @@
       <workItem from="1749071995967" duration="2295000" />
       <workItem from="1749074731366" duration="609000" />
       <workItem from="1749113946320" duration="5857000" />
+      <workItem from="1749558031924" duration="3570000" />
     </task>
     <servers />
   </component>
