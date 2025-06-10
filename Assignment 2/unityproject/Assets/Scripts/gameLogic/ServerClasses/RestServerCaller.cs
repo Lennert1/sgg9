@@ -27,7 +27,7 @@ namespace gamelogic.ServerClasses
             StartCoroutine(GenericSend(url, values, callback));
         }
 
-        public void GenericSendCall(string url, System.Object values,
+        public void GenericSendCall(string url, object values,
             ServerRequestCallBack callback = null)
         {
             StartCoroutine(GenericSend(url, values, callback));
