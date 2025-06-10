@@ -6,25 +6,23 @@ using Newtonsoft.Json;
 
 public class UI : MonoBehaviour
 {
-    protected GameManager gameManager;
-
-    void Awake()
-    {
-        gameManager = GameManager.GetGameManager();
-    }
-
-    public void SetActive(bool b)
+    public virtual void SetActive(bool b)
     {
         gameObject.SetActive(b);
     }
 
-    public void LoadUI(UI ui)
-    {
-        gameManager.SetUIActive(ui);
-    }
 
-    public void Unload()
+    public virtual void Unload()
     {
         SetActive(false);
     }
+
+    #region inputs
+
+    public void LoadUI(UI ui)
+    {
+        GameManager.Instance.SetUIActive(ui);
+    }
+
+    #endregion
 }

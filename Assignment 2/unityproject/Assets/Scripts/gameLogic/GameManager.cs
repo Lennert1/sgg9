@@ -6,7 +6,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager gameManager;
+    public static GameManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+        private set
+        {
+            instance = value;
+        }
+    }
+    private static GameManager instance;
 
 
     #region fields
@@ -21,8 +32,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (gameManager != null) Debug.LogError("Multiple Instances of GameManager!");
-        else gameManager = this;
+        if (instance != null) Debug.LogError("Multiple Instances of GameManager!");
+        else instance = this;
 
         foreach (UI u in allUIs)
         {
@@ -64,14 +75,5 @@ public class GameManager : MonoBehaviour
         usrData = JsonConvert.DeserializeObject<User>(response.message);        
     }
 
-    #endregion
-
-    #region static functions
-
-    public static GameManager GetGameManager()
-    {
-        return gameManager;
-    }
-    
     #endregion
 }
