@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-public class MapUI : MonoBehaviour
+public class MapUI : UI
 {
     [SerializeField] TextMeshProUGUI levelText;
     [SerializeField] TextMeshProUGUI usernameText;

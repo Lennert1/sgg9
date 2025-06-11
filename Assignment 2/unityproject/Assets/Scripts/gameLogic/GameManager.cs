@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
         if (instance != null) Debug.LogError("Multiple Instances of GameManager!");
         else instance = this;
 
+        LoadUserData();
+
         foreach (UI u in allUIs)
         {
             u.SetActive(false);
@@ -60,8 +62,17 @@ public class GameManager : MonoBehaviour
 
     public void LoadUserData()
     {
-        RestServerCaller.Instance.GenericRequestCall("", UserCallback);
+        // for testing purposes only:
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16), new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) }, new List<Character>());
+
+        //RestServerCaller.Instance.GenericRequestCall("", UserCallback);
         Debug.LogWarning("URL in method LoadUserData() in class UI not yet added!");
+    }
+
+    public void SaveUserData()
+    {
+        //RestServerCaller.Instance.GenericSendCall("", usrData);
+        Debug.LogWarning("URL in method SaveUserData() in class UI not yet added!");
     }
 
     public void UserCallback(ServerMessage response)
@@ -72,7 +83,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        usrData = JsonConvert.DeserializeObject<User>(response.message);        
+        usrData = JsonConvert.DeserializeObject<User>(response.message);
     }
 
     #endregion
