@@ -45,12 +45,12 @@ public class InventoryUI : UI
         cardDisplay = new List<GameObject>();
         for (int i = 0; i < cards.Count; i++)
         {
-
             int xOffset = i % cardsPerRow;
             int yOffset = i / cardsPerRow;
-            Vector3 pos = cardDisplayTransform.position + new Vector3(xOffset * positionOffset.x, -yOffset * positionOffset.y, 0);
+            Vector3 pos = new Vector3(xOffset * positionOffset.x, -yOffset * positionOffset.y, 0);
 
-            GameObject card = Instantiate(cardPrefab, pos, Quaternion.identity, cardDisplayTransform);
+            GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, cardDisplayTransform);
+            card.transform.localPosition = pos;
             card.GetComponent<Image>().color = new Color((float)cards[i].type / 16f, (float)cards[i].lvl / 16f, (float)cards[i].count / 16f);
 
             cardDisplay.Add(card);

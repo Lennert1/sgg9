@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using gamelogic.ServerClasses;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -27,6 +28,9 @@ public class Card
 public class User
 {
     public int uid;
+
+    // party ID: 0 := not member of a party
+    public int pid = 0;
     public string name;
     public int lvl = 1;
     public int gold;
@@ -56,6 +60,27 @@ public class User
     }
 }
 
+[Serializable]
+public class Party
+{
+    public int pid;
+    public int memberCount
+    {
+        get { return members.Count; }
+    }
+    public int hp;
+    public int shield;
+    public List<int> members;
+
+    [JsonConstructor]
+    public Party(User leader)
+    {
+        members = new List<int>();
+        members.Add(leader.uid);
+        hp = leader.armorpoints;
+    }
+}
+
 public class Character
 {
     public enum Type
@@ -73,7 +98,7 @@ public class Character
 
     //Kartenlimit ist denke ich sinnvoll
     private int deckLimit = 10;
-    
+
     // ========== //
 
     public Character(Type type)
@@ -82,10 +107,10 @@ public class Character
         xp = 0;
         lvl = 1;
         deck = new List<Card>();
-        
+
         //Knight hat mehr Hp
         if (type == Type.Knight)
-        { 
+        {
             hp = 150;
         }
         else
