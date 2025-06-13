@@ -6,6 +6,7 @@ using gamelogic.ServerClasses;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class Card
@@ -158,5 +159,69 @@ public class Character
     {
         this.xp += rewardXp;
         CheckLvlUp();
+    }
+}
+
+class Enemy
+{
+    public int lvl;
+    public int maxHp;
+    public int hp;
+    public List<Card> deck;
+
+
+    public Enemy(int lvl, List<Card> deck)
+    {
+        this.lvl = lvl;
+        maxHp = lvl * 100;
+        hp = maxHp;
+        if (deck == null || deck.Count == 0)
+        {
+            CreateDeck();
+        }
+        else
+        {
+            this.deck = deck;
+        }
+    }
+
+    //Leeres Deck -> 1 Karte von Typ 0
+    public void CreateDeck()
+    {
+        this.deck = new List<Card>();
+        this.deck.Add(new Card(0, lvl, 1));
+    }
+    public virtual Card action()
+    {
+        return deck[new System.Random().Next(deck.Count)];
+    }
+}
+
+class Boss : Enemy
+{
+    
+    public Boss(int lvl) : base(lvl, CreateBossDeck(lvl))
+    {
+        maxHp = lvl * 120;
+        hp = maxHp;
+    }
+
+    public Boss(int lvl, List<Card> deck) : base(lvl, deck)
+    {
+        maxHp = lvl * 120;
+        hp = maxHp;
+    }
+
+    //bisher auch hier: Leeres Deck -> 1 Karte von Typ 0
+    private static List<Card> CreateBossDeck(int lvl)
+    {
+        List<Card> deck = new List<Card>();
+        deck.Add(new Card(0, lvl, 1));
+        return deck;
+    }
+    
+    public override Card action()
+    {
+        return base.action();
     }
 }
