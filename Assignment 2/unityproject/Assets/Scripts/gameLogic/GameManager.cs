@@ -61,6 +61,12 @@ public class GameManager : MonoBehaviour
         ui.SetActive(true);
         activeUI = ui;
     }
+    
+    public void StartBattle(Dungeon dungeon)
+    {
+        // ui stuff
+        BattleManager.Instance.StartBattle(usrParty, dungeon);
+    }
 
     #endregion
 
