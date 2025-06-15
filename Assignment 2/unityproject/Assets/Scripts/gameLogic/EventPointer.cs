@@ -26,7 +26,7 @@ public class EventPointer : MonoBehaviour
 
     void Start()
     {
-        mapUIManager = GameObject.Find("UI").GetComponent<MapUI>();
+        mapUIManager = GameObject.Find("UI").GetComponentInChildren<MapUI>();
         mapEventManager = GameObject.Find("EventManager").GetComponent<MapEventManager>();
     }
 
@@ -47,7 +47,7 @@ public class EventPointer : MonoBehaviour
 
     private void OnMouseDown()
     {
-        playerLocation = GameObject.Find("UI").GetComponent<LocationStatus>();
+        playerLocation = GameObject.Find("UI").GetComponentInChildren<LocationStatus>();
         
         if (playerLocation == null) 
         {
