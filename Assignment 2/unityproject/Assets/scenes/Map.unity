@@ -6684,6 +6684,7 @@ GameObject:
   - component: {fileID: 61519795522434034}
   - component: {fileID: 4466043002313749107}
   - component: {fileID: 162612357886321916}
+  - component: {fileID: 8807617284109474901}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -6691,6 +6692,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8807617284109474901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807617284109474900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a356389f03c17488d3e342be4510a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
 --- !u!114 &8914210493077052974
 MonoBehaviour:
   m_ObjectHideFlags: 0
