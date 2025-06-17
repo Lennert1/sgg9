@@ -24,7 +24,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UI activeUI;
     [SerializeField] private UI[] allUIs;
+
+
     public User usrData;
+    public Party usrParty;
+
+    // == 0 if not entered any PoI
+    public int currentPoiID;
 
     #endregion
 
@@ -34,6 +40,8 @@ public class GameManager : MonoBehaviour
     {
         if (instance != null) Debug.LogError("Multiple Instances of GameManager!");
         else instance = this;
+
+        LoadUserData();
 
         foreach (UI u in allUIs)
         {
@@ -53,6 +61,12 @@ public class GameManager : MonoBehaviour
         ui.SetActive(true);
         activeUI = ui;
     }
+    
+    public void StartBattle(Dungeon dungeon)
+    {
+        // ui stuff
+        BattleManager.Instance.StartBattle(usrParty, dungeon);
+    }
 
     #endregion
 
@@ -60,9 +74,31 @@ public class GameManager : MonoBehaviour
 
     public void LoadUserData()
     {
-        RestServerCaller.Instance.GenericRequestCall("", UserCallback);
-        Debug.LogWarning("URL in method LoadUserData() in class UI not yet added!");
+        // for testing purposes only:
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16), new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) }, new List<Character>());
+
+#warning missing: REST-Call to retrieve user data
+        //RestServerCaller.Instance.GenericRequestCall("", UserCallback);
     }
+
+    public void SaveUserData()
+    {
+#warning missing: REST-Call to send user data
+        //RestServerCaller.Instance.GenericSendCall("", usrData);
+    }
+
+    public void LoadPartyData()
+    {
+        // for testing purposes only:
+        usrParty = new Party(usrData);
+
+#warning missing: REST-Call to retrieve user data
+        //RestServerCaller.Instance.GenericRequestCall("", PartyCallback);
+    }
+
+    #endregion
+
+    #region Callback Functions
 
     public void UserCallback(ServerMessage response)
     {
@@ -72,7 +108,18 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        usrData = JsonConvert.DeserializeObject<User>(response.message);        
+        usrData = JsonConvert.DeserializeObject<User>(response.message);
+    }
+    
+    public void PartyCallback(ServerMessage response)
+    {
+        if (response.IsError())
+        {
+            Debug.Log("Error");
+            return;
+        }
+
+        usrParty = JsonConvert.DeserializeObject<Party>(response.message);
     }
 
     #endregion

@@ -12,8 +12,13 @@ public class EventPointer : MonoBehaviour
     [SerializeField] private float amplitude = 2f;
     [SerializeField] private float frequency = 0.5f;
 
-
     LocationStatus playerLocation;
+
+    public int eventID;
+
+    /* Access other scripts */
+    MapEventManager mapEventManager;
+    MapUI mapUIManager;
 
     /* Store the Event coordinates --> Maybe we store them on a database?
         Here the eventPosition is set when it is instantiated in the SpawnOnMap script */
@@ -21,7 +26,8 @@ public class EventPointer : MonoBehaviour
 
     void Start()
     {
-        
+        mapUIManager = GameObject.Find("UI").GetComponentInChildren<MapUI>();
+        mapEventManager = GameObject.Find("EventManager").GetComponent<MapEventManager>();
     }
 
     // Update is called once per frame
@@ -41,7 +47,7 @@ public class EventPointer : MonoBehaviour
 
     private void OnMouseDown()
     {
-        playerLocation = GameObject.Find("UI").GetComponent<LocationStatus>();
+        playerLocation = GameObject.Find("UI").GetComponentInChildren<LocationStatus>();
         
         if (playerLocation == null) 
         {
@@ -54,11 +60,22 @@ public class EventPointer : MonoBehaviour
         
         var distance = currentPlayerLocation.GetDistanceTo(eventPos);
         
-        Debug.Log(distance);
+        Debug.Log("Distance: " + distance);
 
-        if (distance <= 50.0) 
+        if (mapUIManager == null)
         {
-            // Add event, when the pointer is clicked   
+            Debug.Log("The UI manager is somehow null!");
+            return;
+        }
+
+        /* If player is close enough, they can join the event */
+        if (distance <= mapEventManager.maxDistance)
+        {
+            mapUIManager.DisplayStartEventPanel();
+        }
+        else
+        {
+            mapUIManager.DisplayNotInRangePanel();
         }
     }
 }

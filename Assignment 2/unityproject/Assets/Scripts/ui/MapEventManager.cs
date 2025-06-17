@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapPlayer : MonoBehaviour
+public class MapEventManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public int maxDistance = 60;
     void Start()
     {
         
