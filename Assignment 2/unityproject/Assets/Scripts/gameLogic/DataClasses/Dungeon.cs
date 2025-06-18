@@ -5,6 +5,21 @@ using UnityEngine;
 
 public class Dungeon
 {
+    public int miniGameType = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private int averageLvl;
     public Boss boss;
     public int rewardXp;
