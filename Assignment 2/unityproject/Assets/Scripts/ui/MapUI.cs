@@ -55,10 +55,4 @@ public class MapUI : UI
         isEventPanelActive = false;
     }
 
-    public void JoinButtonClicked()
-    {
-        // Loads the GameScene
-        SceneManager.LoadScene(2);
-    }
-
 }
