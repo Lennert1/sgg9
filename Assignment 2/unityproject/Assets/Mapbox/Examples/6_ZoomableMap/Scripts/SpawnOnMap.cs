@@ -25,6 +25,8 @@
 
 		List<GameObject> _spawnedObjects;
 
+		[SerializeField] Transform markerContainer;
+
 		void Start()
 		{
 			_locations = new Vector2d[_locationStrings.Length];
@@ -33,7 +35,7 @@
 			{
 				var locationString = _locationStrings[i];
 				_locations[i] = Conversions.StringToLatLon(locationString);
-				var instance = Instantiate(_markerPrefab);
+				var instance = Instantiate(_markerPrefab, markerContainer);
 
 				// Store the event position in the EventPointer script
 				instance.GetComponent<EventPointer>().eventPosition = _locations[i];
