@@ -1,11 +1,13 @@
+using gamelogic.ServerClasses;
+using Mapbox.Unity.Location;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
-using gamelogic.ServerClasses;
 using UnityEngine;
-using Newtonsoft.Json;
 
 public class UI : MonoBehaviour
 {
+    
     public virtual void SetActive(bool b)
     {
         gameObject.SetActive(b);
@@ -16,6 +18,8 @@ public class UI : MonoBehaviour
     {
         SetActive(false);
     }
+
+    
 
     #region inputs
 

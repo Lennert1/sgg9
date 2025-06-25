@@ -1,11 +1,10 @@
 
+using Mapbox.Unity.Location;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
-using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
-
+using UnityEngine.UI;
 public class MapUI : UI
 {
     [SerializeField] TextMeshProUGUI levelText;
@@ -15,7 +14,7 @@ public class MapUI : UI
     [SerializeField] private GameObject eventPanelInRange;
     [SerializeField] private GameObject eventPanelNOTInRange;
 
-    /* Ensures that eventPanelInRange and eventPanelNOTInRange cannot be active at the same time */ 
+    /* Ensures that eventPanelInRange and eventPanelNOTInRange cannot be active at the same time */
     bool isEventPanelActive = false;
 
 
@@ -27,7 +26,7 @@ public class MapUI : UI
     public void backToMenu()
     {
         SceneManager.LoadScene(0);
-    } 
+    }
 
     /* If the user is in range while clicking on a event pointer, they can start the event */
     public void DisplayStartEventPanel()
@@ -54,5 +53,6 @@ public class MapUI : UI
         eventPanelNOTInRange.SetActive(false);
         isEventPanelActive = false;
     }
+
 
 }
