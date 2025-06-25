@@ -25,7 +25,7 @@ public class MapUI : UI
 
     public void backToMenu()
     {
-        SceneManager.LoadScene(0);
+        
     }
 
     /* If the user is in range while clicking on a event pointer, they can start the event */
