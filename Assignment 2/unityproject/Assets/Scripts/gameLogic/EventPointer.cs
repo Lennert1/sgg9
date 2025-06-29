@@ -14,7 +14,7 @@ public class EventPointer : MonoBehaviour
 
     LocationStatus playerLocation;
 
-    public int eventID;
+    public MarkerType markerType;
 
     /* Access other scripts */
     MapEventManager mapEventManager;
@@ -26,7 +26,7 @@ public class EventPointer : MonoBehaviour
 
     void Start()
     {
-        mapUIManager = GameObject.Find("UI").GetComponentInChildren<MapUI>();
+        mapUIManager = GameObject.Find("MapUI").GetComponent<MapUI>();
         mapEventManager = GameObject.Find("EventManager").GetComponent<MapEventManager>();
     }
 
@@ -71,11 +71,17 @@ public class EventPointer : MonoBehaviour
         /* If player is close enough, they can join the event */
         if (distance <= mapEventManager.maxDistance)
         {
-            mapUIManager.DisplayStartEventPanel();
+            mapUIManager.DisplayStartEventPanel(markerType);
+            mapUIManager.SetMarkerType(markerType);
         }
         else
         {
             mapUIManager.DisplayNotInRangePanel();
         }
     }
+}
+
+public enum MarkerType
+{
+    DUNGEON, TAVERN, SHOP
 }

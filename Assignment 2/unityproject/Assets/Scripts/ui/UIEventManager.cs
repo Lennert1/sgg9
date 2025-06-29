@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 /* This is a script that handles the button animations using Tweening
     Drag this script to the canvas of your UI 
     and add your buttons to the Selectables in the Editor */
+/* It does not work properly, so this can be ignored.*/
 public class UIEventManager : MonoBehaviour
 {
     [Header("References")]
@@ -38,10 +40,18 @@ public class UIEventManager : MonoBehaviour
         }
     }
 
-    public virtual void OnDisable()
+
+    public void StopAllTweensAndReset()
     {
-        _scaleDownTween.Kill(true);
-        _scaleUpTween.Kill(true);
+        for (int i = 0; i < Selectables.Count; i++)
+        {
+            DOTween.Kill(Selectables[i]);
+            Selectables[i].transform.localScale = _scales[Selectables[i]];
+        }
+
+        _scaleUpTween?.Kill();
+        _scaleDownTween?.Kill();
+        Debug.Log("Reset");
     }
     
     protected virtual void AddSelectionListeners(Selectable selection)
@@ -74,6 +84,11 @@ public class UIEventManager : MonoBehaviour
 
     public void OnSelect(BaseEventData eventData)
     {
+        if (_scaleUpTween != null && _scaleUpTween.IsActive())
+        {
+            _scaleUpTween.Kill();
+        }
+
         Vector3 newScale = eventData.selectedObject.transform.localScale * _selectedAnimationScale;
         _scaleUpTween = eventData.selectedObject.transform.DOScale(newScale, _scaleDuration);
     }
@@ -81,6 +96,12 @@ public class UIEventManager : MonoBehaviour
     public void OnDeselect(BaseEventData eventData)
     {
         Selectable sel = eventData.selectedObject.GetComponent<Selectable>();
+
+        if (_scaleDownTween != null && _scaleDownTween.IsActive())
+        {
+            _scaleDownTween.Kill();
+        }
+
         _scaleDownTween = eventData.selectedObject.transform.DOScale(_scales[sel], _scaleDuration);
     }
 

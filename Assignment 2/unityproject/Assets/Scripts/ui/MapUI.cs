@@ -14,25 +14,19 @@ public class MapUI : UI
     [SerializeField] private GameObject eventPanelInRange;
     [SerializeField] private GameObject eventPanelNOTInRange;
 
+    [SerializeField] private TextMeshProUGUI joinLabel;
+
     /* Ensures that eventPanelInRange and eventPanelNOTInRange cannot be active at the same time */
     bool isEventPanelActive = false;
 
-
-    public void updateLevel(int level)
-    {
-        levelText.text = "LVL " + level;
-    }
-
-    public void backToMenu()
-    {
-        
-    }
+    MarkerType currentMarker = MarkerType.DUNGEON;
 
     /* If the user is in range while clicking on a event pointer, they can start the event */
-    public void DisplayStartEventPanel()
+    public void DisplayStartEventPanel(MarkerType markerType)
     {
         if (!isEventPanelActive)
         {
+            joinLabel.text = "Enter the " + markerType.ToString() + "?";
             eventPanelInRange.SetActive(true);
             isEventPanelActive = true;
         }
@@ -47,11 +41,44 @@ public class MapUI : UI
             isEventPanelActive = true;
         }
     }
+
+    public void EnterButtonClicked()
+    {
+        eventPanelInRange.SetActive(false);
+        isEventPanelActive = false;
+
+        switch (currentMarker) { 
+            case MarkerType.DUNGEON:
+                DungeonUI dungeonUI = GameObject.Find("UI").GetComponentInChildren<DungeonUI>(true);
+                if (dungeonUI != null) 
+                {
+                    LoadUI(dungeonUI);
+                }
+                break;
+            case MarkerType.TAVERN:
+                TavernUI tavernUI = GameObject.Find("UI").GetComponentInChildren<TavernUI>(true);
+                if(tavernUI != null)
+                {
+                    LoadUI(tavernUI);
+                }
+                break;
+            case MarkerType.SHOP:
+                Debug.Log("Shop here");
+                break;
+            default:
+                break;
+        }
+    }
     public void CloseButtonClicked()
     {
         eventPanelInRange.SetActive(false);
         eventPanelNOTInRange.SetActive(false);
         isEventPanelActive = false;
+    }
+
+    public void SetMarkerType(MarkerType markerType)
+    {
+        currentMarker = markerType;
     }
 
 

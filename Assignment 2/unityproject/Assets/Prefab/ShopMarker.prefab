@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 560679179579365905}
   - component: {fileID: 6277712939089839380}
   - component: {fileID: 8131355498454377766}
-  - component: {fileID: 5134793653882776724}
+  - component: {fileID: 857498740750545570}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: ShopMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 00e2a34fcbc67dc469b1a21b82c47fe0, type: 2}
+  - {fileID: 2100000, guid: e3f792ca3cb6efb4394882181f4fd0aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,7 +108,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &5134793653882776724
+--- !u!114 &857498740750545570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,3 +123,8 @@ MonoBehaviour:
   rotSpeed: 50
   amplitude: 2
   frequency: 0.5
+  eventID: 0
+  eventPosition:
+    x: 0
+    y: 0
+  markerType: 2

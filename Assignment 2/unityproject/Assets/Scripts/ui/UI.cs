@@ -7,7 +7,14 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
-    
+
+    private UIEventManager _uiEventManager;
+
+    private void Start()
+    {
+        _uiEventManager = GameObject.Find("UI").GetComponent<UIEventManager>();
+    }
+
     public virtual void SetActive(bool b)
     {
         gameObject.SetActive(b);
@@ -25,6 +32,10 @@ public class UI : MonoBehaviour
 
     public void LoadUI(UI ui)
     {
+        if(_uiEventManager != null)
+        {
+            _uiEventManager.StopAllTweensAndReset();
+        }
         GameManager.Instance.SetUIActive(ui);
     }
 

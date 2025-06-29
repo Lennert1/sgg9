@@ -39,8 +39,6 @@
 
 				// Store the event position in the EventPointer script
 				instance.GetComponent<EventPointer>().eventPosition = _locations[i];
-				// Store the eventID in the EventPointer script
-				instance.GetComponent<EventPointer>().eventID = i + 1;
 
 				instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
 				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
