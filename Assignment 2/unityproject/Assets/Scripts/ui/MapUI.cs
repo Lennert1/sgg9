@@ -42,6 +42,7 @@ public class MapUI : UI
         }
     }
 
+    /*When Yes-Button is clicked the scene is changed accordingly to the Type of the Marker*/
     public void EnterButtonClicked()
     {
         eventPanelInRange.SetActive(false);
@@ -63,7 +64,11 @@ public class MapUI : UI
                 }
                 break;
             case MarkerType.SHOP:
-                Debug.Log("Shop here");
+                ShopUI shopUI = GameObject.Find("UI").GetComponentInChildren<ShopUI>(true);
+                if (shopUI != null)
+                {
+                    LoadUI(shopUI);
+                }
                 break;
             default:
                 break;
