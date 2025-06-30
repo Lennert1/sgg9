@@ -20,6 +20,16 @@ public class MapUI : UI
     bool isEventPanelActive = false;
 
     MarkerType currentMarker = MarkerType.DUNGEON;
+    int currentEventID = 0;
+
+    /* Access other scripts */
+    GameManager gameManager;
+
+    protected override void Start()
+    {
+        base.Start();
+        gameManager = GameObject.Find("UI").GetComponent<GameManager>();
+    }
 
     /* If the user is in range while clicking on a event pointer, they can start the event */
     public void DisplayStartEventPanel(MarkerType markerType)
@@ -48,12 +58,22 @@ public class MapUI : UI
         eventPanelInRange.SetActive(false);
         isEventPanelActive = false;
 
+        if (gameManager == null)
+        {
+            Debug.Log("Game manager could not be found!");
+            return;
+        }
+
+        // When player clicked on enter, id in GameManager is updated
+        gameManager.currentPoiID = currentEventID;
+
         switch (currentMarker) { 
             case MarkerType.DUNGEON:
                 DungeonUI dungeonUI = GameObject.Find("UI").GetComponentInChildren<DungeonUI>(true);
                 if (dungeonUI != null) 
                 {
                     LoadUI(dungeonUI);
+                    // Socket call here
                 }
                 break;
             case MarkerType.TAVERN:
@@ -61,6 +81,7 @@ public class MapUI : UI
                 if(tavernUI != null)
                 {
                     LoadUI(tavernUI);
+                    // Socket call here
                 }
                 break;
             case MarkerType.SHOP:
@@ -68,6 +89,7 @@ public class MapUI : UI
                 if (shopUI != null)
                 {
                     LoadUI(shopUI);
+                    // Socket call here
                 }
                 break;
             default:
@@ -84,6 +106,11 @@ public class MapUI : UI
     public void SetMarkerType(MarkerType markerType)
     {
         currentMarker = markerType;
+    }
+
+    public void SetCurrentEventID(int eventID)
+    {
+        currentEventID = eventID;
     }
 
 

@@ -10,7 +10,7 @@ public class UI : MonoBehaviour
 
     private UIEventManager _uiEventManager;
 
-    private void Start()
+    protected virtual void Start()
     {
         _uiEventManager = GameObject.Find("UI").GetComponent<UIEventManager>();
     }
