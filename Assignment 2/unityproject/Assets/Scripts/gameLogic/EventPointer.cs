@@ -15,13 +15,14 @@ public class EventPointer : MonoBehaviour
     LocationStatus playerLocation;
 
     public MarkerType markerType;
+    public int eventID;
 
     /* Access other scripts */
     MapEventManager mapEventManager;
     MapUI mapUIManager;
+    
 
-    /* Store the Event coordinates --> Maybe we store them on a database?
-        Here the eventPosition is set when it is instantiated in the SpawnOnMap script */
+    /* Here the eventPosition is set when it is instantiated in the SpawnOnMap script */
     public Vector2d eventPosition;
 
     void Start()
@@ -38,7 +39,7 @@ public class EventPointer : MonoBehaviour
     }
 
 
-    /* Actual  function to make the pointer float and rotate effect */
+    /* Actual function to make the pointer float and rotate effect */
     void RotatePointer()
     {
         transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
@@ -72,7 +73,13 @@ public class EventPointer : MonoBehaviour
         if (distance <= mapEventManager.maxDistance)
         {
             mapUIManager.DisplayStartEventPanel(markerType);
+
+            /* Here every neccessary information from the EventPointer is sent to the MapUI*/ 
+
+            // This is necessary to access the right type of event for the UI
             mapUIManager.SetMarkerType(markerType);
+            // Send MapUI the eventID which the player clicked on
+            mapUIManager.SetCurrentEventID(eventID);
         }
         else
         {

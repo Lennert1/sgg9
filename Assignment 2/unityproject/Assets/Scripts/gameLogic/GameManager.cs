@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public Party usrParty;
 
     // == 0 if not entered any PoI
+    // Assigning eventIDs with following system: 1 to 99 == dungeon, 100 to 199 == taverns, 200 to 299 == shops
     public int currentPoiID;
 
     #endregion
