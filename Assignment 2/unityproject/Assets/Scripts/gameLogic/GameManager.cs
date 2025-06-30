@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UI activeUI;
     [SerializeField] private UI[] allUIs;
+    private MiniGameUI activeMiniGameUI;
 
 
     public User usrData;
@@ -62,6 +63,10 @@ public class GameManager : MonoBehaviour
         activeUI = ui;
     }
 
+    public void SetActiveMiniGameUI(MiniGameUI m) {
+        activeMiniGameUI = m;
+    }
+
     #endregion
 
     #region data management
@@ -86,6 +91,7 @@ public class GameManager : MonoBehaviour
     {
         // for testing purposes only:
         usrParty = new Party(usrData);
+        usrParty.memberPoIids.Add(123);
 
 #warning missing: REST-Call to retrieve user data
         //RestServerCaller.Instance.GenericRequestCall("", PartyCallback);

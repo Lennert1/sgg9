@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,20 +14,29 @@ public class DungeonUI : UI
 
 
     private GameObject loadedGame;
+    private int poiID;
     private Dungeon dungeon;
+    private bool waitToEnter;
 
     public override void SetActive(bool b)
     {
         base.SetActive(b);
 
-        if (b) { lobby.SetActive(true);
+        if (b) {
+            lobby.SetActive(true);
 
-#warning missing: REST-Call to retrieve dungeon data
+            poiID = GameManager.Instance.currentPoiID;
+
+#warning missing: REST-Call to retrieve dungeon data (mit GameManager.currentPOIid)
             dungeon = new Dungeon(new List<Character>() { new Character(characterType.Knight) });
 
 
             startGameButton.GetComponent<Image>().color = (GameManager.Instance.usrData.pid == 0) ? Color.grey : Color.green;
             startGameButton.enabled = GameManager.Instance.usrData.pid != 0;
+            if (GameManager.Instance.usrData.pid != 0) GameManager.Instance.LoadPartyData();
+        }
+        else {
+#warning missing: Web-Socket-Call that player exited POI
         }
     }
 
@@ -38,18 +49,36 @@ public class DungeonUI : UI
     }
 
     public void PressStartButton() {
+        if (waitToEnter) return;
+
         if (loadedGame != null)
         {
             LoadMiniGame(); return;
         }
-        
-        /* missing behavior
 
-        check for if party members ahve entered and listen for web sockets calls that others enter
+        bool allEntered = true;
+        foreach (int id in GameManager.Instance.usrParty.memberPoIids)
+        {
+            if (id != poiID)
+            {
+                allEntered = false;
+                break;
+            }
+        }
 
+        if (allEntered)
+        {
+            LoadMiniGame();
+            return;
+        }
+
+        waitToEnter = true;
+        startGameButton.GetComponent<Image>().color = Color.grey;
+        startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
+
+        /*
+            warten auf web socket calls über updates an den pois der anderen spieler und automatisch das minigame betreten wenn alle bereit sind
         */
-
-        LoadMiniGame();
     }
 
     public void LoadMiniGame() {
@@ -60,12 +89,14 @@ public class DungeonUI : UI
             loadedGame = Instantiate(miniGames[dungeon.miniGameType], transform);
         }
 
+        startGameButton.GetComponent<Image>().color = Color.blue;
+        startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Enter";
         lobby.SetActive(false);
 
         loadedGame.SetActive(true);
 
         if (!n) return;
-        loadedGame.GetComponent<MiniGame>().InitiateMiniGame(this, dungeon);
+        loadedGame.GetComponent<MiniGameUI>().InitiateMiniGame(this, dungeon);
     }
 
     public void ExitMiniGame() {
