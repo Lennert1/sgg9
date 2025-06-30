@@ -3054,7 +3054,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1220223451
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6669,7 +6669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobby: {fileID: 1620843955}
   miniGames:
-  - {fileID: 7101736650055859940, guid: 0d4d7381feac3394db5aa8f5505d3b15, type: 3}
+  - {fileID: 5529789474894485323, guid: bfb268bdab147c24a8bcb496a5ea96fa, type: 3}
   startGameButton: {fileID: 6340737293207715026}
 --- !u!222 &2788847932729547453
 CanvasRenderer:
@@ -6695,7 +6695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2965266189228660577
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -51,7 +51,7 @@ public class InventoryUI : UI
 
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, cardDisplayTransform);
             card.transform.localPosition = pos;
-            card.GetComponent<Image>().color = new Color((float)cards[i].type / 16f, (float)cards[i].lvl / 16f, (float)cards[i].count / 16f);
+            card.GetComponent<CardDisplay>().InitiateCardDisplay(cards[i]);
 
             cardDisplay.Add(card);
         }
