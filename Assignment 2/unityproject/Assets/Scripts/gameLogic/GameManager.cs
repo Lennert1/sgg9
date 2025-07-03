@@ -92,6 +92,8 @@ public class GameManager : MonoBehaviour
     {
         // for testing purposes only:
         usrParty = new Party(usrData);
+        usrParty.members.Add(65987);
+        usrParty.members.Add(2354);
         //usrParty.memberPoIids.Add(123);
 
 #warning missing: REST-Call to retrieve user data

@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Card
 {
-    public int type;
+    public int type; // 0 := backside of a card
     public int lvl = 1;
     public int count = 0;
 
