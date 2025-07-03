@@ -3115,7 +3115,7 @@ MonoBehaviour:
   goToMenuButton: {fileID: 1022597629}
   eventPanelInRange: {fileID: 1704977616}
   eventPanelNOTInRange: {fileID: 660619466}
-  joinLabel: {fileID: 0}
+  joinLabel: {fileID: 1998287610}
 --- !u!1 &1246663551
 GameObject:
   m_ObjectHideFlags: 0
@@ -5597,7 +5597,7 @@ MonoBehaviour:
   - 48.26482800032043, 11.671657936408295
   _spawnScale: 5
   _markerPrefab: {fileID: 1920343025536333545, guid: 628efb019b2c1844597ad88231efa629, type: 3}
-  markerContainer: {fileID: 0}
+  markerContainer: {fileID: 118854409}
 --- !u!4 &2031285980
 Transform:
   m_ObjectHideFlags: 0
@@ -5630,7 +5630,7 @@ MonoBehaviour:
   - 48.2646526439595, 11.671249274213794
   _spawnScale: 5
   _markerPrefab: {fileID: 1920343025536333545, guid: 6ead4fb00080edc4fbe30eb277c85ff8, type: 3}
-  markerContainer: {fileID: 0}
+  markerContainer: {fileID: 118854409}
 --- !u!114 &2031285982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5648,7 +5648,7 @@ MonoBehaviour:
   - 48.26470263855003, 11.671973470611896
   _spawnScale: 5
   _markerPrefab: {fileID: 1920343025536333545, guid: a40e782cc0d38d041a3579b0a20dcc9a, type: 3}
-  markerContainer: {fileID: 0}
+  markerContainer: {fileID: 118854409}
 --- !u!114 &61519795522434034
 MonoBehaviour:
   m_ObjectHideFlags: 0

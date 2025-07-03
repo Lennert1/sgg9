@@ -32,11 +32,12 @@ public class MapUI : UI
     }
 
     /* If the user is in range while clicking on a event pointer, they can start the event */
-    public void DisplayStartEventPanel(MarkerType markerType)
+    public void DisplayStartEventPanel()
     {
+        // Debug.Log(currentMarker);
         if (!isEventPanelActive)
         {
-            joinLabel.text = "Enter the " + markerType.ToString() + "?";
+            joinLabel.text = "Enter the " + currentMarker.ToString() + "?";
             eventPanelInRange.SetActive(true);
             isEventPanelActive = true;
         }

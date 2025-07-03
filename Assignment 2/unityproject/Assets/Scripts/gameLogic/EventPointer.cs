@@ -72,12 +72,13 @@ public class EventPointer : MonoBehaviour
         /* If player is close enough, they can join the event */
         if (distance <= mapEventManager.maxDistance)
         {
-            mapUIManager.DisplayStartEventPanel(markerType);
-
-            /* Here every neccessary information from the EventPointer is sent to the MapUI*/ 
-
             // This is necessary to access the right type of event for the UI
             mapUIManager.SetMarkerType(markerType);
+            Debug.Log("Marker type set " + markerType);
+            mapUIManager.DisplayStartEventPanel();
+
+            /* Here every neccessary information from the EventPointer is sent to the MapUI*/ 
+           
             // Send MapUI the eventID which the player clicked on
             mapUIManager.SetCurrentEventID(eventID);
         }
