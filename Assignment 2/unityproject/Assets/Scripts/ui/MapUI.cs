@@ -114,5 +114,10 @@ public class MapUI : UI
         currentEventID = eventID;
     }
 
+    public bool GetIsEventPanelActive()
+    {
+        return isEventPanelActive;
+    }
+
 
 }

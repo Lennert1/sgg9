@@ -73,8 +73,11 @@ public class EventPointer : MonoBehaviour
         if (distance <= mapEventManager.maxDistance)
         {
             // This is necessary to access the right type of event for the UI
-            mapUIManager.SetMarkerType(markerType);
-            Debug.Log("Marker type set " + markerType);
+            if (!mapUIManager.GetIsEventPanelActive())
+            {
+                mapUIManager.SetMarkerType(markerType);
+                Debug.Log("Marker type set " + markerType);
+            }
             mapUIManager.DisplayStartEventPanel();
 
             /* Here every neccessary information from the EventPointer is sent to the MapUI*/ 
