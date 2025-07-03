@@ -16,7 +16,7 @@ public class CardDisplay : MonoBehaviour
 
     public void InitiateCardDisplay(Card card)
     {
-        // do smth
+        // display correct image etc
     }
 
     public void InitiateSelectableCard(ICardSelector c, int info)

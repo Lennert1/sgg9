@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         // for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16), new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) }, new List<Character>());
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character>());
         usrData.pid = 1;
 
 #warning missing: REST-Call to retrieve user data

@@ -113,7 +113,7 @@ MonoBehaviour:
   - {fileID: 3489009187626213386}
   - {fileID: 1859682863081832501}
   cardDisplayCenter: {fileID: 2297846652640377997}
-  xPositionOffset: 110
+  xPositionOffset: 135
   cardPrefab: {fileID: 6888726468807382001, guid: d4bf212b1ad632f44ab9a1082034838a, type: 3}
 --- !u!1 &5880881061008616004
 GameObject:
@@ -148,7 +148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -150}
+  m_AnchoredPosition: {x: 0, y: -447.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2262586297057747997
