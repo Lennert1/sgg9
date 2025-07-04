@@ -60,8 +60,9 @@ public class DungeonUI : UI
 #warning BattleManager.Instance.ready()
     }
 
-    public void AllPlayersReady() {
+    public void AllPlayersReady(Dungeon d) {
         waitToEnter = false;
+        dungeon = d;
         LoadMiniGame();
     }
 

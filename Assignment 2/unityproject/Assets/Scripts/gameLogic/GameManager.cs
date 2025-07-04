@@ -21,12 +21,21 @@ public class GameManager : MonoBehaviour
 
 
     #region fields
-
+    
+    /* allUIs Indices:
+    0: LoginUI
+    1: MapUI
+    2: Profile
+    3: Inventory
+    4: CharacterMenu
+    5: TavernUI
+    6: DungeonUI
+    */
+    
     [SerializeField] private UI activeUI;
-    [SerializeField] private UI[] allUIs;
+    [SerializeField] public UI[] allUIs;
     private MiniGameUI activeMiniGameUI;
-
-
+    
     public User usrData;
     public Party usrParty;
 
