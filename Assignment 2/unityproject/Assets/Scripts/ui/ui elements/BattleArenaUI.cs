@@ -113,7 +113,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
         UpdateStats(cHP, cShield);
     }
 
-    //call this to begin evaluation after all members have selected their card wfor the round
+    //call this to begin evaluation after all members have selected their card for the round
     public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCard, int cHP, int cShield) {
         SwitchState(BattleState.EvaluateRound);
 

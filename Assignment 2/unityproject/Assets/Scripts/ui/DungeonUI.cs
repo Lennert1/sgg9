@@ -14,7 +14,6 @@ public class DungeonUI : UI
 
 
     private GameObject loadedGame;
-    private int poiID;
     private Dungeon dungeon;
     private bool waitToEnter;
 
@@ -25,18 +24,16 @@ public class DungeonUI : UI
         if (b) {
             lobby.SetActive(true);
 
-            poiID = GameManager.Instance.currentPoiID;
-
-#warning missing: REST-Call to retrieve dungeon data (mit GameManager.currentPOIid)
-            dungeon = new Dungeon(new List<Character>() { new Character(characterType.Knight) });
+#warning dungeon = BattleManager.Instance.dungeon;
 
 
             startGameButton.GetComponent<Image>().color = (GameManager.Instance.usrData.pid == 0) ? Color.grey : Color.green;
+            startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready!";
             startGameButton.enabled = GameManager.Instance.usrData.pid != 0;
             if (GameManager.Instance.usrData.pid != 0) GameManager.Instance.LoadPartyData();
         }
         else {
-#warning missing: Web-Socket-Call that player exited POI
+#warning BattleManager.Instance.unready()
         }
     }
 
@@ -56,29 +53,16 @@ public class DungeonUI : UI
             LoadMiniGame(); return;
         }
 
-        bool allEntered = true;
-        foreach (int id in GameManager.Instance.usrParty.memberPoIids)
-        {
-            if (id != poiID)
-            {
-                allEntered = false;
-                break;
-            }
-        }
-
-        if (allEntered)
-        {
-            LoadMiniGame();
-            return;
-        }
-
         waitToEnter = true;
         startGameButton.GetComponent<Image>().color = Color.grey;
         startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
 
-        /*
-            warten auf web socket calls über updates an den pois der anderen spieler und automatisch das minigame betreten wenn alle bereit sind
-        */
+#warning BattleManager.Instance.ready()
+    }
+
+    public void AllPlayersReady() {
+        waitToEnter = false;
+        LoadMiniGame();
     }
 
     public void LoadMiniGame() {
