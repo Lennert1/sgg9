@@ -9,7 +9,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
 {
     public static BattleManager Instance { get; private set; }
     
-    private Party party = new Party(GameManager.Instance.usrData);
     public Dungeon dungeon;
     private BattleArena battleArena;
     private BattleArenaUI battleArenaUI;
@@ -34,8 +33,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
     public void StartBattle(BattleArena battleArena)
     {
-        partyShield = party.shield;
-        partyHp = party.hp;
+        partyShield = GameManager.Instance.usrParty.shield;
+        partyHp = GameManager.Instance.usrParty.hp;
         maxPartyHp = partyHp;
         boss = battleArena.boss;
         bossHp = boss.hp;
@@ -74,7 +73,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
     private void PlayersPlayCards()
     {
-        if (chosenCards.Count != party.memberCount)
+        if (chosenCards.Count != GameManager.Instance.usrParty.memberCount)
         {
             Debug.Log("Some Players have not chosen cards!");
             return;
@@ -183,7 +182,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         
         Debug.Log("Pressed Ready");
         //Falls man Leader ist, wird ready gecheckt
-        if (GameManager.Instance.usrData.uid == party.members[0])
+        if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
         {
             readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[0], GameManager.Instance.currentPoiID));
             selectedCharacter = GameManager.Instance.usrData.characters[0];
@@ -211,7 +210,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     public void Unready()
     {        
         //Falls man selbst Leader ist
-        if (GameManager.Instance.usrData.pid == party.members[0])
+        if (GameManager.Instance.usrData.pid == GameManager.Instance.usrParty.members[0])
         {
             readyList.Remove(new Tuple<int, Character, int>(GameManager.Instance.usrData.pid,
                 GameManager.Instance.usrData.characters[0], GameManager.Instance.currentPoiID));
@@ -232,7 +231,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         //Wird vom Leader gecallt falls man an einem anderen PoI ist
     public void OtherUnready(int uid)
     {
-        if (GameManager.Instance.usrData.pid != party.members[0])
+        if (GameManager.Instance.usrData.pid != GameManager.Instance.usrParty.members[0])
         {
             //Klickt exit Button
             return;
@@ -254,7 +253,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
         Debug.Log("Ready Check");
         //wenn jeder ready ist und beim selben PoI generiert der Leader das dungeon
-        if (readyList.Count == party.memberCount)
+        if (readyList.Count == GameManager.Instance.usrParty.memberCount)
         {
             int PoIID = GameManager.Instance.currentPoiID;
 
@@ -298,10 +297,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
         StartBattle(battleArena);
     }
     #endregion
-    public void changeParty(Party party)
-    {
-        this.party = party;
-    }
     
     private void Awake()
     {
