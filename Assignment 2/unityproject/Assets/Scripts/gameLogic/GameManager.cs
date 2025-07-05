@@ -84,8 +84,9 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         // for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character>());
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character>{new Character(0)});
         usrData.pid = 1;
+        usrData.characters[0].deck = usrData.characters[0].deck;
 
 #warning missing: REST-Call to retrieve user data
         //RestServerCaller.Instance.GenericRequestCall("", UserCallback);
@@ -101,8 +102,6 @@ public class GameManager : MonoBehaviour
     {
         // for testing purposes only:
         usrParty = new Party(usrData);
-        usrParty.members.Add(65987);
-        usrParty.members.Add(2354);
         //usrParty.memberPoIids.Add(123);
 
 #warning missing: REST-Call to retrieve user data
