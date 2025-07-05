@@ -1,11 +1,10 @@
 
+using Mapbox.Unity.Location;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
-using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
-
+using UnityEngine.UI;
 public class MapUI : UI
 {
     [SerializeField] TextMeshProUGUI levelText;
@@ -15,25 +14,30 @@ public class MapUI : UI
     [SerializeField] private GameObject eventPanelInRange;
     [SerializeField] private GameObject eventPanelNOTInRange;
 
-    /* Ensures that eventPanelInRange and eventPanelNOTInRange cannot be active at the same time */ 
+    [SerializeField] private TextMeshProUGUI joinLabel;
+
+    /* Ensures that eventPanelInRange and eventPanelNOTInRange cannot be active at the same time */
     bool isEventPanelActive = false;
 
+    MarkerType currentMarker = MarkerType.DUNGEON;
+    int currentEventID = 0;
 
-    public void updateLevel(int level)
+    /* Access other scripts */
+    GameManager gameManager;
+
+    protected override void Start()
     {
-        levelText.text = "LVL " + level;
+        base.Start();
+        gameManager = GameObject.Find("UI").GetComponent<GameManager>();
     }
-
-    public void backToMenu()
-    {
-        SceneManager.LoadScene(0);
-    } 
 
     /* If the user is in range while clicking on a event pointer, they can start the event */
     public void DisplayStartEventPanel()
     {
+        // Debug.Log(currentMarker);
         if (!isEventPanelActive)
         {
+            joinLabel.text = "Enter the " + currentMarker.ToString() + "?";
             eventPanelInRange.SetActive(true);
             isEventPanelActive = true;
         }
@@ -48,11 +52,72 @@ public class MapUI : UI
             isEventPanelActive = true;
         }
     }
+
+    /*When Yes-Button is clicked the scene is changed accordingly to the Type of the Marker*/
+    public void EnterButtonClicked()
+    {
+        eventPanelInRange.SetActive(false);
+        isEventPanelActive = false;
+
+        if (gameManager == null)
+        {
+            Debug.Log("Game manager could not be found!");
+            return;
+        }
+
+        // When player clicked on enter, id in GameManager is updated
+        gameManager.currentPoiID = currentEventID;
+
+        switch (currentMarker) { 
+            case MarkerType.DUNGEON:
+                DungeonUI dungeonUI = GameObject.Find("UI").GetComponentInChildren<DungeonUI>(true);
+                if (dungeonUI != null) 
+                {
+                    LoadUI(dungeonUI);
+                    // Socket call here
+                }
+                break;
+            case MarkerType.TAVERN:
+                TavernUI tavernUI = GameObject.Find("UI").GetComponentInChildren<TavernUI>(true);
+                if(tavernUI != null)
+                {
+                    LoadUI(tavernUI);
+                    // Socket call here
+                }
+                break;
+            case MarkerType.SHOP:
+                ShopUI shopUI = GameObject.Find("UI").GetComponentInChildren<ShopUI>(true);
+                if (shopUI != null)
+                {
+                    LoadUI(shopUI);
+                    // Socket call here
+                }
+                break;
+            default:
+                break;
+        }
+    }
     public void CloseButtonClicked()
     {
         eventPanelInRange.SetActive(false);
         eventPanelNOTInRange.SetActive(false);
         isEventPanelActive = false;
     }
+
+    public void SetMarkerType(MarkerType markerType)
+    {
+        currentMarker = markerType;
+    }
+
+    public void SetCurrentEventID(int eventID)
+    {
+        currentEventID = eventID;
+    }
+
+    public bool GetIsEventPanelActive()
+    {
+        return isEventPanelActive;
+    }
+
 
 }

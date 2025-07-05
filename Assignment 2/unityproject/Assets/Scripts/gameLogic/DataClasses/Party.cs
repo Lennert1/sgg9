@@ -15,12 +15,13 @@ public class Party
     public int hp;
     public int shield;
     public List<int> members;
+    public List<int> memberPoIids;
 
     [JsonConstructor]
     public Party(User leader)
     {
-        members = new List<int>();
-        members.Add(leader.uid);
+        members = new List<int> { leader.uid };
+        memberPoIids = new List<int>();
         hp = leader.armorpoints;
     }
 }

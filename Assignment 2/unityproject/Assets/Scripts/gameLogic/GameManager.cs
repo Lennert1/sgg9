@@ -21,15 +21,26 @@ public class GameManager : MonoBehaviour
 
 
     #region fields
-
+    
+    /* allUIs Indices:
+    0: LoginUI
+    1: MapUI
+    2: Profile
+    3: Inventory
+    4: CharacterMenu
+    5: TavernUI
+    6: DungeonUI
+    */
+    
     [SerializeField] private UI activeUI;
-    [SerializeField] private UI[] allUIs;
-
-
+    [SerializeField] public UI[] allUIs;
+    private MiniGameUI activeMiniGameUI;
+    
     public User usrData;
     public Party usrParty;
 
     // == 0 if not entered any PoI
+    // Assigning eventIDs with following system: 1 to 99 == dungeon, 100 to 199 == taverns, 200 to 299 == shops
     public int currentPoiID;
 
     #endregion
@@ -62,6 +73,10 @@ public class GameManager : MonoBehaviour
         activeUI = ui;
     }
 
+    public void SetActiveMiniGameUI(MiniGameUI m) {
+        activeMiniGameUI = m;
+    }
+
     #endregion
 
     #region data management
@@ -69,7 +84,7 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         // for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16), new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) }, new List<Character>());
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(16, 1, 1), new Card(1, 16, 1), new Card(1, 1, 16), new Card(1, 1, 1), new Card(16, 16, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character>());
         usrData.pid = 1;
 
 #warning missing: REST-Call to retrieve user data
@@ -86,6 +101,9 @@ public class GameManager : MonoBehaviour
     {
         // for testing purposes only:
         usrParty = new Party(usrData);
+        usrParty.members.Add(65987);
+        usrParty.members.Add(2354);
+        //usrParty.memberPoIids.Add(123);
 
 #warning missing: REST-Call to retrieve user data
         //RestServerCaller.Instance.GenericRequestCall("", PartyCallback);

@@ -14,19 +14,20 @@ public class EventPointer : MonoBehaviour
 
     LocationStatus playerLocation;
 
+    public MarkerType markerType;
     public int eventID;
 
     /* Access other scripts */
     MapEventManager mapEventManager;
     MapUI mapUIManager;
+    
 
-    /* Store the Event coordinates --> Maybe we store them on a database?
-        Here the eventPosition is set when it is instantiated in the SpawnOnMap script */
+    /* Here the eventPosition is set when it is instantiated in the SpawnOnMap script */
     public Vector2d eventPosition;
 
     void Start()
     {
-        mapUIManager = GameObject.Find("UI").GetComponentInChildren<MapUI>();
+        mapUIManager = GameObject.Find("MapUI").GetComponent<MapUI>();
         mapEventManager = GameObject.Find("EventManager").GetComponent<MapEventManager>();
     }
 
@@ -38,7 +39,7 @@ public class EventPointer : MonoBehaviour
     }
 
 
-    /* Actual  function to make the pointer float and rotate effect */
+    /* Actual function to make the pointer float and rotate effect */
     void RotatePointer()
     {
         transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
@@ -71,11 +72,27 @@ public class EventPointer : MonoBehaviour
         /* If player is close enough, they can join the event */
         if (distance <= mapEventManager.maxDistance)
         {
+            // This is necessary to access the right type of event for the UI
+            if (!mapUIManager.GetIsEventPanelActive())
+            {
+                mapUIManager.SetMarkerType(markerType);
+                Debug.Log("Marker type set " + markerType);
+            }
             mapUIManager.DisplayStartEventPanel();
+
+            /* Here every neccessary information from the EventPointer is sent to the MapUI*/ 
+           
+            // Send MapUI the eventID which the player clicked on
+            mapUIManager.SetCurrentEventID(eventID);
         }
         else
         {
             mapUIManager.DisplayNotInRangePanel();
         }
     }
+}
+
+public enum MarkerType
+{
+    DUNGEON, TAVERN, SHOP
 }

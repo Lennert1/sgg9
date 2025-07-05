@@ -7,6 +7,7 @@ public class Enemy
     public int lvl;
     public int hp;
     public List<Card> deck;
+    public int enemyType;
 
 
     public Enemy(int lvl, List<Card> deck)

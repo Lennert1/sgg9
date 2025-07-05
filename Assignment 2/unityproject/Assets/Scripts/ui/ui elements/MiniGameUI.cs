@@ -1,12 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MiniGame : MonoBehaviour
+public class MiniGameUI : MonoBehaviour
 {
-    private DungeonUI dungeonUI;
-    private Dungeon dungeon;
+    protected DungeonUI dungeonUI;
+    protected Dungeon dungeon;
 
     public virtual void InitiateMiniGame(DungeonUI ui, Dungeon d)
     {

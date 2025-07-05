@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,19 +15,24 @@ public class DungeonUI : UI
 
     private GameObject loadedGame;
     private Dungeon dungeon;
+    private bool waitToEnter;
 
     public override void SetActive(bool b)
     {
         base.SetActive(b);
 
-        if (b) { lobby.SetActive(true);
-
-#warning missing: REST-Call to retrieve dungeon data
-            dungeon = new Dungeon(new List<Character>() { new Character(characterType.Knight) });
-
+        if (b)
+        {
+            lobby.SetActive(true);
 
             startGameButton.GetComponent<Image>().color = (GameManager.Instance.usrData.pid == 0) ? Color.grey : Color.green;
+            startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready!";
             startGameButton.enabled = GameManager.Instance.usrData.pid != 0;
+            if (GameManager.Instance.usrData.pid != 0) GameManager.Instance.LoadPartyData();
+        }
+        else
+        {
+            
         }
     }
 
@@ -37,22 +44,32 @@ public class DungeonUI : UI
         base.Unload();
     }
 
-    public void PressStartButton() {
+    public void PressStartButton()
+    {
+        if (waitToEnter) return;
+
         if (loadedGame != null)
         {
             LoadMiniGame(); return;
         }
-        
-        /* missing behavior
 
-        check for if party members ahve entered and listen for web sockets calls that others enter
+        waitToEnter = true;
+        startGameButton.GetComponent<Image>().color = Color.grey;
+        startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
 
-        */
-
-        LoadMiniGame();
+        BattleManager.Instance.Ready();
     }
 
-    public void LoadMiniGame() {
+    public MiniGameUI StartMiniGame(Dungeon d)
+    {
+        waitToEnter = false;
+        dungeon = d;
+        LoadMiniGame();
+        return loadedGame.GetComponent<MiniGameUI>();
+    }
+
+    private void LoadMiniGame()
+    {
         bool n;
         if (n = loadedGame == null)
         {
@@ -60,15 +77,18 @@ public class DungeonUI : UI
             loadedGame = Instantiate(miniGames[dungeon.miniGameType], transform);
         }
 
+        startGameButton.GetComponent<Image>().color = Color.blue;
+        startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Enter";
         lobby.SetActive(false);
 
         loadedGame.SetActive(true);
 
         if (!n) return;
-        loadedGame.GetComponent<MiniGame>().InitiateMiniGame(this, dungeon);
+        loadedGame.GetComponent<MiniGameUI>().InitiateMiniGame(this, dungeon);
     }
 
-    public void ExitMiniGame() {
+    public void ExitMiniGame()
+    {
         loadedGame.SetActive(false);
         lobby.SetActive(true);
     }

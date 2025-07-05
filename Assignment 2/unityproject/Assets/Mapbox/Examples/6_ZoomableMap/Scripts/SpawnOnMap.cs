@@ -25,6 +25,8 @@
 
 		List<GameObject> _spawnedObjects;
 
+		[SerializeField] Transform markerContainer;
+
 		void Start()
 		{
 			_locations = new Vector2d[_locationStrings.Length];
@@ -33,12 +35,26 @@
 			{
 				var locationString = _locationStrings[i];
 				_locations[i] = Conversions.StringToLatLon(locationString);
-				var instance = Instantiate(_markerPrefab);
+				var instance = Instantiate(_markerPrefab, markerContainer);
 
 				// Store the event position in the EventPointer script
 				instance.GetComponent<EventPointer>().eventPosition = _locations[i];
-				// Store the eventID in the EventPointer script
-				instance.GetComponent<EventPointer>().eventID = i + 1;
+
+				// Assigning eventIDs with following system: 1 to 99 dungeon, 100 to 199 taverns, 200 to 299 shops
+				// Undefined behaviour if more than 99 dungeons/taverns/shops are defined in the inspector...
+				switch(instance.GetComponent<EventPointer>().markerType)
+				{
+					case MarkerType.DUNGEON:
+                        instance.GetComponent<EventPointer>().eventID = i + 1; break;
+					case MarkerType.TAVERN:
+                        instance.GetComponent<EventPointer>().eventID = i + 100; break;
+					case MarkerType.SHOP:
+                        instance.GetComponent<EventPointer>().eventID = i + 200; break;
+					default:
+						instance.GetComponent<EventPointer>().eventID = -1;
+						Debug.Log("Something went wrong while assigning the eventID");
+						break;
+                }
 
 				instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
 				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
