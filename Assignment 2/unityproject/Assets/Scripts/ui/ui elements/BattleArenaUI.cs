@@ -10,18 +10,23 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     #region general
 
     private BattleArena data;
-    private BattleState state;
 
     [SerializeField] private GameObject enemyDisplay;
     [SerializeField] private Transform playerCardDisplayCenter;
     [SerializeField] private Transform enemyCardDisplayCenter;
     [SerializeField] private Transform teamCardDisplayCenter;
     [SerializeField] private GameObject teamStatsDisplay;
+    [SerializeField] private GameObject winScreen;
+    [SerializeField] private GameObject lossScreen;
+    [SerializeField] private GameObject rewardScreen;
 
     #endregion
 
     [SerializeField] private Slider bossHpBar;
     [SerializeField] private Slider bossDmgBar;
+    [SerializeField] private TextMeshProUGUI goldDisplay;
+    [SerializeField] private TextMeshProUGUI expDisplay;
+    [SerializeField] private Transform rewardCardDisplayCenter;
 
     #region cardDisplays
 
@@ -66,8 +71,6 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
     private void SwitchState(BattleState s)
     {
-        state = s;
-
         switch (s)
         {
             case BattleState.Initial:
@@ -77,6 +80,9 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
                     enemyCardDisplayCenter.gameObject.SetActive(true);
                     teamCardDisplayCenter.gameObject.SetActive(false);
                     teamStatsDisplay.SetActive(true);
+                    winScreen.SetActive(false);
+                    lossScreen.SetActive(false);
+                    rewardScreen.SetActive(false);
                     break;
                 }
             case BattleState.SelectCard:
@@ -94,19 +100,19 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
                     teamCardDisplayCenter.gameObject.SetActive(false);
                     break;
                 }
-            case BattleState.Win:
-                {
-                    break;
-                }
-            case BattleState.Lose:
-                {
-                    break;
-                }
             case BattleState.Rewards:
                 {
+                    enemyDisplay.SetActive(false);
+                    playerCardDisplayCenter.gameObject.SetActive(false);
+                    enemyCardDisplayCenter.gameObject.SetActive(false);
+                    teamCardDisplayCenter.gameObject.SetActive(false);
+                    teamStatsDisplay.SetActive(false);
+                    winScreen.SetActive(false);
+                    lossScreen.SetActive(false);
+                    rewardScreen.SetActive(true);
                     break;
                 }
-            default: Debug.LogError("How tf did you manage to have an incorrect battle state?"); break;
+            default: break;
         }
     }
 
@@ -115,7 +121,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     {
         SwitchState(BattleState.SelectCard);
 
-        DisplayPlayerCards(draw);
+        DisplayPlayerCards(draw, true);
         UpdateStats(teamHP, teamShield);
 
         bossHpBar.value = enemyHP;
@@ -127,11 +133,45 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     {
         SwitchState(BattleState.EvaluateRound);
 
-        DisplayPlayerCards(teamCards);
+        DisplayPlayerCards(teamCards, false);
         DisplayEnemyCards(enemyCard);
         UpdateStats(teamHP, teamShield);
 
         bossHpBar.value = enemyHP;
+    }
+
+    public void SwitchToWinScreen() {
+        winScreen.SetActive(true);
+        DisplayForWinLoss();
+    }
+
+    public void SwitchToLossScreen() {
+        lossScreen.SetActive(true);
+        DisplayForWinLoss();
+    }
+
+    public void SwitchToRewards(int gold, int exp, List<Card> cards) {
+        SwitchState(BattleState.Rewards);
+
+        goldDisplay.text = "+" + gold + " Gold";
+        goldDisplay.text = "+" + exp + " EXP";
+
+        for (int i = 0; i < cards.Count; i++)
+        {
+            float xOffset = i * positionOffset.x - ((cards.Count - 1) * positionOffset.x / 2);
+            Vector3 pos = new Vector3(xOffset, 0);
+
+            GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, rewardCardDisplayCenter);
+            card.transform.localPosition = pos;
+            CardDisplay c = card.GetComponent<CardDisplay>();
+            c.InitiateCardDisplay(cards[i]);
+        }
+    }
+
+    public void PressSwitchToRewards() {
+        #warning request reward info from battlemanager
+        // for testing only:
+        SwitchToRewards(1250, 150, new List<Card> { new Card(1), new Card(1), new Card(1) });
     }
 
     // call this each time a card was selected by the team
@@ -161,7 +201,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     #region internal methods
 
     // dont call this on its own
-    private void DisplayPlayerCards(List<Card> draw) {
+    private void DisplayPlayerCards(List<Card> draw, bool interactable) {
         foreach (GameObject g in playerCardDisplay)
         {
             Destroy(g);
@@ -176,7 +216,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
             c.InitiateCardDisplay(draw[i]);
-            c.InitiateSelectableCard(cardSelectors, i); // erste variable sind die ICardSelector an die die response geschickt wird wenn eine karte geclickt wird
+            if (interactable) c.InitiateSelectableCard(cardSelectors, i);
 
             playerCardDisplay.Add(card);
         }
@@ -207,6 +247,24 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     private void UpdateStats(int teamHP, int teamShield) {
         healthLabel.text = "HP: " + teamHP;
         shieldLabel.text = "Shield: " + teamShield;
+    }
+
+    private void DisplayForWinLoss() {
+        List<Card> cards = new List<Card>();
+        for (int i = 0; i < GameManager.Instance.usrParty.memberCount; i++) cards.Add(new Card(0));
+        DisplayPlayerCards(cards, false);
+        cards.RemoveAt(cards.Count - 1);
+        DisplayEnemyCards(cards);
+        DisplayTeamCards(new List<Card>());
+    }
+
+    public void ExitArena() {
+        GameManager.Instance.SetUIActive(GameManager.Instance.allUIs[1]); // ¯\_(ツ)_/¯
+    }
+
+    public void CollectRewards() {
+        #warning battle manager collect rewards
+        ExitArena();
     }
 
     #endregion

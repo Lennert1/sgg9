@@ -342,10 +342,16 @@ public class BattleManager : MonoBehaviour, ICardSelector
         if (victory)
         {
             Debug.Log("Victory!");
+            battleArenaUI.SwitchToWinScreen();
+            // extra aufruf um zu den rewards zu kommen:
+            // benötigt in diesem script eine methode die von ui aufgerufen werden kann um mitzuteilen wenn rewards gebraucht werden
+            // SwitchToRewards(...) muss dann aus diesem script aufgerufen werden
+            // falls rewards in BattleArena.cs gepspeichert werden dann würd ich die methode ohne parameter machen und von dort lesen
         }
         else
         {
             Debug.Log("Defeat!");
+            battleArenaUI.SwitchToLossScreen();
         }
     }
     

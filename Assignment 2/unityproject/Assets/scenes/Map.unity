@@ -6716,7 +6716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobby: {fileID: 1620843955}
   miniGames:
-  - {fileID: 5389901725991070333, guid: 74ccdca773d45624db66e427fdbd3f61, type: 3}
+  - {fileID: 7136469055102789766, guid: 74ccdca773d45624db66e427fdbd3f61, type: 3}
   startGameButton: {fileID: 6340737293207715026}
 --- !u!222 &2788847932729547453
 CanvasRenderer:

@@ -23,6 +23,8 @@ public class DungeonUI : UI
 
         if (b)
         {
+            #warning BattleManager.Instance.Reset()
+
             lobby.SetActive(true);
 
             startGameButton.GetComponent<Image>().color = (GameManager.Instance.usrData.pid == 0) ? Color.grey : Color.green;
@@ -32,7 +34,8 @@ public class DungeonUI : UI
         }
         else
         {
-            
+            if (BattleManager.Instance != null) BattleManager.Instance.Unready();
+            if (loadedGame != null) Destroy(loadedGame);
         }
     }
 
