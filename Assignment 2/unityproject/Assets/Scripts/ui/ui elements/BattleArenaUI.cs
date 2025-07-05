@@ -29,7 +29,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     private List<GameObject> enemyCardDisplay = new List<GameObject>();
     private List<GameObject> teamCardDisplay = new List<GameObject>();
 
-    List<ICardSelector> cardSelectors;
+    private List<ICardSelector> cardSelectors;
 
     #endregion
 
@@ -41,7 +41,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     {
         base.InitiateMiniGame(ui, d);
 
-        cardSelectors = new List<ICardSelector> { this };
+        cardSelectors = new List<ICardSelector> { this, BattleManager.Instance };
 
         data = JsonConvert.DeserializeObject<BattleArena>(d.miniGameJson);
 

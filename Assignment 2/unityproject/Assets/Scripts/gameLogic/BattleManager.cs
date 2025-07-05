@@ -12,6 +12,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private Party party = new Party(GameManager.Instance.usrData);
     public Dungeon dungeon;
     private BattleArena battleArena;
+    private BattleArenaUI battleArenaUI;
     public Boss boss;
     
     //uid, character, PoIID
@@ -48,7 +49,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         if (selectedCharacter.deck.Count < 4)
         {
-            //BattleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield);
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield);
         }
         else
         {
@@ -65,7 +66,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
                 draw.RemoveAt( random.Next(0, draw.Count));
             }
             
-            //BattleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield);
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield);
             
         }
     }
@@ -265,7 +266,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
          
          */
         
-        ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(this.dungeon); //¯\_(ツ)_/¯
+        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(this.dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
     }
     //Bei nicht-Leadern
@@ -274,7 +275,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         this.dungeon = dungeon;
         this.battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
         
-        ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
+        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
     }
     #endregion
