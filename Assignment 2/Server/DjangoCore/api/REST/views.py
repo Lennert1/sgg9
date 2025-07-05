@@ -30,3 +30,9 @@ def update_color(request):
     })
     return utilities.server_message_response(msg,"DATA")
 
+@csrf_exempt
+def update_level(request):
+    msg = json.dumps({
+        "lvl": f"{ServerClass.lvl}"
+    })
+    return utilities.server_message_response(msg,"DATA")

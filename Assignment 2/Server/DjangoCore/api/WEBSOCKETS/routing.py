@@ -6,7 +6,7 @@ from api.WEBSOCKETS import consumers_basic, consumers_test
 
 websocket_urlpatterns = [
     re_path(r'ws/basic/$', consumers_basic.BasicWSServer.as_asgi()),
-    re_path(r'ws/test/', consumers_test.WSTest.as_asgi())
+    re_path(r'ws/test/$', consumers_test.WSTest.as_asgi())
 ]
 '''
 (?P<XXXX>\w+)
