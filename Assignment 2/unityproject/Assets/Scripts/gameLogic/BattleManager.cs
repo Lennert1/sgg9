@@ -359,4 +359,30 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         Instance = this;
     }
+
+    private void Clear()
+    {
+    
+    dungeon = null;
+    battleArena = null;
+    battleArenaUI = null;
+    enemy = null;
+    readyList.Clear();
+    selectedCharacter = null;
+    allCharacters = null;
+
+    partyShield = 0;
+    
+    partyHp = 0;
+    maxPartyHp = 0;
+    
+    bossHp = 0;
+    maxBossHp = 0;
+    
+    chosenCards.Clear();
+    draw.Clear();
+
+    playerTurn = true;
+        
+    }
 }
