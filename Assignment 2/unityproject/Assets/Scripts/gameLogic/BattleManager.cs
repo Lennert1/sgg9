@@ -360,7 +360,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         Instance = this;
     }
 
-    private void Clear()
+    public void Clear()
     {
     
     dungeon = null;

@@ -23,7 +23,7 @@ public class DungeonUI : UI
 
         if (b)
         {
-            #warning BattleManager.Instance.Reset()
+            BattleManager.Instance.Clear();
 
             lobby.SetActive(true);
 
