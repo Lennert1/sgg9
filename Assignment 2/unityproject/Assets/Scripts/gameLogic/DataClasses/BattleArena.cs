@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BattleArena
 {
-    public Boss boss;
+    public Enemy enemy;
     public int rewardXp;
     public int rewardGold;
     public Card rewardCard;
@@ -22,7 +22,7 @@ public class BattleArena
         }
         averageLvl = averageLvl / characters.Count;
         
-        boss = new Boss(averageLvl);
+        enemy = new Enemy(averageLvl);
         
         System.Random rnd = new System.Random();
         

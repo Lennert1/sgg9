@@ -12,7 +12,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     public Dungeon dungeon;
     private BattleArena battleArena;
     private BattleArenaUI battleArenaUI;
-    public Boss boss;
+    public Enemy enemy;
     
     //uid, character, PoIID
     public List<Tuple<int, Character, int>> readyList = new List<Tuple<int,Character, int>>();
@@ -36,9 +36,9 @@ public class BattleManager : MonoBehaviour, ICardSelector
         partyShield = GameManager.Instance.usrParty.shield;
         partyHp = GameManager.Instance.usrParty.hp;
         maxPartyHp = partyHp;
-        boss = battleArena.boss;
-        bossHp = boss.hp;
-        maxBossHp = boss.hp;
+        enemy = battleArena.enemy;
+        bossHp = enemy.hp;
+        maxBossHp = enemy.hp;
         
         Debug.Log($"Battle Started! Party HP: {partyHp}, Boss HP: {bossHp}");
         Draw();
@@ -102,7 +102,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         Debug.Log("Playing Enemies cards");
 
-        ApplyCardEffectToParty(boss.action());
+        ApplyCardEffectToParty(enemy.action());
 
         if (partyHp <= 0)
         {
@@ -276,8 +276,16 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private void allReady()
     {
         //
-        this.battleArena = new BattleArena();
+        List<Character> allCharacters = new List<Character>();
+        foreach (var tuple in readyList)
+        {
+            allCharacters.Add(tuple.Item2);
+        }
+        this.battleArena = new BattleArena(allCharacters);
         this.dungeon = new Dungeon();
+        this.dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
+        
+        Debug.Log(this.dungeon.miniGameJson);
         /* schicke dungeon an die anderen
          
          schickeDungeon();

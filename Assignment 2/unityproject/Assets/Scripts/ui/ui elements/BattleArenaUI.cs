@@ -51,8 +51,8 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
 #warning missing: display enemy sprite
 
-        bossHpBar.maxValue = data.boss.hp;
-        bossDmgBar.maxValue = data.boss.hp;
+        bossHpBar.maxValue = data.enemy.hp;
+        bossDmgBar.maxValue = data.enemy.hp;
 
         SwitchState(BattleState.Initial);
     }
