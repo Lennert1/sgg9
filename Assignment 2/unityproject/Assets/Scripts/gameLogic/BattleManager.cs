@@ -197,18 +197,18 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
             while (draw.Count > 4)
             {
-                draw.RemoveAt( random.Next(0, draw.Count));
+                draw.RemoveAt(random.Next(0, draw.Count));
             }
 
             String s = "";
             foreach (Card card in draw)
             {
-                s += ("Type:" + card.type.ToString() + " Lvl:" + card.lvl.ToString() + "\n");
+                s += "Type:" + card.type.ToString() + " Lvl:" + card.lvl.ToString() + "\n";
             }
             Debug.Log("Cards:\n" + s);
-            
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
-            
+
+            battleArenaUI.SwitchToCardSelector(draw, partyHp, partyShield, bossHp);
+
         }
     }
 
