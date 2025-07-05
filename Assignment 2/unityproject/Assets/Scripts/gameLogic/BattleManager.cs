@@ -26,8 +26,9 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     public int bossHp;
     public int maxBossHp;
-
-    private Dictionary<int, Card> chosenCards = new Dictionary<int, Card>();
+    //uid, card
+    private List<KeyValuePair<int, Card>> chosenCards = new List<KeyValuePair<int, Card>>();
+    private List<Card> draw = new List<Card>();
 
     private bool playerTurn = true;
 
@@ -41,19 +42,19 @@ public class BattleManager : MonoBehaviour, ICardSelector
         maxBossHp = boss.hp;
         
         Debug.Log($"Battle Started! Party HP: {partyHp}, Boss HP: {bossHp}");
-        PlayerChooseCard();
+        Draw();
     }
 
 
-    public void PlayerChooseCard()
+    public void Draw()
     {
         if (selectedCharacter.deck.Count < 4)
         {
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield);
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
         }
         else
         {
-            List<Card> draw = new List<Card>();
+            this.draw = new List<Card>();
 
             foreach (Card card in selectedCharacter.deck)
             {
@@ -66,7 +67,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
                 draw.RemoveAt( random.Next(0, draw.Count));
             }
             
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield);
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
             
         }
     }
@@ -75,16 +76,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         if (chosenCards.Count != party.memberCount)
         {
-            String msg = "Player IDs ";
-            foreach (int i in party.members)
-            {
-                if (!chosenCards.ContainsKey(i))
-                {   
-                    msg += i + " ";
-                }
-            }
-            
-            Debug.Log($"{msg}have not chosen cards!");
+            Debug.Log("Some Players have not chosen cards!");
             return;
         }
         
@@ -152,12 +144,39 @@ public class BattleManager : MonoBehaviour, ICardSelector
             Debug.Log("Defeat!");
         }
     }
-
-
+    
     public void SelectCard(int p)
     {
-        throw new NotImplementedException();
+        foreach (var card in chosenCards.Where(card => card.Key == GameManager.Instance.usrData.uid))
+        {
+            chosenCards.Remove(card);
+            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+            return;
+        }
+
+        chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+
+        /*
+         Schicke Karte an andere
+         */
+        
+        PlayersPlayCards();
     }
+    //Wird gecallt wenn jemand anderes eine Karte ausgewählt hat
+    public void OtherSelectCard(int uid, Card selectedCard)
+    {
+        foreach (var card in chosenCards.Where(card => card.Key == uid))
+        {
+            chosenCards.Remove(card);
+            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, selectedCard));
+            return;
+        }
+        
+        chosenCards.Add(new KeyValuePair<int, Card>(uid, selectedCard));
+        
+        PlayersPlayCards();
+    }
+    
     #region readyFunctions
     public void Ready()
     {
