@@ -9026,6 +9026,7 @@ GameObject:
   - component: {fileID: 8807617284109474901}
   - component: {fileID: 8807617284109474902}
   - component: {fileID: 8807617284109474903}
+  - component: {fileID: 8807617284109474904}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -9082,6 +9083,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ff70a4e0bd75543a3aae36575c958f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8807617284109474904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807617284109474900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ceb0bbc0eb54ad18abe17093ce51051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partyShield: 0
+  partyHp: 0
+  maxPartyHp: 0
+  bossHp: 0
+  maxBossHp: 0
 --- !u!114 &8914210493077052974
 MonoBehaviour:
   m_ObjectHideFlags: 0

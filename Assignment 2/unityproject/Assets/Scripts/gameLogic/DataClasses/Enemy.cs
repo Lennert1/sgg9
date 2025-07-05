@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mapbox.Json;
 using UnityEngine;
 
 public class Enemy
@@ -23,6 +24,12 @@ public class Enemy
             this.deck = deck;
         }
     }
+    public Enemy(int lvl)
+    {
+        this.lvl = lvl;
+        hp = lvl * 100;
+        CreateDeck();
+    }
 
     //Leeres Deck -> 1 Karte von Typ 0
     public void CreateDeck()
@@ -33,5 +40,11 @@ public class Enemy
     public virtual Card action()
     {
         return deck[new System.Random().Next(deck.Count)];
+    }
+    
+    [JsonConstructor]
+    public Enemy()
+    {
+        
     }
 }

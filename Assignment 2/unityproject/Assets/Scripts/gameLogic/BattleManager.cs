@@ -12,11 +12,12 @@ public class BattleManager : MonoBehaviour, ICardSelector
     public Dungeon dungeon;
     private BattleArena battleArena;
     private BattleArenaUI battleArenaUI;
-    public Boss boss;
+    public Enemy enemy;
     
     //uid, character, PoIID
     public List<Tuple<int, Character, int>> readyList = new List<Tuple<int,Character, int>>();
     private Character selectedCharacter;
+    public List<Character> allCharacters;
 
     public int partyShield;
     
@@ -30,151 +31,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private List<Card> draw = new List<Card>();
 
     private bool playerTurn = true;
-
-    public void StartBattle(BattleArena battleArena)
-    {
-        partyShield = GameManager.Instance.usrParty.shield;
-        partyHp = GameManager.Instance.usrParty.hp;
-        maxPartyHp = partyHp;
-        boss = battleArena.boss;
-        bossHp = boss.hp;
-        maxBossHp = boss.hp;
-        
-        Debug.Log($"Battle Started! Party HP: {partyHp}, Boss HP: {bossHp}");
-        Draw();
-    }
-
-
-    public void Draw()
-    {
-        if (selectedCharacter.deck.Count < 4)
-        {
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
-        }
-        else
-        {
-            this.draw = new List<Card>();
-
-            foreach (Card card in selectedCharacter.deck)
-            {
-                draw.Add(card);
-            }
-            Random random = new Random();
-
-            while (draw.Count > 4)
-            {
-                draw.RemoveAt( random.Next(0, draw.Count));
-            }
-            
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
-            
-        }
-    }
-
-    private void PlayersPlayCards()
-    {
-        if (chosenCards.Count != GameManager.Instance.usrParty.memberCount)
-        {
-            Debug.Log("Some Players have not chosen cards!");
-            return;
-        }
-        
-        Debug.Log("Playing Players cards");
-
-        foreach (var kvp in chosenCards)
-        {
-            Card card = kvp.Value;
-            ApplyCardEffectToBoss(card);
-        }
-
-        chosenCards.Clear();
-
-        if (bossHp <= 0)
-        {
-            EndBattle(true);
-            return;
-        }
-
-        EnemyPlayCards();
-    }
-
-    private void EnemyPlayCards()
-    {
-        Debug.Log("Playing Enemies cards");
-
-        ApplyCardEffectToParty(boss.action());
-
-        if (partyHp <= 0)
-        {
-            EndBattle(false);
-            return;
-        }
-
-        Debug.Log("Next round");
-    }
-
-    private void ApplyCardEffectToBoss(Card card)
-    {
-        // bisher nur dmg
-        int damage = card.type == 0 ? card.lvl * 10 : 0;
-        bossHp -= damage;
-
-        Debug.Log($"Player dealt {damage} damage. Boss HP: {bossHp}");
-    }
-
-    private void ApplyCardEffectToParty(Card card)
-    {
-        // bisher nur dmg
-        int damage = card.type == 0 ? card.lvl * 15 : 0;
-        partyHp -= damage;
-
-        Debug.Log($"Boss dealt {damage} damage. Party HP: {partyHp}");
-    }
-
-    //Defeat screen oder rewards hier
-    private void EndBattle(bool victory)
-    {
-        if (victory)
-        {
-            Debug.Log("Victory!");
-        }
-        else
-        {
-            Debug.Log("Defeat!");
-        }
-    }
     
-    public void SelectCard(int p)
-    {
-        foreach (var card in chosenCards.Where(card => card.Key == GameManager.Instance.usrData.uid))
-        {
-            chosenCards.Remove(card);
-            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
-            return;
-        }
-
-        chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
-
-        /*
-         Schicke Karte an andere
-         */
-        
-        PlayersPlayCards();
-    }
-    //Wird gecallt wenn jemand anderes eine Karte ausgewählt hat
-    public void OtherSelectCard(int uid, Card selectedCard)
-    {
-        foreach (var card in chosenCards.Where(card => card.Key == uid))
-        {
-            chosenCards.Remove(card);
-            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, selectedCard));
-            return;
-        }
-        
-        chosenCards.Add(new KeyValuePair<int, Card>(uid, selectedCard));
-        
-        PlayersPlayCards();
-    }
     
     #region readyFunctions
     public void Ready()
@@ -276,8 +133,16 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private void allReady()
     {
         //
-        this.battleArena = new BattleArena();
+        allCharacters = new List<Character>();
+        foreach (var tuple in readyList)
+        {
+            allCharacters.Add(tuple.Item2);
+        }
+        this.battleArena = new BattleArena(allCharacters);
         this.dungeon = new Dungeon();
+        this.dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
+        
+        Debug.Log(battleArena.enemy.hp);
         /* schicke dungeon an die anderen
          
          schickeDungeon();
@@ -297,6 +162,192 @@ public class BattleManager : MonoBehaviour, ICardSelector
         StartBattle(battleArena);
     }
     #endregion
+    
+    
+    public void StartBattle(BattleArena battleArena)
+    {
+        partyShield = GameManager.Instance.usrParty.shield;
+        partyHp = GameManager.Instance.usrParty.hp;
+        maxPartyHp = partyHp;
+        enemy = battleArena.enemy;
+        bossHp = enemy.hp;
+        maxBossHp = enemy.hp;
+        
+        Debug.Log($"Battle Started! Party HP: {partyHp}, Boss HP: {bossHp}");
+        Draw();
+    }
+
+    
+    #region CardPlay
+    public void Draw()
+    {
+        if (selectedCharacter.deck.Count < 4)
+        {
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
+        }
+        else
+        {
+            this.draw = new List<Card>();
+
+            foreach (Card card in selectedCharacter.deck)
+            {
+                draw.Add(card);
+            }
+            Random random = new Random();
+
+            while (draw.Count > 4)
+            {
+                draw.RemoveAt( random.Next(0, draw.Count));
+            }
+
+            String s = "";
+            foreach (Card card in draw)
+            {
+                s += ("Type:" + card.type.ToString() + " Lvl:" + card.lvl.ToString() + "\n");
+            }
+            Debug.Log("Cards:\n" + s);
+            
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
+            
+        }
+    }
+
+    
+    public void SelectCard(int p)
+    {
+        foreach (var card in chosenCards.Where(card => card.Key == GameManager.Instance.usrData.uid))
+        {
+            chosenCards.Remove(card);
+            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+            return;
+        }
+
+        chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+
+        /*
+         Schicke Karte an andere
+         */
+        
+        CheckCards();
+    }
+    //Wird gecallt wenn jemand anderes eine Karte ausgewählt hat
+    public void OtherSelectCard(int uid, Card selectedCard)
+    {
+        foreach (var card in chosenCards.Where(card => card.Key == uid))
+        {
+            chosenCards.Remove(card);
+            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, selectedCard));
+            return;
+        }
+        
+        chosenCards.Add(new KeyValuePair<int, Card>(uid, selectedCard));
+        
+        CheckCards();
+    }
+    
+    private void CheckCards()
+    {
+        if (chosenCards.Count != GameManager.Instance.usrParty.memberCount)
+        {
+            Debug.Log("Some Players have not chosen cards!");
+            return;
+        }
+             
+        Debug.Log("Playing Players cards");
+     
+        foreach (var kvp in chosenCards)
+        {
+            Card card = kvp.Value;
+            ApplyCardEffectToBoss(card);
+        }
+     
+        chosenCards.Clear();
+     
+        if (bossHp <= 0)
+        {
+            EndBattle(true);
+            return;
+        }
+             
+        //Leader Berechnet Gegnerkarte(n) und schickt sie an Teammitglieder
+             
+        if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
+        {
+            EnemyPlayCards();
+        }
+    }
+
+    
+    private void EnemyPlayCards()
+    {
+        Debug.Log("Playing Enemies cards");
+        Card enemyCard = enemy.action();
+        /* Schickt Gegnerkarte an Teammitglieder
+
+        schickeKarte(Card card);
+
+         */
+        
+        ApplyCardEffectToParty(enemyCard);
+
+        if (partyHp <= 0)
+        {
+            EndBattle(false);
+            return;
+        }
+
+        Debug.Log("Next round");
+        Draw();
+    }
+    
+    private void EnemyPlayCards(Card card)
+    {
+        Debug.Log("Playing Enemies cards");
+        
+        ApplyCardEffectToParty(card);
+
+        if (partyHp <= 0)
+        {
+            EndBattle(false);
+            return;
+        }
+
+        Debug.Log("Next round");
+        Draw();
+    }
+
+    private void ApplyCardEffectToBoss(Card card)
+    {
+        // bisher nur dmg
+        int damage = card.type == 0 ? card.lvl * 10 : 0;
+        bossHp -= damage;
+
+        Debug.Log($"Player dealt {damage} damage. Boss HP: {bossHp}");
+    }
+
+    private void ApplyCardEffectToParty(Card card)
+    {
+        // bisher nur dmg
+        int damage = card.type == 0 ? card.lvl * 15 : 0;
+        partyHp -= damage;
+
+        Debug.Log($"Boss dealt {damage} damage. Party HP: {partyHp}");
+    }
+    #endregion
+    
+    
+    //Defeat screen oder rewards hier
+    private void EndBattle(bool victory)
+    {
+        if (victory)
+        {
+            Debug.Log("Victory!");
+        }
+        else
+        {
+            Debug.Log("Defeat!");
+        }
+    }
     
     private void Awake()
     {
