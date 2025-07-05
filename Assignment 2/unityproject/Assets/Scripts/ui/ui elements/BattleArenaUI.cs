@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mapbox.Json;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleArenaUI : MiniGameUI, ICardSelector
 {
@@ -18,6 +19,9 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     [SerializeField] private GameObject teamStatsDisplay;
 
     #endregion
+
+    [SerializeField] private Slider bossHpBar;
+    [SerializeField] private Slider bossDmgBar;
 
     #region cardDisplays
 
@@ -44,6 +48,11 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
         cardSelectors = new List<ICardSelector> { this, BattleManager.Instance };
 
         data = JsonConvert.DeserializeObject<BattleArena>(d.miniGameJson);
+
+#warning missing: display enemy sprite
+
+        bossHpBar.maxValue = data.boss.hp;
+        bossDmgBar.maxValue = data.boss.hp;
 
         SwitchState(BattleState.Initial);
     }
@@ -108,17 +117,23 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
         DisplayPlayerCards(draw);
         UpdateStats(teamHP, teamShield);
+
+        bossHpBar.value = enemyHP;
+        bossDmgBar.value = enemyHP;
     }
 
     //call this to begin evaluation after all members have selected their card for the round
-    public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCard, int teamHP, int teamShield, int enemyHP) {
+    public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCard, int teamHP, int teamShield, int enemyHP)
+    {
         SwitchState(BattleState.EvaluateRound);
 
         DisplayPlayerCards(teamCards);
         DisplayEnemyCards(enemyCard);
         UpdateStats(teamHP, teamShield);
+
+        bossHpBar.value = enemyHP;
     }
-    
+
     // call this each time a card was selected by the team
     public void DisplayTeamCards(List<Card> draw) {
         foreach (GameObject g in teamCardDisplay)
