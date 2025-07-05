@@ -32,7 +32,7 @@ public class DungeonUI : UI
         }
         else
         {
-            BattleManager.Instance.Unready();
+            
         }
     }
 
