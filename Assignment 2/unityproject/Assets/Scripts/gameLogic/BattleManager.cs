@@ -265,7 +265,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
          
          */
         
-        ((DungeonUI) GameManager.Instance.allUIs[6]).AllPlayersReady(this.dungeon); //¯\_(ツ)_/¯
+        ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(this.dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
     }
     //Bei nicht-Leadern
@@ -274,7 +274,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         this.dungeon = dungeon;
         this.battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
         
-        ((DungeonUI) GameManager.Instance.allUIs[6]).AllPlayersReady(dungeon); //¯\_(ツ)_/¯
+        ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
     }
     #endregion

@@ -21,19 +21,18 @@ public class DungeonUI : UI
     {
         base.SetActive(b);
 
-        if (b) {
+        if (b)
+        {
             lobby.SetActive(true);
-
-#warning dungeon = BattleManager.Instance.dungeon;
-
 
             startGameButton.GetComponent<Image>().color = (GameManager.Instance.usrData.pid == 0) ? Color.grey : Color.green;
             startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready!";
             startGameButton.enabled = GameManager.Instance.usrData.pid != 0;
             if (GameManager.Instance.usrData.pid != 0) GameManager.Instance.LoadPartyData();
         }
-        else {
-#warning BattleManager.Instance.unready()
+        else
+        {
+            BattleManager.Instance.Unready();
         }
     }
 
@@ -45,7 +44,8 @@ public class DungeonUI : UI
         base.Unload();
     }
 
-    public void PressStartButton() {
+    public void PressStartButton()
+    {
         if (waitToEnter) return;
 
         if (loadedGame != null)
@@ -57,16 +57,19 @@ public class DungeonUI : UI
         startGameButton.GetComponent<Image>().color = Color.grey;
         startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
 
-#warning BattleManager.Instance.ready()
+        BattleManager.Instance.Ready();
     }
 
-    public void AllPlayersReady(Dungeon d) {
+    public MiniGameUI StartMiniGame(Dungeon d)
+    {
         waitToEnter = false;
         dungeon = d;
         LoadMiniGame();
+        return loadedGame.GetComponent<MiniGameUI>();
     }
 
-    public void LoadMiniGame() {
+    private void LoadMiniGame()
+    {
         bool n;
         if (n = loadedGame == null)
         {
@@ -84,7 +87,8 @@ public class DungeonUI : UI
         loadedGame.GetComponent<MiniGameUI>().InitiateMiniGame(this, dungeon);
     }
 
-    public void ExitMiniGame() {
+    public void ExitMiniGame()
+    {
         loadedGame.SetActive(false);
         lobby.SetActive(true);
     }
