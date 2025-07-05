@@ -227,37 +227,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &4030538124582156868
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4572056826002420035}
-  m_Layer: 0
-  m_Name: InitialDisplay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4572056826002420035
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4030538124582156868}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6189652656165840759}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4778232152354584346
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +257,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4572056826002420035}
   - {fileID: 4587307518040609149}
   - {fileID: 8841792192275305841}
   - {fileID: 8096489287142886798}
@@ -307,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a34233feb5914b44b360057e82da9c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InitialDisplay: {fileID: 4030538124582156868}
+  initialDisplay: {fileID: 0}
   playerCardDisplayCenter: {fileID: 8841792192275305841}
   enemyCardDisplayCenter: {fileID: 8096489287142886798}
   teamCardDisplayCenter: {fileID: 4587307518040609149}

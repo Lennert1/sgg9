@@ -11,7 +11,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     private BattleArena data;
     private BattleState state;
 
-    [SerializeField] private GameObject InitialDisplay;
+    [SerializeField] private GameObject enemyDisplay;
     [SerializeField] private Transform playerCardDisplayCenter;
     [SerializeField] private Transform enemyCardDisplayCenter;
     [SerializeField] private Transform teamCardDisplayCenter;
@@ -55,7 +55,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
     #region control methods
 
-    public void SwitchState(BattleState s)
+    private void SwitchState(BattleState s)
     {
         state = s;
 
@@ -63,18 +63,15 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
         {
             case BattleState.Initial:
                 {
-
-                    playerCardDisplayCenter.gameObject.SetActive(false);
-                    enemyCardDisplayCenter.gameObject.SetActive(false);
+                    enemyDisplay.SetActive(true);
+                    playerCardDisplayCenter.gameObject.SetActive(true);
+                    enemyCardDisplayCenter.gameObject.SetActive(true);
                     teamCardDisplayCenter.gameObject.SetActive(false);
-                    SwitchToCardSelector(new List<Card> { new Card(1, 1, 1), new Card(2, 2, 2), new Card(3, 3, 3), new Card(4, 4, 4) }, 100, 20);
-#warning To Be Replaced: wait for game logic to initiate first round
+                    teamStatsDisplay.SetActive(true);
                     break;
                 }
             case BattleState.SelectCard:
                 {
-                    playerCardDisplayCenter.gameObject.SetActive(true);
-                    enemyCardDisplayCenter.gameObject.SetActive(true);
                     teamCardDisplayCenter.gameObject.SetActive(true);
 
                     List<Card> enemyCards = new List<Card>();
@@ -105,21 +102,21 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     }
 
     // call this to start each round
-    public void SwitchToCardSelector(List<Card> draw, int cHP, int cShield)
+    public void SwitchToCardSelector(List<Card> draw, int teamHP, int teamShield, int enemyHP)
     {
         SwitchState(BattleState.SelectCard);
 
         DisplayPlayerCards(draw);
-        UpdateStats(cHP, cShield);
+        UpdateStats(teamHP, teamShield);
     }
 
     //call this to begin evaluation after all members have selected their card for the round
-    public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCard, int cHP, int cShield) {
+    public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCard, int teamHP, int teamShield, int enemyHP) {
         SwitchState(BattleState.EvaluateRound);
 
         DisplayPlayerCards(teamCards);
         DisplayEnemyCards(enemyCard);
-        UpdateStats(cHP, cShield);
+        UpdateStats(teamHP, teamShield);
     }
     
     // call this each time a card was selected by the team
@@ -149,7 +146,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     #region internal methods
 
     // dont call this on its own
-    public void DisplayPlayerCards(List<Card> draw) {
+    private void DisplayPlayerCards(List<Card> draw) {
         foreach (GameObject g in playerCardDisplay)
         {
             Destroy(g);
@@ -171,7 +168,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     }
 
     // dont call this on its own
-    public void DisplayEnemyCards(List<Card> draw) {
+    private void DisplayEnemyCards(List<Card> draw) {
         foreach (GameObject g in enemyCardDisplay)
         {
             Destroy(g);
@@ -192,9 +189,9 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     }
 
 
-    private void UpdateStats(int cHP, int cShield) {
-        healthLabel.text = "HP: " + cHP;
-        shieldLabel.text = "Shield: " + cShield;
+    private void UpdateStats(int teamHP, int teamShield) {
+        healthLabel.text = "HP: " + teamHP;
+        shieldLabel.text = "Shield: " + teamShield;
     }
 
     #endregion
