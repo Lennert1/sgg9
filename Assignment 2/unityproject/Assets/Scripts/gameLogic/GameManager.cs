@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using gamelogic.ServerClasses;
@@ -45,6 +46,12 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region data memory
+
+    private User tUser;
+
+    #endregion
+
     #region onAwake
 
     void Awake()
@@ -81,15 +88,24 @@ public class GameManager : MonoBehaviour
 
     #region data management
 
+    // load User of this device
     public void LoadUserData()
     {
         // for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(0, 1, 1), new Card(0, 3, 1), new Card(0, 6, 16), new Card(0, 1, 1), new Card(0, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character>{new Character(0)});
-        usrData.pid = 1;
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(0, 1, 1), new Card(0, 3, 1), new Card(0, 6, 16), new Card(0, 1, 1), new Card(0, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
+        usrData.pid = 0;
         usrData.characters[0].deck = usrData.cards;
 
 #warning missing: REST-Call to retrieve user data
-        //RestServerCaller.Instance.GenericRequestCall("", UserCallback);
+        //RestServerCaller.Instance.GenericRequestCall("", ThisUserCallback);
+    }
+
+    // load any User by their ID
+    public User LoadUserData(int id) {
+        return new User(id, "" + id);
+#warning missing: REST-Call to retrieve user data
+        //RestServerCaller.Instance.GenericRequestCall("", UserCallbackByID);
+        return tUser;
     }
 
     public void SaveUserData()
@@ -102,6 +118,8 @@ public class GameManager : MonoBehaviour
     {
         // for testing purposes only:
         usrParty = new Party(usrData);
+        usrParty.members.Add(22769834);
+        usrParty.members.Add(8976);
         //usrParty.memberPoIids.Add(123);
 
 #warning missing: REST-Call to retrieve user data
@@ -112,7 +130,7 @@ public class GameManager : MonoBehaviour
 
     #region Callback Functions
 
-    public void UserCallback(ServerMessage response)
+    public void ThisUserCallback(ServerMessage response)
     {
         if (response.IsError())
         {
@@ -121,6 +139,17 @@ public class GameManager : MonoBehaviour
         }
 
         usrData = JsonConvert.DeserializeObject<User>(response.message);
+    }
+
+    public void UserCallbackByID(ServerMessage response)
+    {
+        if (response.IsError())
+        {
+            Debug.Log("Error");
+            return;
+        }
+
+        tUser = JsonConvert.DeserializeObject<User>(response.message);
     }
     
     public void PartyCallback(ServerMessage response)

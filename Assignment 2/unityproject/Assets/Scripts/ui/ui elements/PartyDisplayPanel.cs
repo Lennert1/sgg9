@@ -16,7 +16,9 @@ public class PartyDisplayPanel : MonoBehaviour
     public void JoinParty()
     {
         int uID = GameManager.Instance.usrData.uid;
-        #warning missing: REST-Call to join party with uID
+#warning missing: game logic call to join party with uID and partyID
+
+        ui.PressJoinParty();
     }
 
     public void SetUI(TavernUI ui) { this.ui = ui; }
