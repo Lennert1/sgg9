@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         // for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
         usrData.pid = 1;
         usrData.characters[0].deck = usrData.cards;
 

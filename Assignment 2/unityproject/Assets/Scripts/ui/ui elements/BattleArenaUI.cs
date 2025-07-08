@@ -54,7 +54,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
         data = JsonConvert.DeserializeObject<BattleArena>(d.miniGameJson);
 
-#warning missing: display enemy sprite
+        enemyDisplay.GetComponent<Image>().sprite = GameAssetManager.Instance.ReadEnemy(data.enemy.enemyType).sprite;
 
         bossHpBar.maxValue = data.enemy.hp;
         bossDmgBar.maxValue = data.enemy.hp;

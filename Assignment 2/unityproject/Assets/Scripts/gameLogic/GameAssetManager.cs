@@ -14,6 +14,9 @@ public class GameAssetManager : MonoBehaviour
     #region assets
 
     [SerializeField] private List<CardScriptableObject> cards;
+    [SerializeField] private CardScriptableObject defaultCard;
+
+    [SerializeField] private List<EnemyScriptableObject> enemies;
 
     #endregion
 
@@ -24,12 +27,21 @@ public class GameAssetManager : MonoBehaviour
         else Instance = this;
 
         for (int i = 0; i < cards.Count; i++) cards[i].id = i;
+        defaultCard.id = -1;
+
+        for (int i = 0; i < enemies.Count; i++) enemies[i].id = i;
     }
 
     public CardScriptableObject ReadCard(int id)
     {
         if (id < cards.Count) return cards[id];
-        else return cards[1];
+        else return defaultCard;
+    }
+
+    public EnemyScriptableObject ReadEnemy(int id)
+    {
+        if (id < enemies.Count) return enemies[id];
+        else return null;
     }
 
     #endregion
