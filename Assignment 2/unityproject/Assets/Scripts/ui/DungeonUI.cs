@@ -34,7 +34,7 @@ public class DungeonUI : UI
         }
         else
         {
-            if (BattleManager.Instance != null) BattleManager.Instance.Unready();
+            if (BattleManager.Instance != null && GameManager.Instance.usrData.pid != 0) BattleManager.Instance.Unready();
             if (loadedGame != null) Destroy(loadedGame);
         }
     }

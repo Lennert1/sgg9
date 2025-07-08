@@ -171,7 +171,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     public void PressSwitchToRewards() {
         #warning request reward info from battlemanager
         // for testing only:
-        SwitchToRewards(1250, 150, new List<Card> { new Card(1), new Card(1), new Card(1) });
+        SwitchToRewards(1250, 150, new List<Card> { new Card(2), new Card(3), new Card(4) });
     }
 
     // call this each time a card was selected by the team

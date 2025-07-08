@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardDisplay : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class CardDisplay : MonoBehaviour
 
     public void InitiateCardDisplay(Card card)
     {
-        // display correct image etc
+        GetComponent<Image>().sprite = GameAssetManager.Instance.ReadCard(card.type).sprite;
     }
 
     public void InitiateSelectableCard(List<ICardSelector> c, int info)
