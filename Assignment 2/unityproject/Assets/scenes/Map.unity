@@ -584,8 +584,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -87.628, y: 1.8707}
-  m_SizeDelta: {x: 49.0077, y: 27.958}
+  m_AnchoredPosition: {x: -143.3667, y: 8.8639}
+  m_SizeDelta: {x: 170.8619, y: 50.0803}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &117238325
 MonoBehaviour:
@@ -634,8 +634,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -733,7 +733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &122829356
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3351,7 +3351,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1220223451
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5194,8 +5194,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 42.5, y: 0.000013828}
-  m_SizeDelta: {x: 131.1254, y: 31.6994}
+  m_AnchoredPosition: {x: 94.5561, y: 8.2366}
+  m_SizeDelta: {x: 278.1803, y: 32.9534}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1772468753
 MonoBehaviour:
@@ -5244,8 +5244,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7099,7 +7099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54683a45cd08a7a45b6cd34f5c962170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeUI: {fileID: 122829357}
+  activeUI: {fileID: 1220223454}
   allUIs:
   - {fileID: 122829357}
   - {fileID: 1220223454}
@@ -7114,7 +7114,7 @@ MonoBehaviour:
     name: 
     lvl: 0
     gold: 0
-    armorpoints: 0
+    armorPoints: 0
     cards: []
   usrParty:
     pid: 0
