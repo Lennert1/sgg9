@@ -42,6 +42,7 @@ def register(request):
     else:
         return utilities.server_message_response("received","STATUS", status=405)
 
+
 @csrf_exempt
 def update_color(request):
     msg = json.dumps({
