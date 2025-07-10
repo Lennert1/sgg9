@@ -51,7 +51,6 @@ public class UIEventManager : MonoBehaviour
 
         _scaleUpTween?.Kill();
         _scaleDownTween?.Kill();
-        Debug.Log("Reset");
     }
     
     protected virtual void AddSelectionListeners(Selectable selection)
