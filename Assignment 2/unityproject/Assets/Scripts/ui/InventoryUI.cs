@@ -26,7 +26,7 @@ public class InventoryUI : UI
             cards = usr.cards;
 
             labelGold.text = "Gold: " + usr.gold;
-            labelArmorCards.text = "ArmorCards: " + usr.armorpoints;
+            labelArmorCards.text = "ArmorCards: " + usr.armorPoints;
 
             cards = usr.cards;
             DisplayInventory();

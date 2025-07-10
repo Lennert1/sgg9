@@ -21,8 +21,9 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
 
 
+
     #region fields
-    
+
     /* allUIs Indices:
     0: LoginUI
     1: MapUI
@@ -32,7 +33,7 @@ public class GameManager : MonoBehaviour
     5: TavernUI
     6: DungeonUI
     */
-    
+
     [SerializeField] private UI activeUI;
     [SerializeField] public UI[] allUIs;
     private MiniGameUI activeMiniGameUI;

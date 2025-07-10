@@ -29,6 +29,12 @@ public class LoginUI : UI
     public void LoginButtonPressed()
     {
         Debug.Log("Pressed");
+        if (userInputField.text.Length <= 0)
+        {
+            errorMessage.text = "Empty input!";
+            return;
+        }
+        StartCoroutine(SendLogin());
     }
 
     IEnumerator SendRegistration()
@@ -39,8 +45,6 @@ public class LoginUI : UI
         };
 
         string jsonData = JsonUtility.ToJson(data);
-
-        Debug.Log("JSON gesendet: " + jsonData); // ← Debug!
 
         using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/register/", "POST"))
         {
@@ -69,9 +73,55 @@ public class LoginUI : UI
         }
     }
 
+    [System.Serializable]
+    public class UserData
+    {
+        public string username;
+        public int uid;
+        public int level;
+    }
+
     IEnumerator SendLogin()
     {
-        yield return null;
+        RegisterData data = new RegisterData
+        {
+            name = userInputField.text,
+        };
+
+        string jsonData = JsonUtility.ToJson(data);
+
+        using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/check_login/", "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+            // To let Unity know which data has been send in the body of the POST request
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+            // For reading the server response
+            www.downloadHandler = new DownloadHandlerBuffer();
+
+            // Tell the server, that a json data was sent
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                MapUI mapUI = GameObject.Find("UI").GetComponentInChildren<MapUI>(true);
+                if (mapUI != null)
+                {
+                    User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
+                    SaveUserDataToFile(userData);
+                    LoadUI(mapUI);
+                }
+            }
+            else
+            {
+                errorMessage.text = "User " + userInputField.text + " does not exist";
+            }
+        }
     }
+
+    
 
 }

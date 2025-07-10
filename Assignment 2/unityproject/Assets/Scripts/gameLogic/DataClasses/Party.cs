@@ -23,6 +23,6 @@ public class Party
         members = new List<int> { leader.uid };
         memberPoIids = new List<int>();
         hp = leader.characters[0].hp;
-        shield = leader.armorpoints;
+        shield = leader.armorPoints;
     }
 }
