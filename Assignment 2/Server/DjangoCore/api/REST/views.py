@@ -21,7 +21,26 @@ def login(request):
 
     print("Name: ", name)
     print("UID: ", uid)
-    return  utilities.server_message_response("recieved","STATUS")
+    return  utilities.server_message_response("received","STATUS")
+
+@csrf_exempt
+def register(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print("Request body raw:", request.body)
+            name = data.get("name")
+
+            # The UID should be assigned by the server
+            # uid = data.get("uid")
+
+            print(f"Name: {name}")
+
+            return utilities.server_message_response("received","STATUS", status=200)
+        except Exception as e:
+            return utilities.server_message_response("received","STATUS", status=400)
+    else:
+        return utilities.server_message_response("received","STATUS", status=405)
 
 @csrf_exempt
 def update_color(request):
