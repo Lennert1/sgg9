@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static LoginUI;
 
 public class UI : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class UI : MonoBehaviour
         SetActive(false);
     }
 
-    
 
     #region inputs
 

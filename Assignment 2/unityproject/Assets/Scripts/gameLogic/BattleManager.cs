@@ -197,18 +197,18 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
             while (draw.Count > 4)
             {
-                draw.RemoveAt( random.Next(0, draw.Count));
+                draw.RemoveAt(random.Next(0, draw.Count));
             }
 
             String s = "";
             foreach (Card card in draw)
             {
-                s += ("Type:" + card.type.ToString() + " Lvl:" + card.lvl.ToString() + "\n");
+                s += "Type:" + card.type.ToString() + " Lvl:" + card.lvl.ToString() + "\n";
             }
             Debug.Log("Cards:\n" + s);
-            
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
-            
+
+            battleArenaUI.SwitchToCardSelector(draw, partyHp, partyShield, bossHp);
+
         }
     }
 
@@ -318,20 +318,54 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
     private void ApplyCardEffectToBoss(Card card)
     {
-        // bisher nur dmg
-        int damage = card.type == 0 ? card.lvl * 10 : 0;
-        bossHp -= damage;
+        CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
 
-        Debug.Log($"Player dealt {damage} damage. Boss HP: {bossHp}");
+        int damage = scriptable.GetDamage(card.lvl);
+        int healing = scriptable.GetHealing(card.lvl);
+        int shield = scriptable.GetShield(card.lvl);
+        bossHp -= damage;
+        partyHp += healing;
+        partyShield += shield;
+        
+        Debug.Log($"Dealt {damage} damage to Boss\nHealed for {healing} HP\nAdded {shield} Shield");
     }
 
     private void ApplyCardEffectToParty(Card card)
     {
-        // bisher nur dmg
-        int damage = card.type == 0 ? card.lvl * 15 : 0;
-        partyHp -= damage;
+        CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
+        bool shieldBreak = false;
 
-        Debug.Log($"Boss dealt {damage} damage. Party HP: {partyHp}");
+        int damage = scriptable.GetDamage(card.lvl);
+        int healing = scriptable.GetHealing(card.lvl);
+        if (partyShield > damage)
+        {
+            partyShield -= damage;
+        }
+        else
+        {
+            damage -= partyShield;
+            partyShield = 0;
+            partyHp -= damage;
+            shieldBreak = true;
+        }
+        
+        partyHp -= damage;
+        bossHp += healing;
+        if (shieldBreak)
+        {
+            Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
+        }
+        else
+        {
+            if (partyShield > 0)
+            {
+                Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
+            }
+            else
+            {
+                Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+            }
+        }
     }
     #endregion
     
@@ -342,15 +376,47 @@ public class BattleManager : MonoBehaviour, ICardSelector
         if (victory)
         {
             Debug.Log("Victory!");
+            battleArenaUI.SwitchToWinScreen();
+            // extra aufruf um zu den rewards zu kommen:
+            // benötigt in diesem script eine methode die von ui aufgerufen werden kann um mitzuteilen wenn rewards gebraucht werden
+            // SwitchToRewards(...) muss dann aus diesem script aufgerufen werden
+            // falls rewards in BattleArena.cs gepspeichert werden dann würd ich die methode ohne parameter machen und von dort lesen
         }
         else
         {
             Debug.Log("Defeat!");
+            battleArenaUI.SwitchToLossScreen();
         }
     }
     
     private void Awake()
     {
         Instance = this;
+    }
+
+    public void Clear()
+    {
+    
+    dungeon = null;
+    battleArena = null;
+    battleArenaUI = null;
+    enemy = null;
+    readyList.Clear();
+    selectedCharacter = null;
+    allCharacters = null;
+
+    partyShield = 0;
+    
+    partyHp = 0;
+    maxPartyHp = 0;
+    
+    bossHp = 0;
+    maxBossHp = 0;
+    
+    chosenCards.Clear();
+    draw.Clear();
+
+    playerTurn = true;
+        
     }
 }

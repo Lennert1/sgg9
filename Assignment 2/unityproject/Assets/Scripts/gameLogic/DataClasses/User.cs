@@ -14,7 +14,7 @@ public class User
     public string name;
     public int lvl = 1;
     public int gold;
-    public int armorpoints;
+    public int armorPoints;
     public List<Card> cards;
     public List<Character> characters;
 

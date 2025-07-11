@@ -6,12 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class TavernUI : UI
 {
-    [SerializeField] Transform partyDisplayTranform;
+    [SerializeField] private GameObject notInParty;
+    [SerializeField] private GameObject inParty;
+
     [SerializeField] private int positionOffset;
+    [SerializeField] Transform partyDisplayTranform;
     [SerializeField] private GameObject partyPrefab;
 
+    [SerializeField] private Transform playerDisplayTransform;
+    [SerializeField] private GameObject playerPrefab;
+
     private List<Party> parties;
-    private List<GameObject> partyDisplay = new List<GameObject>();
+    private List<GameObject> partyDisplay = new();
+
+    private List<GameObject> playerDisplay = new();
 
     public override void SetActive(bool b)
     {
@@ -19,13 +27,19 @@ public class TavernUI : UI
 
         if (b)
         {
+            GameManager.Instance.LoadUserData();
+
             if (GameManager.Instance.usrData.pid != 0)
             {
-                // display players party
+                notInParty.SetActive(false);
+                inParty.SetActive(true);
+                DisplayParty();
             }
             else
             {
-                LoadAvailableParties();
+                notInParty.SetActive(true);
+                inParty.SetActive(false);
+                DisplayAvailableParties();
             }
         }
     }
@@ -33,28 +47,50 @@ public class TavernUI : UI
     public override void Unload()
     {
         ClearPartyDisplay();
+        ClearPlayerDisplay();
 
         base.Unload();
     }
 
+    public void PressCreateParty() {
+#warning missing: game logic call to create party
+        Debug.Log("Created Party!");
 
-    public void GoToMapClicked()
-    {
-        SceneManager.LoadScene(1);
+        notInParty.SetActive(false);
+        inParty.SetActive(true);
+        DisplayParty();
     }
 
-    private void LoadAvailableParties()
+    public void PressJoinParty() {
+        Debug.Log("Joined Party!");
+
+        notInParty.SetActive(false);
+        inParty.SetActive(true);
+        DisplayParty();
+    }
+
+    public void PressLeaveParty() {
+#warning missing: game logic call to leave party
+        Debug.Log("Left Party!");
+
+        notInParty.SetActive(true);
+        inParty.SetActive(false);
+        DisplayAvailableParties();
+    }
+
+    public void DisplayAvailableParties()
     {
 #warning missing: REST-Call to load all parties from this tavern
         // for testing purposes only:
         parties = new List<Party>() { new Party(GameManager.Instance.usrData), new Party(new User(9865, "James")), new Party(new User(2354, "Kirk")), new Party(new User(9834, "Rob")) };
 
-        List<Party> usrParties = new List<Party>();
+        List<Party> filter = new List<Party>();
         foreach (Party p in parties)
         {
-            if (p.members[0] == GameManager.Instance.usrData.uid) usrParties.Add(p);
+            if (p.members[0] == GameManager.Instance.usrData.uid) filter.Add(p);
+            else if (p.memberCount >= 4) filter.Add(p);
         }
-        foreach (Party p in usrParties) parties.Remove(p);
+        foreach (Party p in filter) parties.Remove(p);
 
         partyDisplay = new List<GameObject>();
         for (int i = 0; i < parties.Count; i++)
@@ -70,10 +106,36 @@ public class TavernUI : UI
             partyDisplay.Add(panel);
         }
     }
-    
+
+    public void DisplayParty()
+    {
+        GameManager.Instance.LoadPartyData();
+        Party party = GameManager.Instance.usrParty;
+
+        playerDisplay = new();
+        for (int i = 0; i < party.memberCount; i++)
+        {
+            Vector3 pos = new Vector3(0, -i * positionOffset, 0);
+            GameObject panel = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, playerDisplayTransform);
+            panel.transform.localPosition = pos;
+
+            PartyMemberDisplay displayPanel = panel.GetComponent<PartyMemberDisplay>();
+            displayPanel.SetPlayerValues(GameManager.Instance.LoadUserData(party.members[i]));
+
+            playerDisplay.Add(panel);
+        }
+    }
+
     public void ClearPartyDisplay()
     {
         foreach (GameObject obj in partyDisplay)
+        {
+            Destroy(obj);
+        }
+    }
+
+    public void ClearPlayerDisplay() {
+        foreach (GameObject obj in playerDisplay)
         {
             Destroy(obj);
         }
