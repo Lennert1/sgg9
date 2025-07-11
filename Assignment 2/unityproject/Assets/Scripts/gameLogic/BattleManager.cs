@@ -333,13 +333,39 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private void ApplyCardEffectToParty(Card card)
     {
         CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
+        bool shieldBreak = false;
 
         int damage = scriptable.GetDamage(card.lvl);
         int healing = scriptable.GetHealing(card.lvl);
+        if (partyShield > damage)
+        {
+            partyShield -= damage;
+        }
+        else
+        {
+            damage -= partyShield;
+            partyShield = 0;
+            partyHp -= damage;
+            shieldBreak = true;
+        }
+        
         partyHp -= damage;
         bossHp += healing;
-        
-        Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+        if (shieldBreak)
+        {
+            Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
+        }
+        else
+        {
+            if (partyShield > 0)
+            {
+                Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
+            }
+            else
+            {
+                Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+            }
+        }
     }
     #endregion
     
