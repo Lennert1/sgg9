@@ -319,19 +319,27 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private void ApplyCardEffectToBoss(Card card)
     {
         CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
+
+        int damage = scriptable.GetDamage(card.lvl);
+        int healing = scriptable.GetHealing(card.lvl);
+        int shield = scriptable.GetShield(card.lvl);
+        bossHp -= damage;
+        partyHp += healing;
+        partyShield += shield;
         
-        bossHp -= scriptable.GetDamage(card.lvl);
-        partyHp += scriptable.GetHealing(card.lvl);
-        partyShield += scriptable.GetShield(card.lvl);
+        Debug.Log($"Dealt {damage} damage to Boss\nHealed for {healing} HP\nAdded {shield} Shield");
     }
 
     private void ApplyCardEffectToParty(Card card)
     {
-        // bisher nur dmg
-        int damage = card.type == 0 ? card.lvl * 15 : 0;
-        partyHp -= damage;
+        CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
 
-        Debug.Log($"Boss dealt {damage} damage. Party HP: {partyHp}");
+        int damage = scriptable.GetDamage(card.lvl);
+        int healing = scriptable.GetHealing(card.lvl);
+        partyHp -= damage;
+        bossHp += healing;
+        
+        Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
     }
     #endregion
     
