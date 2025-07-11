@@ -29,18 +29,13 @@ public class MapUI : UI
     {
         base.Start();
         gameManager = GameObject.Find("UI").GetComponent<GameManager>();
-    }
-
-    private void OnEnable()
-    {
         // Load User data to the UI
-        User userData = LoadUserDataFromFile();
+        User userData = _api.LoadUserDataFromFile();
         if (userData != null)
         {
             levelText.text = "LVL " + userData.lvl.ToString();
             usernameText.text = userData.name;
         }
-        
     }
 
     /* If the user is in range while clicking on a event pointer, they can start the event */

@@ -7099,7 +7099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54683a45cd08a7a45b6cd34f5c962170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeUI: {fileID: 1220223454}
+  activeUI: {fileID: 122829357}
   allUIs:
   - {fileID: 122829357}
   - {fileID: 1220223454}
@@ -10532,6 +10532,7 @@ GameObject:
   - component: {fileID: 8807617284109474903}
   - component: {fileID: 8807617284109474904}
   - component: {fileID: 8807617284109474905}
+  - component: {fileID: 8807617284109474906}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -10628,6 +10629,18 @@ MonoBehaviour:
   defaultCard: {fileID: 11400000, guid: 40843aede5dfdd8498b49cd822500307, type: 2}
   enemies:
   - {fileID: 11400000, guid: 06ea5a9c45200ee4589ea1d0c84008ba, type: 2}
+--- !u!114 &8807617284109474906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807617284109474900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25dcd437bc8fe534f84b5fe1b5464268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8914210493077052974
 MonoBehaviour:
   m_ObjectHideFlags: 0

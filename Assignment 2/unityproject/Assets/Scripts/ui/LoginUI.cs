@@ -28,7 +28,6 @@ public class LoginUI : UI
 
     public void LoginButtonPressed()
     {
-        Debug.Log("Pressed");
         if (userInputField.text.Length <= 0)
         {
             errorMessage.text = "Empty input!";
@@ -111,7 +110,7 @@ public class LoginUI : UI
                 if (mapUI != null)
                 {
                     User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
-                    SaveUserDataToFile(userData);
+                    _api.SaveUserDataToFile(userData);
                     LoadUI(mapUI);
                 }
             }
