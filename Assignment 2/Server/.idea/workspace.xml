@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Server.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/consumers_dungeon.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/consumers_lobby.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/ServerClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/ServerClass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/routing.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/routing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/grrrrrrr.mat" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/grrrrrrr.mat" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +128,8 @@
       <workItem from="1750339312108" duration="1640000" />
       <workItem from="1750508298469" duration="24000" />
       <workItem from="1750599305451" duration="3705000" />
-      <workItem from="1751708780885" duration="806000" />
+      <workItem from="1751708780885" duration="3149000" />
+      <workItem from="1752236401109" duration="2443000" />
     </task>
     <servers />
   </component>
