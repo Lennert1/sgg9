@@ -14,6 +14,21 @@ public class CardScriptableObject : ScriptableObject
     [Space]
     public Modifier modifier;
     public float modifierValue = 1f;
+
+    public int GetDamage(int lvl)
+    {
+        return damage * lvl;
+    }
+
+    public int GetHealing(int lvl)
+    {
+        return 1;
+    }
+
+    public int GetShield(int lvl)
+    {
+        return 1;
+    }
 }
 
 public enum Modifier {
