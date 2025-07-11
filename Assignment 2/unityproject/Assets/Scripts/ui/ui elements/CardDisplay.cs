@@ -46,13 +46,13 @@ public class CardDisplay : MonoBehaviour
                 default: break;
             }
         }
-        if (c.healing != 0)
+        if (c.GetHealing(card.lvl) != 0)
         {
-            text += $"   + {c.healing} HP\n";
+            text += $"   + {c.GetHealing(card.lvl)} HP\n";
             infoText.color = new Color(0.8f, 0, 0);
         }
-        if (c.damage != 0) text += $"+ {c.damage} Dmg\n";
-        if (c.shield != 0) text += $"+ {c.shield} Shield\n";
+        if (c.GetDamage(card.lvl) != 0) text += $"+ {c.GetDamage(card.lvl)} Dmg\n";
+        if (c.GetShield(card.lvl) != 0) text += $"+ {c.GetShield(card.lvl)} Shield\n";
         infoText.text = text;
 
         countText.text = card.count != 1 ? $"x{card.count}" : "";
