@@ -318,11 +318,11 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
     private void ApplyCardEffectToBoss(Card card)
     {
-        // bisher nur dmg
-        int damage = card.type == 0 ? card.lvl * 10 : 0;
-        bossHp -= damage;
-
-        Debug.Log($"Player dealt {damage} damage. Boss HP: {bossHp}");
+        CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
+        
+        bossHp -= scriptable.GetDamage(card.lvl);
+        partyHp += scriptable.GetHealing(card.lvl);
+        partyShield += scriptable.GetShield(card.lvl);
     }
 
     private void ApplyCardEffectToParty(Card card)
