@@ -57,7 +57,8 @@ def check_login(request):
             "uid": user.uid,
             "lvl": user.level,
             "gold": user.gold,
-            "armorPoints": user.armorPoints
+            "armorPoints": user.armorPoints,
+            "cards": [{"type": card[0], "lvl": card[1], "count": card[2]} for card in user.listOfCards]
         }
         # Sends a Json Response back to the frontend
         return JsonResponse(user_data, status=200)
@@ -82,6 +83,7 @@ def register(request):
             return utilities.server_message_response("received","STATUS", status=400)
     else:
         return utilities.server_message_response("received","STATUS", status=405)
+
 
 
 
