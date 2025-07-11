@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
 
         _api = GameObject.Find("UI").GetComponent<API>();
         
+        // User data is loaded locally when a login happens
         LoadUserData();
 
         foreach (UI u in allUIs)
@@ -97,10 +98,10 @@ public class GameManager : MonoBehaviour
 
     #region data management
 
-    // load User of this device
+    // load User of this device, this function should be used to update any change on the usrData in the gameManager
     public void LoadUserData()
     {
-        // for testing purposes only:
+        //for testing purposes only:
         usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
         usrData.pid = 1;
         usrData.characters[0].deck = usrData.cards;
@@ -110,6 +111,11 @@ public class GameManager : MonoBehaviour
         {
             usrData = _api.LoadUserDataFromFile();
         }*/
+    }
+
+    public void UpdateUserData(User user)
+    {
+        _api.SaveUserDataToFile(user);
     }
 
     // load any User by their ID

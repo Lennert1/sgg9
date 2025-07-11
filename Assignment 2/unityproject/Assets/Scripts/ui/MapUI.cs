@@ -126,5 +126,11 @@ public class MapUI : UI
         return isEventPanelActive;
     }
 
+    public override void Unload()
+    {
+        CloseButtonClicked();
+        base.Unload();
+    }
+
 
 }

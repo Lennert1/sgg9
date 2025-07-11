@@ -89,6 +89,7 @@ public class LoginUI : UI
 
         string jsonData = JsonUtility.ToJson(data);
 
+
         using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/check_login/", "POST"))
         {
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
@@ -111,6 +112,7 @@ public class LoginUI : UI
                 {
                     User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
                     GameManager.Instance.GetAPI().SaveUserDataToFile(userData);
+                    GameManager.Instance.LoadUserData();
                     LoadUI(mapUI);
                 }
             }
