@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   sprite: {fileID: 21300000, guid: 2949ac391b527504ebc8fcbe10598643, type: 3}
-  damage: 200
-  healing: 0
-  shield: 0
+  baseDamage: 200
+  baseHealing: 0
+  baseShield: 0
   modifier: 0
   modifierValue: 1
