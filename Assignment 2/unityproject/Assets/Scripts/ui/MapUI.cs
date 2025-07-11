@@ -30,7 +30,7 @@ public class MapUI : UI
         base.Start();
         gameManager = GameObject.Find("UI").GetComponent<GameManager>();
         // Load User data to the UI
-        User userData = _api.LoadUserDataFromFile();
+        User userData = GameManager.Instance.GetAPI().LoadUserDataFromFile();
         if (userData != null)
         {
             levelText.text = "LVL " + userData.lvl.ToString();

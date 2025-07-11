@@ -21,7 +21,8 @@ public class ShopUI : UI
 
         if (b)
         {
-            User userData = _api.LoadUserDataFromFile();
+            // This has to be changed to access the GameManagers user data instead
+            User userData = GameManager.Instance.GetAPI().LoadUserDataFromFile();
             if (userData != null)
             {
                 goldLabel.text = "Your Gold: " + userData.gold;
@@ -60,6 +61,8 @@ public class ShopUI : UI
             LoadUI(mapUI);
         }
     }
+
+
 
 
 

@@ -110,7 +110,7 @@ public class LoginUI : UI
                 if (mapUI != null)
                 {
                     User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
-                    _api.SaveUserDataToFile(userData);
+                    GameManager.Instance.GetAPI().SaveUserDataToFile(userData);
                     LoadUI(mapUI);
                 }
             }

@@ -10,12 +10,6 @@ public class UI : MonoBehaviour
 {
 
     private UIEventManager _uiEventManager;
-    protected API _api;
-
-    private void Awake()
-    {
-        _api = GameObject.Find("UI").GetComponent<API>();
-    }
 
     protected virtual void Start()
     {

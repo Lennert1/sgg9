@@ -20,6 +20,12 @@ public class GameManager : MonoBehaviour
     }
     private static GameManager instance;
 
+    private API _api;
+
+    public API GetAPI() {
+        return _api;
+    }
+
 
 
     #region fields
@@ -60,6 +66,8 @@ public class GameManager : MonoBehaviour
         if (instance != null) Debug.LogError("Multiple Instances of GameManager!");
         else instance = this;
 
+        _api = GameObject.Find("UI").GetComponent<API>();
+        
         LoadUserData();
 
         foreach (UI u in allUIs)
@@ -96,9 +104,12 @@ public class GameManager : MonoBehaviour
         usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
         usrData.pid = 1;
         usrData.characters[0].deck = usrData.cards;
-
-#warning missing: REST-Call to retrieve user data
-        //RestServerCaller.Instance.GenericRequestCall("", ThisUserCallback);
+        
+        // This function loads the user data from json as C# object so you can access the data 
+        /*if (_api != null)
+        {
+            usrData = _api.LoadUserDataFromFile();
+        }*/
     }
 
     // load any User by their ID
