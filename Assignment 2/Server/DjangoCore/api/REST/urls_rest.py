@@ -9,4 +9,7 @@ urlpatterns = [
     # =========== The stuff that Han did =============================
     path("register/", views.register, name="register"),
     path("check_login/", views.check_login, name="check_login"),
+    path("updateData/", views.updateData, name="updateData"),
+    path("userById/<int:uid>/", views.userById, name="userById"),
+    path("partyById/<int:pid>/", views.partyById, name = "partyById")
 ]
