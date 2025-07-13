@@ -22,15 +22,11 @@ public class MapUI : UI
     MarkerType currentMarker = MarkerType.DUNGEON;
     int currentEventID = 0;
 
-    /* Access other scripts */
-    GameManager gameManager;
-
-    protected override void Start()
+    public override void SetActive(bool b)
     {
-        base.Start();
-        gameManager = GameObject.Find("UI").GetComponent<GameManager>();
+        base.SetActive(b);
         // Load User data to the UI
-        User userData = GameManager.Instance.GetAPI().LoadUserDataFromFile();
+        User userData = GameManager.Instance.usrData;
         if (userData != null)
         {
             levelText.text = "LVL " + userData.lvl.ToString();
@@ -66,14 +62,8 @@ public class MapUI : UI
         eventPanelInRange.SetActive(false);
         isEventPanelActive = false;
 
-        if (gameManager == null)
-        {
-            Debug.Log("Game manager could not be found!");
-            return;
-        }
-
         // When player clicked on enter, id in GameManager is updated
-        gameManager.currentPoiID = currentEventID;
+        GameManager.Instance.currentPoiID = currentEventID;
 
         switch (currentMarker) { 
             case MarkerType.DUNGEON:

@@ -23,7 +23,7 @@ namespace gamelogic.ServerClasses
         public string message;
         public string identifier;
 
-        public ServerMessage(string extraMessage = null, string message = null, string identifier = null)
+        public ServerMessage(string message = null, string extraMessage = null, string identifier = null)
         {
             this.extraMessage = extraMessage;
             this.message = message;

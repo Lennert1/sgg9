@@ -1,13 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class API : MonoBehaviour
-{   void Start()
-    {
+{
 
-    }
-
+    User loadedUser;
     // This function loads the user data from json as C# object so you can access the data 
     public User LoadUserDataFromFile()
     {
@@ -46,6 +47,44 @@ public class API : MonoBehaviour
         System.IO.File.WriteAllText(path, json);
 
         Debug.Log("Userdaten gespeichert unter: " + path);
+    }
+
+
+    public User GetLoadedUser()
+    {
+        return loadedUser;
+    }
+
+    // This function sends an update
+    public IEnumerator SendUpdate(UpdateData updateData)
+    {
+        // Convert to json
+        string jsonData = JsonUtility.ToJson(updateData);
+
+        using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/updateData/", "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+            // To let Unity know which data has been send in the body of the POST request
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+            // For reading the server response
+            www.downloadHandler = new DownloadHandlerBuffer();
+
+            // Tell the server, that a json data was sent
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Response: " + www.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError("Error: " + www.error);
+            }
+        }
     }
 
 }

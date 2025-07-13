@@ -123,6 +123,11 @@ public class LoginUI : UI
         }
     }
 
+    public void pressButton()
+    {
+        GameManager.Instance.LoadUserData(12340);
+    }
+
     
 
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -18,6 +19,12 @@ public class Party
     public List<int> memberPoIids;
 
     [JsonConstructor]
+    public Party(int pid, List<int> members, List<int> memberPoIids)
+    {
+        this.pid = pid;
+        this.members = members;
+        this.memberPoIids = memberPoIids;
+    }
     public Party(User leader)
     {
         members = new List<int> { leader.uid };
@@ -25,4 +32,28 @@ public class Party
         hp = leader.characters[0].hp;
         shield = leader.armorPoints;
     }
+
+    // Set hp and shield to the right values
+    public void initializeParty()
+    {
+        this.hp = 100;
+        this.shield = 10;
+    }
+
+    public override string ToString()
+    {
+        string membersList = members != null ? string.Join(", ", members) : "None";
+        string memberPoIidsList = memberPoIids != null ? string.Join(", ", memberPoIids) : "None";
+
+        return $"Party Details:\n" +
+               $"- PID: {pid}\n" +
+               $"- HP: {hp}\n" +
+               $"- Shield: {shield}\n" +
+               $"- Member Count: {memberCount}\n" +
+               $"- Members: {membersList}\n" +
+               $"- MemberPoIids: {memberPoIidsList}";
+    }
+
+
+
 }

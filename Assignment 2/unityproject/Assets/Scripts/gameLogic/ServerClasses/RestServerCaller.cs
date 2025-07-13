@@ -43,9 +43,19 @@ namespace gamelogic.ServerClasses
             StartCoroutine(GenericRequest(url, callback));
         }
 
+        /*public void GetUserByIdRequestCall(string url,int id, ServerRequestCallBack onSuccess = null)
+        {
+            StartCoroutine(GetUserByID(id, onSuccess));
+        }*/
+        public void GetUserByIdRequestCall(int id, Action<User> onSuccess)
+        {
+            StartCoroutine(GetUserByID(id, onSuccess));
+        }
 
-        
-        
+
+
+
+
         //Tatsächliche REST_Calls, als Coroutine Aufrufen
 
         private IEnumerator GenericSend(string url, Dictionary<string, object> values,
@@ -109,9 +119,37 @@ namespace gamelogic.ServerClasses
                 if (www.downloadHandler.text.IsNullOrEmpty())
                     throw new Exception("Server did not respond. Is the server up? or does it receive the request?");
                 Debug.Log(www.downloadHandler.text);
-                callback?.Invoke(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
+
+                // This shit made me lose my mind
+                //callback?.Invoke(JsonConvert.DeserializeObject<ServerMessage>(www.downloadHandler.text));
+                ServerMessage serverMessage = new ServerMessage(www.downloadHandler.text, null, "MESSAGE");
+                callback?.Invoke(serverMessage);
             }
         }
+
+        // Corresponding method for Game manager LoadUserData(id) function
+        // Every loaded user is first stored in loadedUser variable cuz Idk how to make that better
+        private IEnumerator GetUserByID(int id, Action<User> onSuccess)
+        {
+            string url = "http://127.0.0.1:8000/api/userById/" + id + "/";
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string json = request.downloadHandler.text;
+                Debug.Log("Response: " + json);
+
+                // To json
+                User user = JsonUtility.FromJson<User>(json);
+                onSuccess?.Invoke(user);
+            }
+            else
+            {
+                Debug.LogError("Error: " + request.error);
+                onSuccess?.Invoke(null);
+            }
+        } 
 
     }
 }

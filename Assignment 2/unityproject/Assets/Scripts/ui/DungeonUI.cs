@@ -29,6 +29,7 @@ public class DungeonUI : UI
 
             startGameButton.GetComponent<Image>().color = (GameManager.Instance.usrData.pid == 0) ? Color.grey : Color.green;
             startGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready!";
+            //GameManager.Instance.usrData.pid = 1;
             startGameButton.enabled = GameManager.Instance.usrData.pid != 0;
             if (GameManager.Instance.usrData.pid != 0) GameManager.Instance.LoadPartyData();
         }

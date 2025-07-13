@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class ShopUI : UI
@@ -80,17 +81,31 @@ public class ShopUI : UI
 
     private void BuyItem(int id)
     {
-        if (GameManager.Instance.usrData.gold >= priceMap[id])
+        User userData = GameManager.Instance.usrData;
+        if (userData.gold >= priceMap[id])
         {
-            GameManager.Instance.usrData.gold -= priceMap[id];
+            userData.gold -= priceMap[id];
 
             Card cardToBeAdded = new Card(id, shopLVL, 1);
 
             if (!CheckIfCardExists(cardToBeAdded))
             {
-                GameManager.Instance.usrData.cards.Add(cardToBeAdded);
+                userData.cards.Add(cardToBeAdded);
             }
-            GameManager.Instance.UpdateUserData(GameManager.Instance.usrData);
+            // Update the userData.json file, don't think we need this once the data base exists
+            GameManager.Instance.UpdateUserData(userData);
+
+            API api = GameManager.Instance.GetAPI();
+            
+
+            UpdateData updateData = new UpdateData
+            {
+                updatedGold = userData.gold,
+                updatedCards = userData.cards
+            };
+
+            // Send update information to the server
+            StartCoroutine(api.SendUpdate(updateData));
 
             goldLabel.text = "Your Gold: " + GameManager.Instance.usrData.gold.ToString();
             notificationLabel.text = "Bought an item!";
