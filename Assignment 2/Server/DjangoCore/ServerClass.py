@@ -47,3 +47,42 @@ class ServerClass(Enum):
                 return user
         return None
 
+    @classmethod
+    def get_user_by_id(cls, uid):
+        for user in cls:
+            if user.uid == uid:
+                return user
+        return None
+
+
+class Parties(Enum):
+    PARTY1 = (1, [12340, 5678], [])
+    PARTY2 = (2, [5678], [])
+    # memberCount, hp, shield are calculated in the C# class
+    def __init__(self, pid, members, memberPOI):
+        self._pid = pid
+        self._members = members
+        self._memberPOI = memberPOI
+
+    @property
+    def pid(self):
+        return self._pid
+
+    @property
+    def members(self):
+        return self._members
+
+    @property
+    def memberPOI(self):
+        return self._memberPOI
+
+    @classmethod
+    def get_party_by_pid(cls, pid):
+        for user in cls:
+            if user.pid == pid:
+                return user
+        return None
+
+
+
+

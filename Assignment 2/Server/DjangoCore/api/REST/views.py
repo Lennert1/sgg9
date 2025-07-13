@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from ServerClass import ServerClass
+from ServerClass import ServerClass, Parties
 import json
 import utilities
 
@@ -64,7 +64,7 @@ def check_login(request):
         return JsonResponse(user_data, status=200)
 
 # This method is not finished yet
-# This should add an instance to the ServerClass
+# This should add an instance to the ServerClass/ database
 @csrf_exempt
 def register(request):
     if request.method == "POST":
@@ -72,11 +72,12 @@ def register(request):
             data = json.loads(request.body)
             print("Request body raw:", request.body)
             name = data.get("name")
+            print(f"Name: {name}")
 
             # The UID should be assigned by the server I think
             # uid = data.get("uid")
 
-            print(f"Name: {name}")
+            # Here should be the call to send data to the data base
 
             return utilities.server_message_response("received","STATUS", status=200)
         except Exception as e:
@@ -84,6 +85,63 @@ def register(request):
     else:
         return utilities.server_message_response("received","STATUS", status=405)
 
+@csrf_exempt
+def updateData(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print(data)
+            gold = data.get("updatedGold")
+            cards = data.get("updatedCards")
+
+            # Send the updated data to the database
+
+            return utilities.server_message_response("received", "STATUS", status=200)
+        except Exception as e:
+            return utilities.server_message_response("received", "STATUS", status=400)
+    else:
+        return utilities.server_message_response("received", "STATUS", status=405)
+
+# Searches in the database for the id and returns the data in a json
+@csrf_exempt
+def userById(request, uid):
+    print(f"Benutzer-ID: {uid}")
+    if request.method == "GET":
+        # Search for user
+        user = ServerClass.get_user_by_id(uid)
+        if user is not None:
+            user_data = {
+                "name": user.username,
+                "uid": user.uid,
+                "lvl": user.level,
+                "gold": user.gold,
+                "armorPoints": user.armorPoints,
+                "cards": [{"type": card[0], "lvl": card[1], "count": card[2]} for card in user.listOfCards]
+            }
+            return JsonResponse(user_data)
+        else:
+            return JsonResponse({'error': 'User not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+@csrf_exempt
+def partyById(request, pid):
+    if request.method == "POST":
+        # Search for user
+        party = Parties.get_party_by_pid(pid)
+        if party is not None:
+            party_data = {
+                "pid": party.pid,
+                "members": [ member for member in party.members],
+                # I dunno where this is even used
+                "memberPoIids": []
+            }
+            return JsonResponse(party_data)
+        else:
+            return JsonResponse({'error': 'Party not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 
