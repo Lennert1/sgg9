@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         _api = GameObject.Find("UI").GetComponent<API>();
         
         // User data is loaded locally when a login happens
-        //LoadUserData();
+        LoadUserData();
 
         foreach (UI u in allUIs)
         {
@@ -103,10 +103,12 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         //for testing purposes only:
-        //usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
-        //usrData.pid = 1;
-        //usrData.characters[0].deck = usrData.cards;
-        
+        usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
+        usrData.pid = 1;
+        usrData.characters[0].deck = usrData.cards;
+
+        return;
+
         // This function loads the user data from json as C# object so you can access the data 
         if (_api != null)
         {
@@ -122,8 +124,11 @@ public class GameManager : MonoBehaviour
     // load any User by their ID
     public User LoadUserData(int id) 
     {
-        RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);
-        return loadedUser;
+        return new User(id, "" + id);
+
+        // Correct method
+        /*RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);
+        return loadedUser;*/
     }
 
     /*public void SaveUserData()
@@ -135,12 +140,14 @@ public class GameManager : MonoBehaviour
     public void LoadPartyData()
     {
         // for testing purposes only:
-        // usrParty = new Party(usrData);
+        usrParty = new Party(usrData);
         //usrParty.members.Add(22769834);
         //usrParty.members.Add(8976);
         //usrParty.memberPoIids.Add(123);
-        string url = "http://127.0.0.1:8000/api/partyById/" + usrData.pid + "/";
-        RestServerCaller.Instance.GenericRequestCall(url, PartyCallback);
+
+        // Correct method
+        /*string url = "http://127.0.0.1:8000/api/partyById/" + usrData.pid + "/";
+        RestServerCaller.Instance.GenericRequestCall(url, PartyCallback);*/
     }
 
     #endregion
