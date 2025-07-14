@@ -164,12 +164,12 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, rewardCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(cards[i]);
+            c.InitiateCardDisplay(cards[i], hideLVL:true);
         }
     }
 
     public void PressSwitchToRewards() {
-        #warning request reward info from battlemanager
+#warning request reward info from battlemanager
         // for testing only:
         SwitchToRewards(1250, 150, new List<Card> { new Card(2), new Card(3), new Card(4) });
     }
@@ -190,7 +190,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             card.transform.localPosition = pos;
             card.transform.localScale = Vector3.one * teamCardDisplayScaleFactor;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i]);
+            c.InitiateCardDisplay(draw[i], hideCount:true);
 
             teamCardDisplay.Add(card);
         }
@@ -215,7 +215,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, playerCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i]);
+            c.InitiateCardDisplay(draw[i], hideCount:true);
             if (interactable) c.InitiateSelectableCard(cardSelectors, i);
 
             playerCardDisplay.Add(card);
@@ -237,7 +237,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, enemyCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i]);
+            c.InitiateCardDisplay(draw[i], hideCount:true);
 
             enemyCardDisplay.Add(card);
         }
@@ -263,7 +263,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     }
 
     public void CollectRewards() {
-        #warning battle manager collect rewards
+#warning battle manager collect rewards
         ExitArena();
     }
 

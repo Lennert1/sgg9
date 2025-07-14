@@ -95,6 +95,40 @@ public class GameManager : MonoBehaviour
         activeMiniGameUI = m;
     }
 
+    public void UpdateCardDeckLevels()
+    {
+        for (int c = 0; c < usrData.characters.Count; c++)
+        {
+            for (int d = 0; d < usrData.characters[c].deck.Count; d++)
+            {
+                for (int i = 0; i < usrData.cards.Count; i++)
+                {
+                    if (usrData.characters[c].deck[d].type == usrData.cards[i].type)
+                    {
+                        usrData.characters[c].deck[d].lvl = usrData.cards[i].lvl; break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void AddCardsToInventory(List<Card> cards)
+    {
+        foreach (Card c in cards)
+        {
+            bool a = false;
+            for (int i = 0; i < usrData.cards.Count; i++)
+            {
+                if (usrData.cards[i].type == c.type)
+                {
+                    a = true;
+                    usrData.cards[i].count += c.count;
+                }
+            }
+            if (!a) usrData.cards.Add(c);
+        }
+    }
+
     #endregion
 
     #region data management
@@ -103,9 +137,9 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         //for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) });
+        usrData = new User(1234, "Pony");
+        usrData.cards = new List<Card> { new Card(1, 5, 3), new Card(2, 1, 1), new Card(3, 4, 17), new Card(4, 16, 2), new Card(5, 7, -3), new Card(6, 1, 1) };
         usrData.pid = 1;
-        usrData.characters[0].deck = usrData.cards;
 
         return;
 

@@ -17,6 +17,7 @@ public class User
     public int armorPoints;
     public List<Card> cards;
     public List<Character> characters;
+    public int selectedCharacter;
 
     // ========== //
 
@@ -27,7 +28,12 @@ public class User
         this.name = name;
 
         cards = new List<Card>();
-        characters = new List<Character>();
+        characters = new List<Character>()
+        {
+            new Character(characterType.Assassin),
+            new Character(characterType.Paladin),
+            new Character(characterType.Shaman)
+        };
     }
 
     public User(int uid, string name, List<Card> cards, List<Character> characters)

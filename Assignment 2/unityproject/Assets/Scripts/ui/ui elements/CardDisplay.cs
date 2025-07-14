@@ -24,7 +24,7 @@ public class CardDisplay : MonoBehaviour
         }
     }
 
-    public void InitiateCardDisplay(Card card)
+    public void InitiateCardDisplay(Card card, bool hideCount = false, bool hideLVL = false)
     {
         CardScriptableObject c = GameAssetManager.Instance.ReadCard(card.type);
         GetComponent<Image>().sprite = c.sprite;
@@ -55,10 +55,10 @@ public class CardDisplay : MonoBehaviour
         if (c.GetShield(card.lvl) != 0) text += $"+ {c.GetShield(card.lvl)} Shield\n";
         infoText.text = text;
 
-        countText.text = card.count != 1 ? $"x{card.count}" : "";
+        countText.text = (card.count != 1 && !hideCount) ? $"x{card.count}" : "";
         countText.color = card.count > 0 ? new Color(1f, 0.9f, 0.5f) : new Color(1, 0, 0);
 
-        lvlText.text = $"LVL {card.lvl}";
+        lvlText.text = hideLVL ? "" : $"LVL {card.lvl}";
         lvlText.color = lvlColorGradient.Evaluate((float)card.lvl / 24);
     }
 

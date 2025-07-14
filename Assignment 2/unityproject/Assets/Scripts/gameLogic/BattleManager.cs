@@ -42,7 +42,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
         if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
         {
             readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[0], GameManager.Instance.currentPoiID));
-            selectedCharacter = GameManager.Instance.usrData.characters[0];
+            selectedCharacter = GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter];
+            GameManager.Instance.UpdateCardDeckLevels();
             CheckReady();
         }
         else

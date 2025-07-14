@@ -23,12 +23,10 @@ public class InventoryUI : UI
         if (b)
         {
             User usr = GameManager.Instance.usrData;
-            cards = usr.cards;
 
             labelGold.text = "Gold: " + usr.gold;
             labelArmorCards.text = "ArmorCards: " + usr.armorPoints;
-
-            cards = usr.cards;
+            
             DisplayInventory();
         }
     }
@@ -42,6 +40,8 @@ public class InventoryUI : UI
 
     public void DisplayInventory()
     {
+        List<Card> cards = GameManager.Instance.usrData.cards;
+
         cardDisplay = new List<GameObject>();
         for (int i = 0; i < cards.Count; i++)
         {
