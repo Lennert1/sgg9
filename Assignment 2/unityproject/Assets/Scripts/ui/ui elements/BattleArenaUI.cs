@@ -237,7 +237,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, enemyCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i], hideCount:true);
+            c.InitiateCardDisplay(draw[i], hideCount:true, displayAsEnemy: true);
 
             enemyCardDisplay.Add(card);
         }

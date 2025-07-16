@@ -46,7 +46,7 @@ public class CharacterMenuUI : UI, ICardSelector
         if (b)
         {
             base.SetActive(b);
-#warning GameManager.Instance.LoadUserData();
+            GameManager.Instance.LoadUserData();
             GameManager.Instance.UpdateCardDeckLevels();
             characters = GameManager.Instance.usrData.characters;
 
@@ -109,7 +109,7 @@ public class CharacterMenuUI : UI, ICardSelector
 
     private void Scroll(int d)
     {
-        int max = GameManager.Instance.usrData.cards.Count - 3;
+        int max = inventoryCardDisplay.Count - 3;
         invOffset += d;
         if (invOffset < 0) invOffset = 0;
         if (invOffset > max) invOffset = max;
@@ -174,16 +174,20 @@ public class CharacterMenuUI : UI, ICardSelector
         foreach (GameObject obj in inventoryCardDisplay) obj.Destroy();
         inventoryCardDisplay = new List<GameObject>();
 
+        int info = 0;
+
         for (int i = 0; i < cards.Count; i++)
         {
-            Vector3 pos = new Vector3(i * positionOffset.x, 0, 0);
+            if (cards[i].type > 5) {
+                Vector3 pos = new Vector3(info * positionOffset.x, 0, 0);
 
-            GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, inventoryTransform);
-            card.transform.localPosition = pos;
-            card.GetComponent<CardDisplay>().InitiateCardDisplay(cards[i]);
-            card.GetComponent<CardDisplay>().InitiateSelectableCard(thisAsList, i + 8);
+                GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, inventoryTransform);
+                card.transform.localPosition = pos;
+                card.GetComponent<CardDisplay>().InitiateCardDisplay(cards[i]);
+                card.GetComponent<CardDisplay>().InitiateSelectableCard(thisAsList, info++ + 8); // xD
 
-            inventoryCardDisplay.Add(card);
+                inventoryCardDisplay.Add(card);
+            }
         }
     }
 

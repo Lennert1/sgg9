@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviour
     // Assigning eventIDs with following system: 1 to 99 == dungeon, 100 to 199 == taverns, 200 to 299 == shops
     public int currentPoiID;
 
+    [SerializeField] private List<int> rewardPool;
+    public List<Card> RewardPool { get; private set; }
+
     #endregion
 
     #region data memory
@@ -68,9 +71,16 @@ public class GameManager : MonoBehaviour
         else instance = this;
 
         _api = GameObject.Find("UI").GetComponent<API>();
-        
+
         // User data is loaded locally when a login happens
         LoadUserData();
+
+        List<Card> r = new();
+        foreach (int i in rewardPool)
+        {
+            r.Add(new Card(i));
+        }
+        RewardPool = r;
 
         foreach (UI u in allUIs)
         {
@@ -143,7 +153,7 @@ public class GameManager : MonoBehaviour
     {
         //for testing purposes only:
         usrData = new User(1234, "Pony");
-        usrData.cards = new List<Card> { new Card(1, 5, 3), new Card(2, 1, 1), new Card(3, 4, 17), new Card(4, 16, 2), new Card(5, 7, -3), new Card(6, 1, 1) };
+        if (GameAssetManager.Instance != null) usrData.cards = GameAssetManager.Instance.CreateInventoryOfAllCards();
         usrData.pid = 1;
         usrData.gold = 2000;
 

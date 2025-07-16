@@ -22,6 +22,7 @@ public class InventoryUI : UI
 
         if (b)
         {
+            GameManager.Instance.LoadUserData();
             User usr = GameManager.Instance.usrData;
 
             labelGold.text = "Gold: " + usr.gold;
