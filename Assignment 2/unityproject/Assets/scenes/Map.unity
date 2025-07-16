@@ -17121,6 +17121,8 @@ MonoBehaviour:
   - {fileID: 5610214105595263930}
   - {fileID: 7192965091729477438}
   - {fileID: 2763234693900098315}
+  - {fileID: 1371265618}
+  - {fileID: 1774052993}
   usrData:
     uid: 0
     pid: 0
@@ -17384,7 +17386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1265646958908124901
 MonoBehaviour:
   m_ObjectHideFlags: 0
