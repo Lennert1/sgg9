@@ -8,17 +8,20 @@ public class CharacterMenuUI : UI, ICardSelector
 {
     private int editing = -1; // -1 for none
 
-    [SerializeField] List<Image> editSaveButtons;
-    [SerializeField] List<Image> selectButtons;
+    [SerializeField] private List<Image> editSaveButtons;
+    [SerializeField] private List<Image> selectButtons;
+    [SerializeField] private List<TextMeshProUGUI> infoTexts;
+    [SerializeField] private List<Image> upgradeButtons;
+    [SerializeField] private TextMeshProUGUI upgradePointsDisplay;
 
-    [SerializeField] Vector2 positionOffset;
+    [SerializeField] private Vector2 positionOffset;
     private List<Character> characters;
     [SerializeField] private List<Transform> deckTransforms;
     private List<List<GameObject>> deckCardDisplays;
     [SerializeField] private Transform inventoryTransform;
     private List<GameObject> inventoryCardDisplay;
 
-    [SerializeField] GameObject cardPrefab;
+    [SerializeField] private GameObject cardPrefab;
     private List<ICardSelector> thisAsList;
 
     private int invOffset;
@@ -43,10 +46,11 @@ public class CharacterMenuUI : UI, ICardSelector
         if (b)
         {
             base.SetActive(b);
-#warning GameManager.Instance.LoadUserData();
+            GameManager.Instance.LoadUserData();
             GameManager.Instance.UpdateCardDeckLevels();
-
             characters = GameManager.Instance.usrData.characters;
+
+            UpdateUpgradeInfos();
 
             DisplayAllCharacters();
             DisplayInventory();
@@ -105,7 +109,7 @@ public class CharacterMenuUI : UI, ICardSelector
 
     private void Scroll(int d)
     {
-        int max = GameManager.Instance.usrData.cards.Count - 3;
+        int max = inventoryCardDisplay.Count - 3;
         invOffset += d;
         if (invOffset < 0) invOffset = 0;
         if (invOffset > max) invOffset = max;
@@ -136,9 +140,32 @@ public class CharacterMenuUI : UI, ICardSelector
         }
     }
 
+    public void UpgradeCharacter(int i) {
+        if (GameManager.Instance.usrData.upgradePoints < characters[i].GetRequiredUpgradePoints()) return;
+
+        GameManager.Instance.usrData.upgradePoints -= characters[i].GetRequiredUpgradePoints();
+        characters[i].SetLevel(characters[i].lvl + 1);
+        
+#warning save user data to database!
+
+        UpdateUpgradeInfos();
+    }
+
     #endregion
 
     #region display
+
+    private void UpdateUpgradeInfos() {
+        for (int i = 0; i < infoTexts.Count; i++)
+        {
+            infoTexts[i].text = $"{characters[i].type}\nLVL: {characters[i].lvl}\nHP: {characters[i].hp}";
+
+            upgradeButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = $"Upgrade for\n{characters[i].GetRequiredUpgradePoints()} pts?";
+            upgradeButtons[i].color = GameManager.Instance.usrData.upgradePoints >= characters[i].GetRequiredUpgradePoints() ? Color.green : Color.grey;
+
+            upgradePointsDisplay.text = $"Upgradepoints:\n{GameManager.Instance.usrData.upgradePoints}";
+        }
+    }
 
     private void DisplayInventory()
     {
@@ -147,16 +174,20 @@ public class CharacterMenuUI : UI, ICardSelector
         foreach (GameObject obj in inventoryCardDisplay) obj.Destroy();
         inventoryCardDisplay = new List<GameObject>();
 
+        int info = 0;
+
         for (int i = 0; i < cards.Count; i++)
         {
-            Vector3 pos = new Vector3(i * positionOffset.x, 0, 0);
+            if (cards[i].type > 5) {
+                Vector3 pos = new Vector3(info * positionOffset.x, 0, 0);
 
-            GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, inventoryTransform);
-            card.transform.localPosition = pos;
-            card.GetComponent<CardDisplay>().InitiateCardDisplay(cards[i]);
-            card.GetComponent<CardDisplay>().InitiateSelectableCard(thisAsList, i + 8);
+                GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, inventoryTransform);
+                card.transform.localPosition = pos;
+                card.GetComponent<CardDisplay>().InitiateCardDisplay(cards[i]);
+                card.GetComponent<CardDisplay>().InitiateSelectableCard(thisAsList, info++ + 8); // xD
 
-            inventoryCardDisplay.Add(card);
+                inventoryCardDisplay.Add(card);
+            }
         }
     }
 

@@ -13,14 +13,12 @@ public class ProfileUI : UI
     {
         base.SetActive(b);
 
-
         if (b)
         {
             User usr = GameManager.Instance.usrData;
             labelName.text = usr.name;
             labelID.text = "id:" + usr.uid;
             labelLvl.text = "Level: " + usr.lvl;
-
         }
     }
 

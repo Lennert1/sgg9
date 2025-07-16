@@ -12,7 +12,8 @@ public class Character
     public characterType type;
     public int xp;
     public int lvl;
-    public int baseHP;
+    private int baseHP;
+    public int hp;
     public List<Card> deck;
 
     //Kartenlimit ist denke ich sinnvoll
@@ -24,10 +25,9 @@ public class Character
     {
         this.type = type;
         xp = 0;
-        lvl = 1;
         deck = new List<Card>();
 
-        //Knight hat mehr Hp
+
         switch (type)
         {
             case characterType.Assassin:
@@ -55,12 +55,25 @@ public class Character
                 }
             default: break;
         }
+
+        SetLevel(1);
     }
 
     [JsonConstructor]
     public Character()
     {
         deck = new();
+    }
+
+    public void SetLevel(int lvl)
+    {
+        this.lvl = lvl;
+        hp = (int)(baseHP * Math.Pow((double)lvl, 1.2));
+    }
+
+    public int GetRequiredUpgradePoints()
+    {
+        return lvl * lvl + 4;
     }
 }
 

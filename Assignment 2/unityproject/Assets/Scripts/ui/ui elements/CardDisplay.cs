@@ -24,7 +24,7 @@ public class CardDisplay : MonoBehaviour
         }
     }
 
-    public void InitiateCardDisplay(Card card, bool hideCount = false, bool hideLVL = false)
+    public void InitiateCardDisplay(Card card, bool hideCount = false, bool hideLVL = false, bool displayAsEnemy = false)
     {
         CardScriptableObject c = GameAssetManager.Instance.ReadCard(card.type);
         GetComponent<Image>().sprite = c.sprite;
@@ -42,17 +42,17 @@ public class CardDisplay : MonoBehaviour
         {
             switch (c.modifier)
             {
-                case Modifier.DamageMultiplier: text += $"x {c.modifierValue * 100}% Dmg\n"; break;
+                case Modifier.DamageMultiplier: text += $"x " + (displayAsEnemy ? "???" : (c.modifierValue * 100)) + "% Dmg\n"; break;
                 default: break;
             }
         }
         if (c.GetHealing(card.lvl) != 0)
         {
-            text += $"   + {c.GetHealing(card.lvl)} HP\n";
+            text += "     + " + (displayAsEnemy ? "???" : c.GetHealing(card.lvl)) + " HP\n";
             infoText.color = new Color(0.8f, 0, 0);
         }
-        if (c.GetDamage(card.lvl) != 0) text += $"+ {c.GetDamage(card.lvl)} Dmg\n";
-        if (c.GetShield(card.lvl) != 0) text += $"+ {c.GetShield(card.lvl)} Shield\n";
+        if (c.GetDamage(card.lvl) != 0) text += "+ " + (displayAsEnemy ? "???" : c.GetDamage(card.lvl)) + " Dmg\n";
+        if (c.GetShield(card.lvl) != 0) text += "+ " + (displayAsEnemy ? "???" : c.GetShield(card.lvl)) + " Shield\n";
         infoText.text = text;
 
         countText.text = (card.count != 1 && !hideCount) ? $"x{card.count}" : "";

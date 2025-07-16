@@ -38,6 +38,16 @@ public class GameAssetManager : MonoBehaviour
         else return defaultCard;
     }
 
+    public List<Card> CreateInventoryOfAllCards()
+    {
+        List<Card> l = new();
+        for (int i = 1; i < cards.Count; i++)
+        {
+            l.Add(new Card(i));
+        }
+        return l;
+    }
+
     public EnemyScriptableObject ReadEnemy(int id)
     {
         if (id < enemies.Count) return enemies[id];
