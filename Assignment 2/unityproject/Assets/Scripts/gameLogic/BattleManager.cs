@@ -389,6 +389,55 @@ public class BattleManager : MonoBehaviour, ICardSelector
             battleArenaUI.SwitchToLossScreen();
         }
     }
+
+    public int getRewardGold()
+    {
+        return battleArena.rewardGold;
+    }
+
+    public int getRewardXP()
+    {
+        return battleArena.rewardXp;
+    }
+    
+    public int getRewardArmorpoints()
+    {
+        return battleArena.rewardArmorpoints;
+    }
+
+    public List<Card> getRewardCards()
+    {
+        return battleArena.rewardCards;
+    }
+
+    public void collectRewards()
+    {
+        GameManager.Instance.usrData.gold += battleArena.rewardGold;
+
+        List<Card> rC = battleArena.rewardCards;
+        List<Card> uC = GameManager.Instance.usrData.cards;
+        
+        for (int i = 0; i < rC.Count; i++)
+        {
+            for (int j = 0; j < uC.Count; j++)
+            {
+                if (rC[i].type == uC[j].type)
+                {
+                    GameManager.Instance.usrData.cards[j].addCards(rC[i].count);
+                    rC.RemoveAt(i);
+                    i--;
+                    break;
+                }
+            }
+        }
+
+        foreach (var card in rC)
+        {
+            GameManager.Instance.usrData.cards.Add(card);
+        }
+        
+        // XP/Upgradepoints/Armorpoints Verwirrung
+    }
     
     private void Awake()
     {
