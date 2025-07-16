@@ -12,7 +12,13 @@ public class User
     // party ID: 0 := not member of a party
     public int pid = 0;
     public string name;
-    public int lvl = 1;
+    public int lvl {get
+        {
+            int v = 0;
+            foreach (Character c in characters) v += c.lvl;
+            return v;
+        }
+    }
     public int gold;
     public int upgradePoints;
     public List<Card> cards;
