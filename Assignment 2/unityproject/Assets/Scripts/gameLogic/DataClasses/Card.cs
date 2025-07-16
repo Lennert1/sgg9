@@ -18,4 +18,9 @@ public class Card
         this.lvl = lvl;
         this.count = count;
     }
+
+    public int RequiredCardsForUpgrade()
+    {
+        return (int)(0.2 * lvl * lvl + 10);
+    }
 }

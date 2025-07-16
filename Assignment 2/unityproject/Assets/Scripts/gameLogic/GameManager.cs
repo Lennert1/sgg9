@@ -123,6 +123,11 @@ public class GameManager : MonoBehaviour
                 {
                     a = true;
                     usrData.cards[i].count += c.count;
+                    if (usrData.cards[i].count >= usrData.cards[i].RequiredCardsForUpgrade())
+                    {
+                        usrData.cards[i].count -= usrData.cards[i].RequiredCardsForUpgrade();
+                        usrData.cards[i].lvl += 1;
+                    }
                 }
             }
             if (!a) usrData.cards.Add(c);
@@ -140,6 +145,7 @@ public class GameManager : MonoBehaviour
         usrData = new User(1234, "Pony");
         usrData.cards = new List<Card> { new Card(1, 5, 3), new Card(2, 1, 1), new Card(3, 4, 17), new Card(4, 16, 2), new Card(5, 7, -3), new Card(6, 1, 1) };
         usrData.pid = 1;
+        usrData.gold = 2000;
 
         return;
 

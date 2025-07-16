@@ -90,20 +90,7 @@ public class ShopUI : UI
 
             GameManager.Instance.AddCardsToInventory(new List<Card> { cardToBeAdded });
 
-            // Update the userData.json file, don't think we need this once the data base exists
-            GameManager.Instance.UpdateUserData(userData);
-
-            API api = GameManager.Instance.GetAPI();
-            
-
-            UpdateData updateData = new UpdateData
-            {
-                updatedGold = userData.gold,
-                updatedCards = userData.cards
-            };
-
-            // Send update information to the server
-            StartCoroutine(api.SendUpdate(updateData));
+#warning save user data to database! we dont care that this shit is hella inefficient, just yeet over all the user data, its easier that way
 
             goldLabel.text = "Your Gold: " + GameManager.Instance.usrData.gold.ToString();
             notificationLabel.text = "Bought an item!";
