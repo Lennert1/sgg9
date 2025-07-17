@@ -1,3 +1,4 @@
+from bson import ObjectId
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -78,8 +79,12 @@ def register(request):
             name = data.get("name")
             print(data)
 
-            # TODO: Here a call to see if the user already exists
-            # TODO: If user already exists send status 409 code back
+            # A call to see if the user already exists
+            # If user already exists send status 409 code back
+            if User.objects.filter(name=name).exists():
+                return utilities.server_message_response("User with that Name already exists!", "409", status = 409)
+
+            # Create user
 
             user = User.objects.create(
                 name = name,
@@ -126,25 +131,25 @@ def updateData(request):
 
 # Searches in the database for the id and returns the data in a json
 @csrf_exempt
-def userById(request, uid):
-    print(f"Benutzer-ID: {uid}")
-    if request.method == "GET":
+def userById(request):
+    #if request.method == "GET":
+
+        data = json.loads(request.body)
+        uid = ObjectId(data.get("uid"))
+        print(data)
+        print(uid)
         # Search for user
-        user = ServerClass.get_user_by_id(uid)
+        user = User.objects.filter(id=uid).first()
+        print(f"user: {user}")
         if user is not None:
-            user_data = {
-                "name": user.username,
-                "uid": user.uid,
-                "lvl": user.level,
-                "gold": user.gold,
-                "armorPoints": user.armorPoints,
-                "cards": [{"type": card[0], "lvl": card[1], "count": card[2]} for card in user.listOfCards]
-            }
+            #helper functions in utility
+            user_data = utilities.serialize_user(user)
+            print(user_data)
             return JsonResponse(user_data)
         else:
             return JsonResponse({'error': 'User not found'}, status=404)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    #else:
+    #    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 @csrf_exempt

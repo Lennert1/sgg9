@@ -15,3 +15,35 @@ def server_message_json(message, identifier="ERROR", extra_message="server"):
         "message": message,
         "identifier": identifier
     })
+
+from bson import ObjectId
+
+def serialize_card(card):
+    return {
+        "id": str(card.id),
+        "type": card.type,
+        "lvl": card.lvl,
+        "count": card.count
+    }
+
+def serialize_character(character):
+    return {
+        "id": str(character.id),
+        "type": character.type,
+        "lvl": character.lvl,
+        "baseHP": character.baseHP,
+        "cards": [serialize_card(card) for card in character.cards] if character.cards else []
+    }
+
+def serialize_user(user):
+    return {
+        "id": str(user.id),
+        "name": user.name,
+        "lvl": user.lvl,
+        "gold": user.gold,
+        "upgradePoints": user.upgradePoints,
+        "selectedCharacter": user.selectedCharacter,
+        "cards": [serialize_card(card) for card in user.cards] if user.cards else [],
+        "characters": [serialize_character(c) for c in user.characters] if user.characters else [],
+        "friends": user.friends if user.friends else []
+    }

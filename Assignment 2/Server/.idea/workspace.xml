@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/DjangoCore/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/DjangoCore/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/scenes/gameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/scenes/gameScene.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,6 +133,7 @@
       <workItem from="1751708780885" duration="3149000" />
       <workItem from="1752236401109" duration="2443000" />
       <workItem from="1752673599185" duration="6475000" />
+      <workItem from="1752752965136" duration="14140000" />
     </task>
     <servers />
   </component>
