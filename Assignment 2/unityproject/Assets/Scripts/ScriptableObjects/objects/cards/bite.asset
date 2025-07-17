@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ad66d866f01c748b4eb73398de59e0, type: 3}
   m_Name: bite
   m_EditorClassIdentifier: 
-  id: 6
+  id: 8
   sprite: {fileID: 21300000, guid: 8eb914904c538ff4982b3bf39b448624, type: 3}
-  baseDamage: 70
+  baseDamage: 35
   baseHealing: 0
   baseShield: 0
   modifier: 0
