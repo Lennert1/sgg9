@@ -15,14 +15,7 @@ public class Enemy
     {
         this.lvl = lvl;
         hp = lvl * 100;
-        if (deck == null || deck.Count == 0)
-        {
-            CreateDeck();
-        }
-        else
-        {
-            this.deck = deck;
-        }
+        this.deck = deck;
     }
     public Enemy(int lvl)
     {
@@ -34,8 +27,7 @@ public class Enemy
     //Leeres Deck -> 1 Karte von Typ 0
     public void CreateDeck()
     {
-        this.deck = new List<Card>();
-        this.deck.Add(new Card(0, lvl, 1));
+        deck = new() { new Card (8), new Card (9), new Card (11), new Card (13), new Card (17)};
     }
     public virtual Card action()
     {

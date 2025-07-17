@@ -1479,7 +1479,7 @@ GameObject:
   - component: {fileID: 279153050181711860}
   - component: {fileID: 8161848357825172885}
   m_Layer: 0
-  m_Name: Exp
+  m_Name: Upgrades
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2500,7 +2500,7 @@ MonoBehaviour:
   bossHpBar: {fileID: 5760859315370268947}
   bossDmgBar: {fileID: 1829422674306725055}
   goldDisplay: {fileID: 4625563514696867122}
-  expDisplay: {fileID: 0}
+  upgradeDisplay: {fileID: 8161848357825172885}
   rewardCardDisplayCenter: {fileID: 6937374073359063410}
   cardPrefab: {fileID: 6888726468807382001, guid: d4bf212b1ad632f44ab9a1082034838a, type: 3}
   positionOffset: {x: 140, y: 180}

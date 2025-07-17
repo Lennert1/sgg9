@@ -72,15 +72,21 @@ public class GameManager : MonoBehaviour
 
         _api = GameObject.Find("UI").GetComponent<API>();
 
-        // User data is loaded locally when a login happens
-        LoadUserData();
-
         List<Card> r = new();
         foreach (int i in rewardPool)
         {
             r.Add(new Card(i));
         }
         RewardPool = r;
+        
+        // User data is loaded locally when a login happens
+        // rmv //
+        usrData = new User(1234, "Pony");
+        usrData.pid = 1;
+        usrData.gold = 2000;
+        // ** //
+
+        LoadUserData();
 
         foreach (UI u in allUIs)
         {
@@ -115,7 +121,8 @@ public class GameManager : MonoBehaviour
                 {
                     if (usrData.characters[c].deck[d].type == usrData.cards[i].type)
                     {
-                        usrData.characters[c].deck[d].lvl = usrData.cards[i].lvl; break;
+                        usrData.characters[c].deck[d].lvl = usrData.cards[i].lvl;
+                        break;
                     }
                 }
             }
@@ -132,12 +139,17 @@ public class GameManager : MonoBehaviour
                 if (usrData.cards[i].type == c.type)
                 {
                     a = true;
+                    Debug.Log($"Pre-Add: Type: {usrData.cards[i].type}, Count: {usrData.cards[i].count}");
                     usrData.cards[i].count += c.count;
-                    if (usrData.cards[i].count >= usrData.cards[i].RequiredCardsForUpgrade())
+                    Debug.Log($"Post-Add: Type: {usrData.cards[i].type}, Count: {usrData.cards[i].count}");
+                    if (usrData.cards[i].count > usrData.cards[i].RequiredCardsForUpgrade())
                     {
+                        Debug.Log($"Pre-Upgrade: Type: {usrData.cards[i].type}, Count: {usrData.cards[i].count}");
                         usrData.cards[i].count -= usrData.cards[i].RequiredCardsForUpgrade();
                         usrData.cards[i].lvl += 1;
+                        Debug.Log($"Used {usrData.cards[i].RequiredCardsForUpgrade()} to upgrade Card of type: {usrData.cards[i].type} to level: {usrData.cards[i].lvl} with remaining count: {usrData.cards[i].count}");
                     }
+                    break;
                 }
             }
             if (!a) usrData.cards.Add(c);
@@ -152,10 +164,13 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         //for testing purposes only:
+        return;
+
         usrData = new User(1234, "Pony");
         if (GameAssetManager.Instance != null) usrData.cards = GameAssetManager.Instance.CreateInventoryOfAllCards();
         usrData.pid = 1;
         usrData.gold = 2000;
+        usrData.selectedCharacter = 1;
 
         return;
 
@@ -174,7 +189,7 @@ public class GameManager : MonoBehaviour
     // load any User by their ID
     public User LoadUserData(int id) 
     {
-        return new User(id, "" + id);
+        return usrData;
 
         // Correct method
         /*RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);

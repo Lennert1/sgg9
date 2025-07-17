@@ -68,7 +68,7 @@ public class Character
     public void SetLevel(int lvl)
     {
         this.lvl = lvl;
-        hp = (int)(baseHP * Math.Pow((double)lvl, 1.2));
+        hp = (int)(baseHP * Math.Pow(1.2, (double)lvl - 1));
     }
 
     public int GetRequiredUpgradePoints()

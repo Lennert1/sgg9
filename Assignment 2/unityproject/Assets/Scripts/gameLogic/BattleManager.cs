@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Mapbox.Json;
 using Random = System.Random;
+using System.Collections;
 
 public class BattleManager : MonoBehaviour, ICardSelector
 {
@@ -29,6 +30,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     //uid, card
     private List<KeyValuePair<int, Card>> chosenCards = new List<KeyValuePair<int, Card>>();
     private List<Card> draw = new List<Card>();
+    private List<Card> enemyCards = new();
 
     private bool playerTurn = true;
     
@@ -139,9 +141,10 @@ public class BattleManager : MonoBehaviour, ICardSelector
         {
             allCharacters.Add(tuple.Item2);
         }
-        this.battleArena = new BattleArena(allCharacters);
-        this.dungeon = new Dungeon();
-        this.dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
+
+        battleArena = new BattleArena(allCharacters);
+        dungeon = new Dungeon();
+        dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
         
         Debug.Log(battleArena.enemy.hp);
         /* schicke dungeon an die anderen
@@ -150,14 +153,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
          
          */
         
-        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(this.dungeon); //¯\_(ツ)_/¯
+        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
     }
     //Bei nicht-Leadern
     public void allReady(Dungeon dungeon)
     {
         this.dungeon = dungeon;
-        this.battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
+        battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
         
         battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
@@ -168,7 +171,12 @@ public class BattleManager : MonoBehaviour, ICardSelector
     public void StartBattle(BattleArena battleArena)
     {
         partyShield = GameManager.Instance.usrParty.shield;
-        partyHp = GameManager.Instance.usrParty.hp;
+        partyHp = 0;
+        foreach (int i in GameManager.Instance.usrParty.members)
+        {
+            User t = GameManager.Instance.LoadUserData(i);
+            partyHp += t.characters[t.selectedCharacter].hp;
+        }
         maxPartyHp = partyHp;
         enemy = battleArena.enemy;
         bossHp = enemy.hp;
@@ -216,12 +224,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     public void SelectCard(int p)
     {
+        if (!playerTurn) return; 
+        
         foreach (var card in chosenCards.Where(card => card.Key == GameManager.Instance.usrData.uid))
-        {
-            chosenCards.Remove(card);
-            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
-            return;
-        }
+            {
+                chosenCards.Remove(card);
+                chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+                return;
+            }
 
         chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
 
@@ -253,7 +263,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
             Debug.Log("Some Players have not chosen cards!");
             return;
         }
-             
+
+        playerTurn = false;
         Debug.Log("Playing Players cards");
      
         foreach (var kvp in chosenCards)
@@ -261,8 +272,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
             Card card = kvp.Value;
             ApplyCardEffectToBoss(card);
         }
-     
-        chosenCards.Clear();
      
         if (bossHp <= 0)
         {
@@ -282,14 +291,19 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private void EnemyPlayCards()
     {
         Debug.Log("Playing Enemies cards");
-        Card enemyCard = enemy.action();
+        enemyCards = new(enemy.deck);
+        Random r = new();
+        while (enemyCards.Count > 3)
+        {
+            enemyCards.RemoveAt(r.Next(enemyCards.Count));
+        }
         /* Schickt Gegnerkarte an Teammitglieder
 
-        schickeKarte(Card card);
+        schickeKarten(List<Card> cards);
 
          */
-        
-        ApplyCardEffectToParty(enemyCard);
+
+        ApplyCardEffectToParty(enemyCards);
 
         if (partyHp <= 0)
         {
@@ -298,14 +312,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
 
         Debug.Log("Next round");
-        Draw();
+        StartCoroutine(StartEvaluationPhase());
     }
     
-    private void EnemyPlayCards(Card card)
+    private void EnemyPlayCards(List<Card> cards)
     {
         Debug.Log("Playing Enemies cards");
         
-        ApplyCardEffectToParty(card);
+        ApplyCardEffectToParty(cards);
 
         if (partyHp <= 0)
         {
@@ -314,6 +328,17 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
 
         Debug.Log("Next round");
+        StartCoroutine(StartEvaluationPhase());
+    }
+
+    public IEnumerator StartEvaluationPhase()
+    {
+        List<Card> teamCards = new();
+        foreach (var kvp in chosenCards) teamCards.Add(kvp.Value);
+        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, partyHp, partyShield, bossHp);
+        yield return new WaitForSeconds(10);
+        playerTurn = true;
+        chosenCards.Clear();
         Draw();
     }
 
@@ -327,44 +352,47 @@ public class BattleManager : MonoBehaviour, ICardSelector
         bossHp -= damage;
         partyHp += healing;
         partyShield += shield;
-        
+
         Debug.Log($"Dealt {damage} damage to Boss\nHealed for {healing} HP\nAdded {shield} Shield");
     }
 
-    private void ApplyCardEffectToParty(Card card)
+    private void ApplyCardEffectToParty(List<Card> cards)
     {
-        CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
-        bool shieldBreak = false;
+        foreach (Card card in cards)
+        {
+            CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
+            bool shieldBreak = false;
 
-        int damage = scriptable.GetDamage(card.lvl);
-        int healing = scriptable.GetHealing(card.lvl);
-        if (partyShield > damage)
-        {
-            partyShield -= damage;
-        }
-        else
-        {
-            damage -= partyShield;
-            partyShield = 0;
-            partyHp -= damage;
-            shieldBreak = true;
-        }
-        
-        partyHp -= damage;
-        bossHp += healing;
-        if (shieldBreak)
-        {
-            Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
-        }
-        else
-        {
-            if (partyShield > 0)
+            int damage = scriptable.GetDamage(card.lvl);
+            int healing = scriptable.GetHealing(card.lvl);
+            if (partyShield > damage)
             {
-                Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
+                partyShield -= damage;
             }
             else
             {
-                Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+                damage -= partyShield;
+                partyShield = 0;
+                partyHp -= damage;
+                shieldBreak = true;
+            }
+
+            partyHp -= damage;
+            bossHp += healing;
+            if (shieldBreak)
+            {
+                Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
+            }
+            else
+            {
+                if (partyShield > 0)
+                {
+                    Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
+                }
+                else
+                {
+                    Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+                }
             }
         }
     }
@@ -374,6 +402,10 @@ public class BattleManager : MonoBehaviour, ICardSelector
     //Defeat screen oder rewards hier
     private void EndBattle(bool victory)
     {
+        List<Card> teamCards = new();
+        foreach (var kvp in chosenCards) teamCards.Add(kvp.Value);
+        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, partyHp, partyShield, bossHp);
+        playerTurn = false;
         if (victory)
         {
             Debug.Log("Victory!");
@@ -390,53 +422,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
     }
 
-    public int getRewardGold()
-    {
-        return battleArena.rewardGold;
-    }
-
-    public int getRewardXP()
-    {
-        return battleArena.rewardXp;
-    }
-    
-    public int getRewardArmorpoints()
-    {
-        return battleArena.rewardArmorpoints;
-    }
-
-    public List<Card> getRewardCards()
-    {
-        return battleArena.rewardCards;
-    }
-
-    public void collectRewards()
+    public void CollectRewards()
     {
         GameManager.Instance.usrData.gold += battleArena.rewardGold;
+        GameManager.Instance.usrData.upgradePoints += battleArena.rewardUpgradePoints;
 
-        List<Card> rC = battleArena.rewardCards;
-        List<Card> uC = GameManager.Instance.usrData.cards;
-        
-        for (int i = 0; i < rC.Count; i++)
-        {
-            for (int j = 0; j < uC.Count; j++)
-            {
-                if (rC[i].type == uC[j].type)
-                {
-                    GameManager.Instance.usrData.cards[j].addCards(rC[i].count);
-                    rC.RemoveAt(i);
-                    i--;
-                    break;
-                }
-            }
-        }
+        GameManager.Instance.AddCardsToInventory(battleArena.rewardCards);
 
-        foreach (var card in rC)
-        {
-            GameManager.Instance.usrData.cards.Add(card);
-        }
-        
-        // XP/Upgradepoints/Armorpoints Verwirrung
+#warning send user data to database
     }
     
     private void Awake()
