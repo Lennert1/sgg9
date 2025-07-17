@@ -27,6 +27,7 @@ class User(models.Model):
     selectedCharacter = models.IntegerField()
     cards = ArrayField(EmbeddedModelField(Card), null=True, blank=True)
     characters = ArrayField(EmbeddedModelField(Character), null=True, blank=True)
+    friends = ArrayField(models.IntegerField(), null=True, blank=True)
 
     def __str__(self):
         return self.name

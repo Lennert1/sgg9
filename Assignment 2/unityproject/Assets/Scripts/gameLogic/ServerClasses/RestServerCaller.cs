@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,7 +9,6 @@ using WebSocketSharp;
 
 namespace gamelogic.ServerClasses
 {
-
 
     public class RestServerCaller : SingletonPersistant<RestServerCaller>
     {
@@ -50,6 +48,12 @@ namespace gamelogic.ServerClasses
         public void GetUserByIdRequestCall(int id, Action<User> onSuccess)
         {
             StartCoroutine(GetUserByID(id, onSuccess));
+        }
+
+        // This method sends the user to the server, where it is going to be updated in the database
+        public void SendUpdateCall(User updatedUser)
+        {
+            StartCoroutine(SendUpdate(updatedUser));
         }
 
 
@@ -149,7 +153,40 @@ namespace gamelogic.ServerClasses
                 Debug.LogError("Error: " + request.error);
                 onSuccess?.Invoke(null);
             }
-        } 
+        }
+
+
+        private IEnumerator SendUpdate(User updatedUser)
+        {
+            // Convert to json
+            string jsonData = JsonUtility.ToJson(updatedUser);
+
+            using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/updateData/", "POST"))
+            {
+                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+                // To let Unity know which data has been send in the body of the POST request
+                www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+                // For reading the server response
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                // Tell the server, that a json data was sent
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    Debug.Log("Response: " + www.downloadHandler.text);
+                }
+                else
+                {
+                    Debug.LogError("Error: " + www.error);
+                }
+            }
+        }
+
 
     }
 }

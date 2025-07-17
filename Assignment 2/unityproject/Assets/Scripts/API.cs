@@ -56,10 +56,10 @@ public class API : MonoBehaviour
     }
 
     // This function sends an update
-    public IEnumerator SendUpdate(UpdateData updateData)
+    /*public IEnumerator SendUpdate(User updatedUser)
     {
         // Convert to json
-        string jsonData = JsonUtility.ToJson(updateData);
+        string jsonData = JsonUtility.ToJson(updatedUser);
 
         using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/updateData/", "POST"))
         {
@@ -85,6 +85,6 @@ public class API : MonoBehaviour
                 Debug.LogError("Error: " + www.error);
             }
         }
-    }
+    }*/
 
 }

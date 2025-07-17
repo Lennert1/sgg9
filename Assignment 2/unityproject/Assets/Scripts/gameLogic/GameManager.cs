@@ -167,11 +167,6 @@ public class GameManager : MonoBehaviour
         usrData = LoadUserData(usrData.uid);
     }
 
-    public void UpdateUserData(User user)
-    {
-        _api.SaveUserDataToFile(user);
-    }
-
     // load any User by their ID
     public User LoadUserData(int id)
     {
@@ -186,8 +181,7 @@ public class GameManager : MonoBehaviour
 
     public void SaveUserData()
     {
-#warning missing
-        //RestServerCaller.Instance.GenericSendCall("", usrData);
+        RestServerCaller.Instance.SendUpdateCall(usrData);
     }
 
     public void LoadPartyData()

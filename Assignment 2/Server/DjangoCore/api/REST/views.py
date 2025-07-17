@@ -7,6 +7,7 @@ import json
 import utilities
 from api.models import *
 
+
 # Create your views here.
 @csrf_exempt
 def change_color(request):
@@ -71,42 +72,49 @@ def check_login(request):
 def register(request):
     if request.method == "POST":
         try:
+            # This is the new user sent by unity
             data = json.loads(request.body)
-            print("Request body raw:", request.body)
-            name = data.get("name")
-            print(f"Name: {name}")
 
-            # The UID should be assigned by the server I think
-            # uid = data.get("uid")
+            name = data.get("name")
+            print(data)
+
+            # TODO: Here a call to see if the user already exists
+            # TODO: If user already exists send status 409 code back
+
             user = User.objects.create(
                 name = name,
-                lvl = 1,
-                gold = 0,
-                upgradePoints = 0,
-                selectedCharacter = 0,
-                cards = [],
-                characters = []
+                lvl = data.get("lvl"),
+                gold = data.get("gold"),
+                upgradePoints = data.get("upgradePoints"),
+                selectedCharacter = data.get("selectedCharacter"),
+                cards = data.get("cards"),
+                characters = data.get("characters"),
+                friends = data.get("friends")
             )
             user.save()
             print("Anzahl User in DB:", User.objects.count())
 
-            # Here should be the call to send data to the data base
-
-            return utilities.server_message_response("received","STATUS", status=200)
+            # TODO: Assign UID that does not exist
+            return JsonResponse(user, status=200)
         except Exception as e:
             print(e)
             return utilities.server_message_response("received","STATUS", status=400)
     else:
         return utilities.server_message_response("received","STATUS", status=405)
 
+
+
+
+
 @csrf_exempt
 def updateData(request):
     if request.method == "POST":
         try:
+            # This is the userdata received from the front end
             data = json.loads(request.body)
+            uid = data.get("uid")
             print(data)
-            gold = data.get("updatedGold")
-            cards = data.get("updatedCards")
+            print(uid)
 
             # Send the updated data to the database
 

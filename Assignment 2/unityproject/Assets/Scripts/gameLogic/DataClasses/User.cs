@@ -23,6 +23,7 @@ public class User
     public int upgradePoints;
     public List<Card> cards;
     public List<Character> characters;
+    public List<int> friendsUID;
     public int selectedCharacter;
 
     // ========== //
@@ -40,14 +41,17 @@ public class User
             new Character(characterType.Paladin),
             new Character(characterType.Shaman)
         };
+        friendsUID = new List<int>();
     }
 
-    public User(int uid, string name, List<Card> cards, List<Character> characters)
+    public User(int uid, string name, List<Card> cards, List<Character> characters, List<int> friendsUID)
     {
         this.uid = uid;
         this.name = name;
 
         this.cards = cards;
         this.characters = characters;
+        this.friendsUID = friendsUID;
+
     }
 }
