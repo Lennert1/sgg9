@@ -25,7 +25,7 @@ public class TestScript : MonoBehaviour
         greenColor.Add("color", 0);
         redColor.Add("color", 1);
         blueColor.Add("color", 2);
-        user.Add("name", "leo");
+        user.Add("name", "ramo");
 
         User t = new User(1234, "Pony", new List<Card>() { new Card(3, 1, 1), new Card(17, 1, 4), new Card(4, 3, 1) }, new List<Character>());
         usr = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(t));
