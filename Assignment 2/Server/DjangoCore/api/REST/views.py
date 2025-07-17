@@ -5,6 +5,20 @@ from rest_framework.response import Response
 from ServerClass import ServerClass, Parties
 import json
 import utilities
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+
+uri = "mongodb+srv://hannguyen30052003:8YYgCLne0GkLrTsx@gamedatabase.mro6jbt.mongodb.net/?retryWrites=true&w=majority&appName=GameDatabase"
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'))
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
 
 # Create your views here.
 @csrf_exempt
