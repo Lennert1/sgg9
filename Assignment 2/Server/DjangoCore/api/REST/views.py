@@ -71,29 +71,41 @@ def register(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            print("Request body raw:", request.body)
+            # This is the username sent by unity
             name = data.get("name")
             print(f"Name: {name}")
+            print(data)
 
-            # The UID should be assigned by the server I think
-            # uid = data.get("uid")
+            # TODO: Here a call to see if the user already exists
+            # TODO: If user already exists send status 409 code back
 
-            # Here should be the call to send data to the data base
+            # TODO: Assign UID that does not exist
+            uid = 999
 
-            return utilities.server_message_response("received","STATUS", status=200)
+            registration_data = {
+                "name": name,
+                "uid": uid
+            }
+            # If successful, send the data back to unity, where the user is created
+            return JsonResponse(registration_data, status=200)
         except Exception as e:
             return utilities.server_message_response("received","STATUS", status=400)
     else:
         return utilities.server_message_response("received","STATUS", status=405)
 
+
+
+
+
 @csrf_exempt
 def updateData(request):
     if request.method == "POST":
         try:
+            # This is the userdata received from the front end
             data = json.loads(request.body)
+            uid = data.get("uid")
             print(data)
-            gold = data.get("updatedGold")
-            cards = data.get("updatedCards")
+            print(uid)
 
             # Send the updated data to the database
 
