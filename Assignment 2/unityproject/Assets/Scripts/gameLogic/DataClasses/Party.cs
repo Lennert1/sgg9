@@ -33,13 +33,6 @@ public class Party
         shield = leader.upgradePoints;
     }
 
-    // Set hp and shield to the right values
-    public void initializeParty()
-    {
-        this.hp = 100;
-        this.shield = 10;
-    }
-
     public override string ToString()
     {
         string membersList = members != null ? string.Join(", ", members) : "None";

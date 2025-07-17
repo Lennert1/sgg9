@@ -9,7 +9,9 @@ using System.Collections;
 public class BattleManager : MonoBehaviour, ICardSelector
 {
     public static BattleManager Instance { get; private set; }
-    
+
+    public BattleState battleState;
+
     public Dungeon dungeon;
     private BattleArena battleArena;
     private BattleArenaUI battleArenaUI;
@@ -421,10 +423,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
         {
             Debug.Log("Victory!");
             battleArenaUI.SwitchToWinScreen();
-            // extra aufruf um zu den rewards zu kommen:
-            // benötigt in diesem script eine methode die von ui aufgerufen werden kann um mitzuteilen wenn rewards gebraucht werden
-            // SwitchToRewards(...) muss dann aus diesem script aufgerufen werden
-            // falls rewards in BattleArena.cs gepspeichert werden dann würd ich die methode ohne parameter machen und von dort lesen
         }
         else
         {
@@ -440,7 +438,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
         GameManager.Instance.AddCardsToInventory(battleArena.rewardCards);
 
-#warning send user data to database
+        GameManager.Instance.SaveUserData();
     }
     
     private void Awake()

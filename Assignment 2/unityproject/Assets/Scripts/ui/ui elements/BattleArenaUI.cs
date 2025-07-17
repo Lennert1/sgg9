@@ -71,6 +71,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
     private void SwitchState(BattleState s)
     {
+        BattleManager.Instance.battleState = s;
         switch (s)
         {
             case BattleState.Initial:
@@ -265,5 +266,6 @@ public enum BattleState
     EvaluateRound,
     Win,
     Lose,
-    Rewards
+    Rewards,
+    Waiting
 }

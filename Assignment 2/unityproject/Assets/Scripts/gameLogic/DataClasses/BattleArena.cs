@@ -7,11 +7,20 @@ using UnityEngine;
 [Serializable]
 public class BattleArena
 {
+    public int partyID;
+
+    [Space]
+
     public Enemy enemy;
     public int rewardGold;
-    public List<Card> rewardCards;
+    public List<Card> rewardCards = new();
     public int rewardUpgradePoints;
-    private System.Random rnd = new System.Random();
+
+    [Space]
+    public List<bool> playerChecks = new();
+    public List<Card> playerCards = new();
+    public List<Card> enemyCards = new();
+    public BattleState battleState;
 
 
     public BattleArena(List<Character> characters, Enemy enemy)
@@ -25,26 +34,16 @@ public class BattleArena
 
         this.enemy = enemy;
 
-        rewardGold = calculateGold(averageLvl);
+        rewardGold = (int)((0.1 * averageLvl + 0.9) * 25);
 
         rewardCards = calculateCards(averageLvl);
-        rewardUpgradePoints = calculateArmorpoints(averageLvl);
-    }
-
-    private int calculateGold(int averageLvl)
-    {
-        //20 faches Durchschnittlevel +- 10%
-        return (int)(averageLvl * 20 * (rnd.NextDouble() * 0.2 + 0.9));
-    }
-
-    private int calculateXP(int averageLvl)
-    {
-        //1/4 der benötigten xp des durchschnittlevels der gruppe +- 10%
-        return (int)(100 * Math.Pow(1.5, averageLvl - 1) / 4 * (rnd.NextDouble() * 0.2 + 0.9));
+        rewardUpgradePoints = (int)((0.1 * averageLvl + 0.9) * 10);
     }
 
     private List<Card> calculateCards(int averageLvl)
     {
+        System.Random rnd = new();
+
         //Random Karte * durchschnittslevel und 10% chance auf zweite karte
         if (GameManager.Instance.RewardPool.Count == 0)
         {
@@ -64,11 +63,6 @@ public class BattleArena
             cards[1].count = averageLvl;
         }
         return cards;
-    }
-
-    private int calculateArmorpoints(int averageLvl)
-    {
-        return averageLvl * 50;
     }
 
     [JsonConstructor]
