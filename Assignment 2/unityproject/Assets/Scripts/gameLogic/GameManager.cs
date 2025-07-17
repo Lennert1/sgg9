@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UI activeUI;
     [SerializeField] public UI[] allUIs;
     private MiniGameUI activeMiniGameUI;
-    
+
     public User usrData;
     public Party usrParty;
 
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     private User tUser;
     private User loadedUser;
+    private BattleArena tBattleArena;
 
     #endregion
 
@@ -78,7 +79,7 @@ public class GameManager : MonoBehaviour
             r.Add(new Card(i));
         }
         RewardPool = r;
-        
+
         // User data is loaded locally when a login happens
         // rmv //
         usrData = new User(1234, "Pony");
@@ -163,14 +164,7 @@ public class GameManager : MonoBehaviour
     // load User of this device, this function should be used to update any change on the usrData in the gameManager
     public void LoadUserData()
     {
-        //for testing purposes only:
-        return;
-
-        // This function loads the user data from json as C# object so you can access the data 
-        if (_api != null)
-        {
-            usrData = _api.LoadUserDataFromFile();
-        }
+        usrData = LoadUserData(usrData.uid);
     }
 
     public void UpdateUserData(User user)
@@ -179,32 +173,53 @@ public class GameManager : MonoBehaviour
     }
 
     // load any User by their ID
-    public User LoadUserData(int id) 
+    public User LoadUserData(int id)
     {
         return usrData;
+
+#warning missing
 
         // Correct method
         /*RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);
         return loadedUser;*/
     }
 
-    /*public void SaveUserData()
+    public void SaveUserData()
     {
-#warning missing: REST-Call to send user data
+#warning missing
         //RestServerCaller.Instance.GenericSendCall("", usrData);
-    } */
+    }
 
     public void LoadPartyData()
     {
         // for testing purposes only:
         usrParty = new Party(usrData);
-        //usrParty.members.Add(22769834);
-        //usrParty.members.Add(8976);
-        //usrParty.memberPoIids.Add(123);
+
+#warning missing
 
         // Correct method
         /*string url = "http://127.0.0.1:8000/api/partyById/" + usrData.pid + "/";
         RestServerCaller.Instance.GenericRequestCall(url, PartyCallback);*/
+    }
+
+    public void SaveBattleArena(BattleArena battleArena)
+    {
+        tBattleArena = battleArena;
+#warning missing
+        // get partyID and save battleArena to corresponding data base entry
+    }
+
+    public BattleArena LoadBattleArena(int partyID) {
+#warning missing
+        return tBattleArena;
+    }
+
+    public void UpdatePlayerFlags(int partyID, int index, bool value) {
+        // update the bool at the index in playerChecks[] in the BattleArena entry corresponding to the partyID
+    }
+
+    public void AddPlayerCard(int partyID, Card card) {
+        // add the card to playerCards[] in the BattleArena entry corresponding to the partyID
     }
 
     #endregion
@@ -232,7 +247,7 @@ public class GameManager : MonoBehaviour
 
         tUser = JsonConvert.DeserializeObject<User>(response.message);
     }
-    
+
     public void PartyCallback(ServerMessage response)
     {
         if (response.IsError())
@@ -242,8 +257,17 @@ public class GameManager : MonoBehaviour
         }
 
         usrParty = JsonUtility.FromJson<Party>(response.message);
-        usrParty.initializeParty();
         //Debug.Log(usrParty);
+    }
+
+    public void BattleArenaCallback(ServerMessage response) {
+        if (response.IsError())
+        {
+            Debug.Log("Error");
+            return;
+        }
+
+        tBattleArena = JsonUtility.FromJson<BattleArena>(response.message);
     }
 
     public void SetLoadedUser(User user)

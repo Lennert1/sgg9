@@ -94,7 +94,8 @@ public class CharacterMenuUI : UI, ICardSelector
         selectButtons[GameManager.Instance.usrData.selectedCharacter].color = Color.gray;
         selectButtons[s].color = Color.green;
         GameManager.Instance.usrData.selectedCharacter = s;
-#warning save user data to database!
+
+        GameManager.Instance.SaveUserData();
     }
 
     public void ScrollRight()
@@ -136,7 +137,7 @@ public class CharacterMenuUI : UI, ICardSelector
         }
 
         if (editing == -1) {
-#warning save user data to database!
+        GameManager.Instance.SaveUserData();
         }
     }
 
@@ -146,7 +147,7 @@ public class CharacterMenuUI : UI, ICardSelector
         GameManager.Instance.usrData.upgradePoints -= characters[i].GetRequiredUpgradePoints();
         characters[i].SetLevel(characters[i].lvl + 1);
         
-#warning save user data to database!
+        GameManager.Instance.SaveUserData();
 
         UpdateUpgradeInfos();
     }
