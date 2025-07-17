@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/consumers_dungeon.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DjangoCore/api/WEBSOCKETS/consumers_lobby.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/DjangoCore/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/DjangoCore/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,6 +131,7 @@
       <workItem from="1750599305451" duration="3705000" />
       <workItem from="1751708780885" duration="3149000" />
       <workItem from="1752236401109" duration="2443000" />
+      <workItem from="1752673599185" duration="6475000" />
     </task>
     <servers />
   </component>

@@ -86,3 +86,6 @@ class Parties(Enum):
 
 
 
+class ServerUtility:
+    color = 1
+    uid = 1
