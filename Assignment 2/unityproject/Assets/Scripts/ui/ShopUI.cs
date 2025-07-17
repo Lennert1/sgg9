@@ -88,24 +88,9 @@ public class ShopUI : UI
 
             Card cardToBeAdded = new Card(id, shopLVL, 1);
 
-            if (!CheckIfCardExists(cardToBeAdded))
-            {
-                userData.cards.Add(cardToBeAdded);
-            }
-            // Update the userData.json file, don't think we need this once the data base exists
-            GameManager.Instance.UpdateUserData(userData);
+            GameManager.Instance.AddCardsToInventory(new List<Card> { cardToBeAdded });
 
-            API api = GameManager.Instance.GetAPI();
-            
-
-            UpdateData updateData = new UpdateData
-            {
-                updatedGold = userData.gold,
-                updatedCards = userData.cards
-            };
-
-            // Send update information to the server
-            StartCoroutine(api.SendUpdate(updateData));
+            GameManager.Instance.SaveUserData();
 
             goldLabel.text = "Your Gold: " + GameManager.Instance.usrData.gold.ToString();
             notificationLabel.text = "Bought an item!";
@@ -114,19 +99,6 @@ public class ShopUI : UI
         {
             notificationLabel.text = "Not enough gold!";
         }
-    }
-
-    private bool CheckIfCardExists(Card cardToBeAdded)
-    {
-        foreach (Card card in GameManager.Instance.usrData.cards)
-        {
-            if (card.type == cardToBeAdded.type && card.lvl == cardToBeAdded.lvl)
-            {
-                card.count++;
-                return true;
-            }
-        }
-        return false;
     }
 
     public void BuyDaggerButtonClicked()

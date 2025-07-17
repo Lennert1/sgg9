@@ -7,4 +7,6 @@ public class EnemyScriptableObject : ScriptableObject
 {
     public int id;
     public Sprite sprite;
+    public int baseHP;
+    public List<int> deck;
 }

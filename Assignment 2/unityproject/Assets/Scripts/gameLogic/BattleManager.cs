@@ -4,11 +4,14 @@ using System.Linq;
 using UnityEngine;
 using Mapbox.Json;
 using Random = System.Random;
+using System.Collections;
 
 public class BattleManager : MonoBehaviour, ICardSelector
 {
     public static BattleManager Instance { get; private set; }
-    
+
+    public BattleState battleState;
+
     public Dungeon dungeon;
     private BattleArena battleArena;
     private BattleArenaUI battleArenaUI;
@@ -29,6 +32,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     //uid, card
     private List<KeyValuePair<int, Card>> chosenCards = new List<KeyValuePair<int, Card>>();
     private List<Card> draw = new List<Card>();
+    private List<Card> enemyCards = new();
 
     private bool playerTurn = true;
     
@@ -41,8 +45,9 @@ public class BattleManager : MonoBehaviour, ICardSelector
         //Falls man Leader ist, wird ready gecheckt
         if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
         {
-            readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[0], GameManager.Instance.currentPoiID));
-            selectedCharacter = GameManager.Instance.usrData.characters[0];
+            readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter], GameManager.Instance.currentPoiID));
+            selectedCharacter = GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter];
+            GameManager.Instance.UpdateCardDeckLevels();
             CheckReady();
         }
         else
@@ -138,9 +143,21 @@ public class BattleManager : MonoBehaviour, ICardSelector
         {
             allCharacters.Add(tuple.Item2);
         }
-        this.battleArena = new BattleArena(allCharacters);
-        this.dungeon = new Dungeon();
-        this.dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
+
+        int et = new Random().Next(GameAssetManager.Instance.Enemies.Count - 1);
+        EnemyScriptableObject es = GameAssetManager.Instance.ReadEnemy(et);
+        List<Card> ed = new();
+        foreach (int i in es.deck)
+        {
+            ed.Add(new Card(i));
+        }
+        int el = 0;
+        foreach (Character c in allCharacters) el += c.lvl;
+
+        Enemy e = new Enemy(et, ed, es.baseHP, el);
+        battleArena = new BattleArena(allCharacters, e);
+        dungeon = new Dungeon();
+        dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
         
         Debug.Log(battleArena.enemy.hp);
         /* schicke dungeon an die anderen
@@ -149,14 +166,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
          
          */
         
-        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(this.dungeon); //¯\_(ツ)_/¯
+        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
     }
     //Bei nicht-Leadern
     public void allReady(Dungeon dungeon)
     {
         this.dungeon = dungeon;
-        this.battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
+        battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
         
         battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
         StartBattle(battleArena);
@@ -167,7 +184,12 @@ public class BattleManager : MonoBehaviour, ICardSelector
     public void StartBattle(BattleArena battleArena)
     {
         partyShield = GameManager.Instance.usrParty.shield;
-        partyHp = GameManager.Instance.usrParty.hp;
+        partyHp = 0;
+        foreach (int i in GameManager.Instance.usrParty.members)
+        {
+            User t = GameManager.Instance.LoadUserData(i);
+            partyHp += t.characters[t.selectedCharacter].hp;
+        }
         maxPartyHp = partyHp;
         enemy = battleArena.enemy;
         bossHp = enemy.hp;
@@ -215,12 +237,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     public void SelectCard(int p)
     {
+        if (!playerTurn) return; 
+        
         foreach (var card in chosenCards.Where(card => card.Key == GameManager.Instance.usrData.uid))
-        {
-            chosenCards.Remove(card);
-            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
-            return;
-        }
+            {
+                chosenCards.Remove(card);
+                chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+                return;
+            }
 
         chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
 
@@ -252,7 +276,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
             Debug.Log("Some Players have not chosen cards!");
             return;
         }
-             
+
+        playerTurn = false;
         Debug.Log("Playing Players cards");
      
         foreach (var kvp in chosenCards)
@@ -260,8 +285,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
             Card card = kvp.Value;
             ApplyCardEffectToBoss(card);
         }
-     
-        chosenCards.Clear();
      
         if (bossHp <= 0)
         {
@@ -281,14 +304,19 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private void EnemyPlayCards()
     {
         Debug.Log("Playing Enemies cards");
-        Card enemyCard = enemy.action();
+        enemyCards = new(enemy.deck);
+        Random r = new();
+        while (enemyCards.Count > 3)
+        {
+            enemyCards.RemoveAt(r.Next(enemyCards.Count));
+        }
         /* Schickt Gegnerkarte an Teammitglieder
 
-        schickeKarte(Card card);
+        schickeKarten(List<Card> cards);
 
          */
-        
-        ApplyCardEffectToParty(enemyCard);
+
+        ApplyCardEffectToParty(enemyCards);
 
         if (partyHp <= 0)
         {
@@ -297,14 +325,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
 
         Debug.Log("Next round");
-        Draw();
+        StartCoroutine(StartEvaluationPhase());
     }
     
-    private void EnemyPlayCards(Card card)
+    private void EnemyPlayCards(List<Card> cards)
     {
         Debug.Log("Playing Enemies cards");
         
-        ApplyCardEffectToParty(card);
+        ApplyCardEffectToParty(cards);
 
         if (partyHp <= 0)
         {
@@ -313,6 +341,17 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
 
         Debug.Log("Next round");
+        StartCoroutine(StartEvaluationPhase());
+    }
+
+    public IEnumerator StartEvaluationPhase()
+    {
+        List<Card> teamCards = new();
+        foreach (var kvp in chosenCards) teamCards.Add(kvp.Value);
+        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, partyHp, partyShield, bossHp);
+        yield return new WaitForSeconds(10);
+        playerTurn = true;
+        chosenCards.Clear();
         Draw();
     }
 
@@ -326,44 +365,47 @@ public class BattleManager : MonoBehaviour, ICardSelector
         bossHp -= damage;
         partyHp += healing;
         partyShield += shield;
-        
+
         Debug.Log($"Dealt {damage} damage to Boss\nHealed for {healing} HP\nAdded {shield} Shield");
     }
 
-    private void ApplyCardEffectToParty(Card card)
+    private void ApplyCardEffectToParty(List<Card> cards)
     {
-        CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
-        bool shieldBreak = false;
+        foreach (Card card in cards)
+        {
+            CardScriptableObject scriptable = GameAssetManager.Instance.ReadCard(card.type);
+            bool shieldBreak = false;
 
-        int damage = scriptable.GetDamage(card.lvl);
-        int healing = scriptable.GetHealing(card.lvl);
-        if (partyShield > damage)
-        {
-            partyShield -= damage;
-        }
-        else
-        {
-            damage -= partyShield;
-            partyShield = 0;
-            partyHp -= damage;
-            shieldBreak = true;
-        }
-        
-        partyHp -= damage;
-        bossHp += healing;
-        if (shieldBreak)
-        {
-            Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
-        }
-        else
-        {
-            if (partyShield > 0)
+            int damage = scriptable.GetDamage(card.lvl);
+            int healing = scriptable.GetHealing(card.lvl);
+            if (partyShield > damage)
             {
-                Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
+                partyShield -= damage;
             }
             else
             {
-                Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+                damage -= partyShield;
+                partyShield = 0;
+                partyHp -= damage;
+                shieldBreak = true;
+            }
+
+            partyHp -= damage;
+            bossHp += healing;
+            if (shieldBreak)
+            {
+                Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
+            }
+            else
+            {
+                if (partyShield > 0)
+                {
+                    Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
+                }
+                else
+                {
+                    Debug.Log($"Boss dealt {damage} damage to Party\nBoss healed for {healing} HP");
+                }
             }
         }
     }
@@ -373,20 +415,30 @@ public class BattleManager : MonoBehaviour, ICardSelector
     //Defeat screen oder rewards hier
     private void EndBattle(bool victory)
     {
+        List<Card> teamCards = new();
+        foreach (var kvp in chosenCards) teamCards.Add(kvp.Value);
+        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, partyHp, partyShield, bossHp);
+        playerTurn = false;
         if (victory)
         {
             Debug.Log("Victory!");
             battleArenaUI.SwitchToWinScreen();
-            // extra aufruf um zu den rewards zu kommen:
-            // benötigt in diesem script eine methode die von ui aufgerufen werden kann um mitzuteilen wenn rewards gebraucht werden
-            // SwitchToRewards(...) muss dann aus diesem script aufgerufen werden
-            // falls rewards in BattleArena.cs gepspeichert werden dann würd ich die methode ohne parameter machen und von dort lesen
         }
         else
         {
             Debug.Log("Defeat!");
             battleArenaUI.SwitchToLossScreen();
         }
+    }
+
+    public void CollectRewards()
+    {
+        GameManager.Instance.usrData.gold += battleArena.rewardGold;
+        GameManager.Instance.usrData.upgradePoints += battleArena.rewardUpgradePoints;
+
+        GameManager.Instance.AddCardsToInventory(battleArena.rewardCards);
+
+        GameManager.Instance.SaveUserData();
     }
     
     private void Awake()
