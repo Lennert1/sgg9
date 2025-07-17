@@ -72,37 +72,30 @@ def check_login(request):
 def register(request):
     if request.method == "POST":
         try:
+            # This is the new user sent by unity
             data = json.loads(request.body)
-            # This is the username sent by unity
+
             name = data.get("name")
-            print(f"Name: {name}")
             print(data)
 
             # TODO: Here a call to see if the user already exists
             # TODO: If user already exists send status 409 code back
-            # The UID should be assigned by the server I think
-            # uid = data.get("uid")
+
             user = User.objects.create(
                 name = name,
-                lvl = 1,
-                gold = 0,
-                upgradePoints = 0,
-                selectedCharacter = 0,
-                cards = [],
-                characters = []
+                lvl = data.get("lvl"),
+                gold = data.get("gold"),
+                upgradePoints = data.get("upgradePoints"),
+                selectedCharacter = data.get("selectedCharacter"),
+                cards = data.get("cards"),
+                characters = data.get("characters"),
+                friends = data.get("friends")
             )
             user.save()
             print("Anzahl User in DB:", User.objects.count())
 
             # TODO: Assign UID that does not exist
-            uid = 999
-
-            registration_data = {
-                "name": name,
-                "uid": uid
-            }
-            # If successful, send the data back to unity, where the user is created
-            return JsonResponse(registration_data, status=200)
+            return JsonResponse(user, status=200)
         except Exception as e:
             print(e)
             return utilities.server_message_response("received","STATUS", status=400)
