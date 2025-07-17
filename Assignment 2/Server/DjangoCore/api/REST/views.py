@@ -2,17 +2,19 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from ServerClass import ServerClass, Parties
+from ServerClass import ServerClass, Parties, ServerUtility
 import json
 import utilities
+from api.models import *
 
 # Create your views here.
 @csrf_exempt
 def change_color(request):
+    print(request.body)
     color_data = json.loads(request.body).get("color")
-    ServerClass.color = int(color_data)
+    ServerUtility.color = int(color_data)
     print("Empfangene Farbe (REST):", color_data)
-    return  utilities.server_message_response(f"color: {color_data}","DATA")
+    return  utilities.server_message_response(f"color: {color_data}","DATA", status = 200)
 
 @csrf_exempt
 def login(request):
@@ -21,14 +23,14 @@ def login(request):
 
     print("Name: ", name)
     print("UID: ", uid)
-    return utilities.server_message_response("received","STATUS")
+    return utilities.server_message_response("received","STATUS", status = 200)
 
 @csrf_exempt
 def update_color(request):
     msg = json.dumps({
-        "color": f"{ServerClass.color}"
+        "color": f"{ServerUtility.color}"
     })
-    return utilities.server_message_response(msg,"DATA")
+    return utilities.server_message_response(msg,"DATA", status = 200)
 
 # =============================== Stuff that Han did ========================================
 
@@ -76,11 +78,23 @@ def register(request):
 
             # The UID should be assigned by the server I think
             # uid = data.get("uid")
+            user = User.objects.create(
+                name = name,
+                lvl = 1,
+                gold = 0,
+                upgradePoints = 0,
+                selectedCharacter = 0,
+                cards = [],
+                characters = []
+            )
+            user.save()
+            print("Anzahl User in DB:", User.objects.count())
 
             # Here should be the call to send data to the data base
 
             return utilities.server_message_response("received","STATUS", status=200)
         except Exception as e:
+            print(e)
             return utilities.server_message_response("received","STATUS", status=400)
     else:
         return utilities.server_message_response("received","STATUS", status=405)
