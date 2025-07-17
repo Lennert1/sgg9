@@ -41,6 +41,7 @@ public class User
             new Character(characterType.Paladin),
             new Character(characterType.Shaman)
         };
+        friendsUID = new List<int>();
     }
 
     public User(int uid, string name, List<Card> cards, List<Character> characters, List<int> friendsUID)
