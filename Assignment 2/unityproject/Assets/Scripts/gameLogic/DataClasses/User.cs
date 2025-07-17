@@ -17,6 +17,7 @@ public class User
     public int armorPoints;
     public List<Card> cards;
     public List<Character> characters;
+    public List<int> friendsUID;
 
     // ========== //
 
@@ -30,12 +31,14 @@ public class User
         characters = new List<Character>();
     }
 
-    public User(int uid, string name, List<Card> cards, List<Character> characters)
+    public User(int uid, string name, List<Card> cards, List<Character> characters, List<int> friendsUID)
     {
         this.uid = uid;
         this.name = name;
 
         this.cards = cards;
         this.characters = characters;
+        this.friendsUID = friendsUID;
+
     }
 }
