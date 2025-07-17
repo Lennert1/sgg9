@@ -90,7 +90,7 @@ public class ShopUI : UI
 
             GameManager.Instance.AddCardsToInventory(new List<Card> { cardToBeAdded });
 
-#warning save user data to database! we dont care that this shit is hella inefficient, just yeet over all the user data, its easier that way
+            GameManager.Instance.SaveUserData();
 
             goldLabel.text = "Your Gold: " + GameManager.Instance.usrData.gold.ToString();
             notificationLabel.text = "Bought an item!";
