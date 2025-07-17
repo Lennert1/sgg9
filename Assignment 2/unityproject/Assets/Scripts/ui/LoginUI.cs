@@ -72,14 +72,6 @@ public class LoginUI : UI
         }
     }
 
-    [System.Serializable]
-    public class UserData
-    {
-        public string username;
-        public int uid;
-        public int level;
-    }
-
     IEnumerator SendLogin()
     {
         RegisterData data = new RegisterData

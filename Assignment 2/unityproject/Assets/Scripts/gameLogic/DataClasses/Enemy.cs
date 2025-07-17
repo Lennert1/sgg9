@@ -5,41 +5,30 @@ using UnityEngine;
 
 public class Enemy
 {
+    public int enemyType;
     public int lvl;
     public int hp;
     public List<Card> deck;
-    public int enemyType;
 
 
-    public Enemy(int lvl, List<Card> deck)
+    public Enemy(int type, List<Card> deck, int hp, int lvl = 1)
     {
+        enemyType = type;
+        this.deck = deck;
         this.lvl = lvl;
-        hp = lvl * 100;
-        if (deck == null || deck.Count == 0)
-        {
-            CreateDeck();
-        }
-        else
-        {
-            this.deck = deck;
-        }
+        this.hp = (int)((0.9 + (0.1 * lvl)) * hp);
     }
-    public Enemy(int lvl)
+    public Enemy(int type, int lvl = 1)
     {
-        this.lvl = lvl;
+        enemyType = type;
         hp = lvl * 100;
         CreateDeck();
+        this.lvl = lvl;
     }
 
-    //Leeres Deck -> 1 Karte von Typ 0
     public void CreateDeck()
     {
-        this.deck = new List<Card>();
-        this.deck.Add(new Card(0, lvl, 1));
-    }
-    public virtual Card action()
-    {
-        return deck[new System.Random().Next(deck.Count)];
+        deck = new();
     }
     
     [JsonConstructor]

@@ -62,6 +62,7 @@ public class TavernUI : UI
     }
 
     public void PressJoinParty() {
+#warning missing: game logic call to join party
         Debug.Log("Joined Party!");
 
         notInParty.SetActive(false);

@@ -12,12 +12,19 @@ public class User
     // party ID: 0 := not member of a party
     public int pid = 0;
     public string name;
-    public int lvl = 1;
+    public int lvl {get
+        {
+            int v = 0;
+            foreach (Character c in characters) v += c.lvl;
+            return v;
+        }
+    }
     public int gold;
-    public int armorPoints;
+    public int upgradePoints;
     public List<Card> cards;
     public List<Character> characters;
     public List<int> friendsUID;
+    public int selectedCharacter;
 
     // ========== //
 
@@ -28,7 +35,12 @@ public class User
         this.name = name;
 
         cards = new List<Card>();
-        characters = new List<Character>();
+        characters = new List<Character>()
+        {
+            new Character(characterType.Assassin),
+            new Character(characterType.Paladin),
+            new Character(characterType.Shaman)
+        };
     }
 
     public User(int uid, string name, List<Card> cards, List<Character> characters, List<int> friendsUID)

@@ -17,6 +17,7 @@ public class GameAssetManager : MonoBehaviour
     [SerializeField] private CardScriptableObject defaultCard;
 
     [SerializeField] private List<EnemyScriptableObject> enemies;
+    public List<EnemyScriptableObject> Enemies { get { return enemies; } }
 
     #endregion
 
@@ -36,6 +37,16 @@ public class GameAssetManager : MonoBehaviour
     {
         if (id < cards.Count) return cards[id];
         else return defaultCard;
+    }
+
+    public List<Card> CreateInventoryOfAllCards()
+    {
+        List<Card> l = new();
+        for (int i = 1; i < cards.Count; i++)
+        {
+            l.Add(new Card(i));
+        }
+        return l;
     }
 
     public EnemyScriptableObject ReadEnemy(int id)

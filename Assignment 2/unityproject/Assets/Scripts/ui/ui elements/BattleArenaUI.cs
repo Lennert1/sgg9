@@ -25,7 +25,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     [SerializeField] private Slider bossHpBar;
     [SerializeField] private Slider bossDmgBar;
     [SerializeField] private TextMeshProUGUI goldDisplay;
-    [SerializeField] private TextMeshProUGUI expDisplay;
+    [SerializeField] private TextMeshProUGUI upgradeDisplay;
     [SerializeField] private Transform rewardCardDisplayCenter;
 
     #region cardDisplays
@@ -129,12 +129,12 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     }
 
     //call this to begin evaluation after all members have selected their card for the round
-    public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCard, int teamHP, int teamShield, int enemyHP)
+    public void SwitchToEvaluation(List<Card> teamCards, List<Card> enemyCards, int teamHP, int teamShield, int enemyHP)
     {
         SwitchState(BattleState.EvaluateRound);
 
         DisplayPlayerCards(teamCards, false);
-        DisplayEnemyCards(enemyCard);
+        DisplayEnemyCards(enemyCards);
         UpdateStats(teamHP, teamShield);
 
         bossHpBar.value = enemyHP;
@@ -142,20 +142,20 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
 
     public void SwitchToWinScreen() {
         winScreen.SetActive(true);
-        DisplayForWinLoss();
     }
 
     public void SwitchToLossScreen() {
         lossScreen.SetActive(true);
-        DisplayForWinLoss();
     }
 
-    public void SwitchToRewards(int gold, int exp, List<Card> cards) {
+    public void SwitchToRewards() {
         SwitchState(BattleState.Rewards);
+        BattleManager.Instance.CollectRewards();
 
-        goldDisplay.text = "+" + gold + " Gold";
-        goldDisplay.text = "+" + exp + " EXP";
+        goldDisplay.text = "+" + data.rewardGold + " Gold";
+        upgradeDisplay.text = "+" + data.rewardUpgradePoints + " Upgrade Points";
 
+        List<Card> cards = data.rewardCards;
         for (int i = 0; i < cards.Count; i++)
         {
             float xOffset = i * positionOffset.x - ((cards.Count - 1) * positionOffset.x / 2);
@@ -164,14 +164,12 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, rewardCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(cards[i]);
+            c.InitiateCardDisplay(cards[i], hideLVL: true);
         }
     }
 
     public void PressSwitchToRewards() {
-        #warning request reward info from battlemanager
-        // for testing only:
-        SwitchToRewards(1250, 150, new List<Card> { new Card(2), new Card(3), new Card(4) });
+        SwitchToRewards();
     }
 
     // call this each time a card was selected by the team
@@ -190,7 +188,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             card.transform.localPosition = pos;
             card.transform.localScale = Vector3.one * teamCardDisplayScaleFactor;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i]);
+            c.InitiateCardDisplay(draw[i], hideCount:true);
 
             teamCardDisplay.Add(card);
         }
@@ -215,7 +213,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, playerCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i]);
+            c.InitiateCardDisplay(draw[i], hideCount:true);
             if (interactable) c.InitiateSelectableCard(cardSelectors, i);
 
             playerCardDisplay.Add(card);
@@ -237,7 +235,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
             GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, enemyCardDisplayCenter);
             card.transform.localPosition = pos;
             CardDisplay c = card.GetComponent<CardDisplay>();
-            c.InitiateCardDisplay(draw[i]);
+            c.InitiateCardDisplay(draw[i], hideCount:true, displayAsEnemy: true);
 
             enemyCardDisplay.Add(card);
         }
@@ -249,21 +247,11 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
         shieldLabel.text = "Shield: " + teamShield;
     }
 
-    private void DisplayForWinLoss() {
-        List<Card> cards = new List<Card>();
-        for (int i = 0; i < GameManager.Instance.usrParty.memberCount; i++) cards.Add(new Card(0));
-        DisplayPlayerCards(cards, false);
-        cards.RemoveAt(cards.Count - 1);
-        DisplayEnemyCards(cards);
-        DisplayTeamCards(new List<Card>());
-    }
-
     public void ExitArena() {
         GameManager.Instance.SetUIActive(GameManager.Instance.allUIs[1]); // ¯\_(ツ)_/¯
     }
 
     public void CollectRewards() {
-        #warning battle manager collect rewards
         ExitArena();
     }
 

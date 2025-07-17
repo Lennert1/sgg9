@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviour
     // Assigning eventIDs with following system: 1 to 99 == dungeon, 100 to 199 == taverns, 200 to 299 == shops
     public int currentPoiID;
 
+    [SerializeField] private List<int> rewardPool;
+    public List<Card> RewardPool { get; private set; }
+
     #endregion
 
     #region data memory
@@ -68,8 +71,21 @@ public class GameManager : MonoBehaviour
         else instance = this;
 
         _api = GameObject.Find("UI").GetComponent<API>();
+
+        List<Card> r = new();
+        foreach (int i in rewardPool)
+        {
+            r.Add(new Card(i));
+        }
+        RewardPool = r;
         
         // User data is loaded locally when a login happens
+        // rmv //
+        usrData = new User(1234, "Pony");
+        usrData.pid = 1;
+        usrData.gold = 2000;
+        // ** //
+
         LoadUserData();
 
         foreach (UI u in allUIs)
@@ -95,6 +111,51 @@ public class GameManager : MonoBehaviour
         activeMiniGameUI = m;
     }
 
+    public void UpdateCardDeckLevels()
+    {
+        for (int c = 0; c < usrData.characters.Count; c++)
+        {
+            for (int d = 0; d < usrData.characters[c].deck.Count; d++)
+            {
+                for (int i = 0; i < usrData.cards.Count; i++)
+                {
+                    if (usrData.characters[c].deck[d].type == usrData.cards[i].type)
+                    {
+                        usrData.characters[c].deck[d].lvl = usrData.cards[i].lvl;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void AddCardsToInventory(List<Card> cards)
+    {
+        foreach (Card c in cards)
+        {
+            bool a = false;
+            for (int i = 0; i < usrData.cards.Count; i++)
+            {
+                if (usrData.cards[i].type == c.type)
+                {
+                    a = true;
+                    Debug.Log($"Pre-Add: Type: {usrData.cards[i].type}, Count: {usrData.cards[i].count}");
+                    usrData.cards[i].count += c.count;
+                    Debug.Log($"Post-Add: Type: {usrData.cards[i].type}, Count: {usrData.cards[i].count}");
+                    if (usrData.cards[i].count > usrData.cards[i].RequiredCardsForUpgrade())
+                    {
+                        Debug.Log($"Pre-Upgrade: Type: {usrData.cards[i].type}, Count: {usrData.cards[i].count}");
+                        usrData.cards[i].count -= usrData.cards[i].RequiredCardsForUpgrade();
+                        usrData.cards[i].lvl += 1;
+                        Debug.Log($"Used {usrData.cards[i].RequiredCardsForUpgrade()} to upgrade Card of type: {usrData.cards[i].type} to level: {usrData.cards[i].lvl} with remaining count: {usrData.cards[i].count}");
+                    }
+                    break;
+                }
+            }
+            if (!a) usrData.cards.Add(c);
+        }
+    }
+
     #endregion
 
     #region data management
@@ -103,10 +164,6 @@ public class GameManager : MonoBehaviour
     public void LoadUserData()
     {
         //for testing purposes only:
-        usrData = new User(1234, "Pony", new List<Card>() { new Card(1, 1, 1), new Card(2, 1, 1), new Card(3, 3, 1), new Card(4, 6, 16), new Card(5, 1, 1), new Card(6, 9, 16) /*, new Card(16, 1, 16), new Card(1, 16, 16), new Card(16, 16, 1), new Card(16, 1, 1), new Card(1, 1, 16) */}, new List<Character> { new Character(0) }, new List<int> {5678});
-        usrData.pid = 1;
-        usrData.characters[0].deck = usrData.cards;
-
         return;
 
         // This function loads the user data from json as C# object so you can access the data 
@@ -124,7 +181,7 @@ public class GameManager : MonoBehaviour
     // load any User by their ID
     public User LoadUserData(int id) 
     {
-        return new User(id, "" + id);
+        return usrData;
 
         // Correct method
         /*RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);

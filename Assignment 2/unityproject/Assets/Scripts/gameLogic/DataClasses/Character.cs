@@ -1,19 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mapbox.Json;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[Serializable]
 public class Character
 {
 
     public characterType type;
     public int xp;
     public int lvl;
+    private int baseHP;
     public int hp;
     public List<Card> deck;
 
     //Kartenlimit ist denke ich sinnvoll
-    private int deckLimit = 10;
+    private int deckLimit = 8;
 
     // ========== //
 
@@ -21,65 +25,62 @@ public class Character
     {
         this.type = type;
         xp = 0;
-        lvl = 1;
         deck = new List<Card>();
 
-        //Knight hat mehr Hp
-        if (type == characterType.Knight)
+
+        switch (type)
         {
-            hp = 150;
+            case characterType.Assassin:
+                {
+                    baseHP = 70;
+                    deck = new List<Card> { new Card(1), new Card(2), new Card(2), new Card(4) };
+                    break;
+                }
+            case characterType.Paladin:
+                {
+                    baseHP = 240;
+                    deck = new List<Card> { new Card(2), new Card(2), new Card(5), new Card(5) };
+                    break;
+                }
+            case characterType.Shaman:
+                {
+                    baseHP = 140;
+                    deck = new List<Card> { new Card(1), new Card(3), new Card(3), new Card(3) };
+                    break;
+                }
+            case characterType.Wizard:
+                {
+                    baseHP = 1;
+                    break;
+                }
+            default: break;
         }
-        else
-        {
-            hp = 100;
-        }
+
+        SetLevel(1);
     }
 
-    public void AddCardToDeck(Card card)
+    [JsonConstructor]
+    public Character()
     {
-        if (deck.Count < deckLimit && !deck.Contains(card))
-        {
-            deck.Add(card);
-        }
+        deck = new();
     }
 
-    public void RemoveCardFromDeck(Card card)
+    public void SetLevel(int lvl)
     {
-        deck.Remove(card);
-    }
-    private void CheckLvlUp()
-    {
-        while (true)
-        {
-            //Benötigte Xp *1,5 pro Level, startet bei 100xp
-            if (xp >= (int)(100 * Math.Pow(1.5, lvl - 1)))
-            {
-                lvl++;
-                xp -= (int)(100 * Math.Pow(1.5, lvl - 1));
-
-                /* LevelUp boni hierhin
-                 
-                hp += lvl * 20
-                
-                */
-
-                continue;
-            }
-
-            break;
-        }
+        this.lvl = lvl;
+        hp = (int)(baseHP * Math.Pow(1.2, (double)lvl - 1));
     }
 
-    public void AddXp(int rewardXp)
+    public int GetRequiredUpgradePoints()
     {
-        this.xp += rewardXp;
-        CheckLvlUp();
+        return lvl * lvl + 4;
     }
 }
 
 public enum characterType
 {
-    Knight,
+    Assassin,
+    Paladin,
     Shaman,
     Wizard
 }

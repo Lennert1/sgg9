@@ -30,7 +30,7 @@ public class Party
         members = new List<int> { leader.uid };
         memberPoIids = new List<int>();
         hp = leader.characters[0].hp;
-        shield = leader.armorPoints;
+        shield = leader.upgradePoints;
     }
 
     // Set hp and shield to the right values

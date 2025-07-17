@@ -12,7 +12,7 @@ public class InventoryUI : UI
     [SerializeField] private GameObject cardPrefab;
     [Space]
     [SerializeField] private TextMeshProUGUI labelGold;
-    [SerializeField] private TextMeshProUGUI labelArmorCards;
+    [SerializeField] private TextMeshProUGUI labelUpgradePoints;
     private List<Card> cards;
     private List<GameObject> cardDisplay = new List<GameObject>();
 
@@ -22,13 +22,12 @@ public class InventoryUI : UI
 
         if (b)
         {
+            GameManager.Instance.LoadUserData();
             User usr = GameManager.Instance.usrData;
-            cards = usr.cards;
 
             labelGold.text = "Gold: " + usr.gold;
-            labelArmorCards.text = "ArmorCards: " + usr.armorPoints;
-
-            cards = usr.cards;
+            labelUpgradePoints.text = "Upgrade Points: " + usr.upgradePoints;
+            
             DisplayInventory();
         }
     }
@@ -42,6 +41,8 @@ public class InventoryUI : UI
 
     public void DisplayInventory()
     {
+        List<Card> cards = GameManager.Instance.usrData.cards;
+
         cardDisplay = new List<GameObject>();
         for (int i = 0; i < cards.Count; i++)
         {
