@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class UpdateData
+public class PurchaseData
 {
     public int updatedGold;
     public List<Card> updatedCards;

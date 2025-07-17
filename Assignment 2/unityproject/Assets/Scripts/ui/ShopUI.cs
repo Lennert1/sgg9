@@ -37,10 +37,10 @@ public class ShopUI : UI
         if (b)
         {
             // This has to be changed to access the GameManagers user data instead
-            User userData = GameManager.Instance.GetAPI().LoadUserDataFromFile();
-            if (userData != null)
+            User usr = GameManager.Instance.usrData;
+            if (usr != null)
             {
-                goldLabel.text = "Your Gold: " + userData.gold;
+                goldLabel.text = "Your Gold: " + usr.gold;
             }
             notificationLabel.text = "";
         }

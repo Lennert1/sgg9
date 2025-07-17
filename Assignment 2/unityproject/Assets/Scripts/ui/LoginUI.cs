@@ -15,7 +15,6 @@ public class LoginUI : UI
     {
         public string name;
     }
-
     public void RegisterButtonPressed()
     {
         if (userInputField.text.Length <= 0)
@@ -36,14 +35,12 @@ public class LoginUI : UI
         StartCoroutine(SendLogin());
     }
 
+    // This function sends the input of the text field to the server, where a new account is created
     IEnumerator SendRegistration()
     {
-        RegisterData data = new RegisterData
-        {
-            name = userInputField.text,
-        };
+        User newUser = new User(-1, userInputField.text);
 
-        string jsonData = JsonUtility.ToJson(data);
+        string jsonData = JsonUtility.ToJson(newUser);
 
         using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/register/", "POST"))
         {
@@ -62,7 +59,8 @@ public class LoginUI : UI
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("Response: " + www.downloadHandler.text);
+                string response = www.downloadHandler.text;
+                Debug.Log(response);
                 errorMessage.text = "Registration successful! You can login now!";
             }
             else
@@ -70,6 +68,8 @@ public class LoginUI : UI
                 Debug.LogError("Error: " + www.error);
             }
         }
+
+
     }
 
     IEnumerator SendLogin()
@@ -103,8 +103,7 @@ public class LoginUI : UI
                 if (mapUI != null)
                 {
                     User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
-                    GameManager.Instance.GetAPI().SaveUserDataToFile(userData);
-                    GameManager.Instance.LoadUserData();
+                    GameManager.Instance.usrData = userData;
                     LoadUI(mapUI);
                 }
             }
