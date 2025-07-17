@@ -17,6 +17,7 @@ public class GameAssetManager : MonoBehaviour
     [SerializeField] private CardScriptableObject defaultCard;
 
     [SerializeField] private List<EnemyScriptableObject> enemies;
+    public List<EnemyScriptableObject> Enemies { get { return enemies; } }
 
     #endregion
 

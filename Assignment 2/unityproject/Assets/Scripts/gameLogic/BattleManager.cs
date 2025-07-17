@@ -43,7 +43,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         //Falls man Leader ist, wird ready gecheckt
         if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
         {
-            readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[0], GameManager.Instance.currentPoiID));
+            readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter], GameManager.Instance.currentPoiID));
             selectedCharacter = GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter];
             GameManager.Instance.UpdateCardDeckLevels();
             CheckReady();
@@ -142,7 +142,18 @@ public class BattleManager : MonoBehaviour, ICardSelector
             allCharacters.Add(tuple.Item2);
         }
 
-        battleArena = new BattleArena(allCharacters);
+        int et = new Random().Next(GameAssetManager.Instance.Enemies.Count - 1);
+        EnemyScriptableObject es = GameAssetManager.Instance.ReadEnemy(et);
+        List<Card> ed = new();
+        foreach (int i in es.deck)
+        {
+            ed.Add(new Card(i));
+        }
+        int el = 0;
+        foreach (Character c in allCharacters) el += c.lvl;
+
+        Enemy e = new Enemy(et, ed, es.baseHP, el);
+        battleArena = new BattleArena(allCharacters, e);
         dungeon = new Dungeon();
         dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
         

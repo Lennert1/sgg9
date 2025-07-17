@@ -14,7 +14,7 @@ public class BattleArena
     private System.Random rnd = new System.Random();
 
 
-    public BattleArena(List<Character> characters)
+    public BattleArena(List<Character> characters, Enemy enemy)
     {
         int averageLvl = 0;
         for (int i = 0; i < characters.Count; i++)
@@ -23,7 +23,7 @@ public class BattleArena
         }
         averageLvl = averageLvl / characters.Count;
 
-        enemy = new Enemy(averageLvl);
+        this.enemy = enemy;
 
         rewardGold = calculateGold(averageLvl);
 

@@ -166,14 +166,6 @@ public class GameManager : MonoBehaviour
         //for testing purposes only:
         return;
 
-        usrData = new User(1234, "Pony");
-        if (GameAssetManager.Instance != null) usrData.cards = GameAssetManager.Instance.CreateInventoryOfAllCards();
-        usrData.pid = 1;
-        usrData.gold = 2000;
-        usrData.selectedCharacter = 1;
-
-        return;
-
         // This function loads the user data from json as C# object so you can access the data 
         if (_api != null)
         {

@@ -179,12 +179,12 @@ public class CharacterMenuUI : UI, ICardSelector
         for (int i = 0; i < cards.Count; i++)
         {
             if (cards[i].type > 5) {
-                Vector3 pos = new Vector3(info * positionOffset.x, 0, 0);
+                Vector3 pos = new Vector3(info++ * positionOffset.x, 0, 0);
 
                 GameObject card = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, inventoryTransform);
                 card.transform.localPosition = pos;
                 card.GetComponent<CardDisplay>().InitiateCardDisplay(cards[i]);
-                card.GetComponent<CardDisplay>().InitiateSelectableCard(thisAsList, info++ + 8); // xD
+                card.GetComponent<CardDisplay>().InitiateSelectableCard(thisAsList, i + 8); // xD
 
                 inventoryCardDisplay.Add(card);
             }
