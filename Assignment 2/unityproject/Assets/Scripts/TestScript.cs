@@ -19,13 +19,15 @@ public class TestScript : MonoBehaviour
     Dictionary<String, Object> redColor = new Dictionary<String, Object>();
     Dictionary<String, Object> blueColor = new Dictionary<String, Object>();
     Dictionary<String, Object> user = new Dictionary<String, Object>();
+    Dictionary<String, Object> userRequest = new Dictionary<String, Object>();
 
     void Start()
     {
         greenColor.Add("color", 0);
         redColor.Add("color", 1);
         blueColor.Add("color", 2);
-        user.Add("name", "leo");
+        user.Add("name", "ramo");
+        userRequest.Add("uid", "68793229e204ff397a8131ef");
 
         User t = new User(1234, "Pony", new List<Card>() { new Card(3, 1, 1), new Card(17, 1, 4), new Card(4, 3, 1) }, new List<Character>(), new List<int>());
         usr = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(t));
@@ -41,6 +43,12 @@ public class TestScript : MonoBehaviour
     {
         
         RestServerCaller.Instance.GenericSendCall("api/register/", user,null);
+    }
+
+    public void request()
+    {
+        RestServerCaller.Instance.GenericSendCall("api/userById/", userRequest,null);
+        
     }
     
     public void changeColorGreen()
