@@ -55,13 +55,13 @@ namespace GeoCoordinatePortable.gameLogic
         }
 
         //called if you're in a party and someone else used joinParty(yourPartyid)
-        public void otherJoined(int uid)
+        public void otherJoined(string uid)
         {
             GameManager.Instance.partyData.members.Add(uid);
         }
 
         //called if you're in a party and someone in your Party used leaveParty()
-        public void otherLeft(int uid)
+        public void otherLeft(string uid)
         {
             GameManager.Instance.partyData.members.Remove(uid);
         }

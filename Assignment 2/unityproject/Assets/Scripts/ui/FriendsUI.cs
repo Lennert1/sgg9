@@ -25,7 +25,7 @@ public class FriendsUI : UI
                 else
                 {
                     Debug.Log(usr.friendsUID.Count);
-                    foreach (int friendID in usr.friendsUID)
+                    foreach (string friendID in usr.friendsUID)
                     {
                         noFriendsText.text = "";
                         User friend = GameManager.Instance.LoadUserData(friendID);

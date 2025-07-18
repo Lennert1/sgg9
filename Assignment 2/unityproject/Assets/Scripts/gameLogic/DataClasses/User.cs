@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class User
 {
-    public int uid;
+    public string uid;
 
     // party ID: 0 := not member of a party
     public int pid = 0;
@@ -23,13 +23,13 @@ public class User
     public int upgradePoints;
     public List<Card> cards;
     public List<Character> characters;
-    public List<int> friendsUID;
+    public List<string> friendsUID;
     public int selectedCharacter;
 
     // ========== //
 
     [JsonConstructor]
-    public User(int uid, string name)
+    public User(string uid, string name)
     {
         this.uid = uid;
         this.name = name;
@@ -41,10 +41,10 @@ public class User
             new Character(characterType.Paladin),
             new Character(characterType.Shaman)
         };
-        friendsUID = new List<int>();
+        friendsUID = new List<string>();
     }
 
-    public User(int uid, string name, List<Card> cards, List<Character> characters, List<int> friendsUID)
+    public User(string uid, string name, List<Card> cards, List<Character> characters, List<string> friendsUID)
     {
         this.uid = uid;
         this.name = name;
