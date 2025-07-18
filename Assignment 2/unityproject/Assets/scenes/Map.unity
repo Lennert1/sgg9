@@ -19479,7 +19479,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4032442749290392818}
   - component: {fileID: 7192965091729477438}
-  - component: {fileID: 7192965091729477439}
   m_Layer: 0
   m_Name: TavernUI
   m_TagString: Untagged
@@ -20806,19 +20805,6 @@ MonoBehaviour:
   partyPrefab: {fileID: 5470456940106659153, guid: 2500d437f211b354b965b5493afa33ba, type: 3}
   playerDisplayTransform: {fileID: 945921617}
   playerPrefab: {fileID: 7674451809490385814, guid: 1b499877400fc694bbd485f391d518db, type: 3}
---- !u!114 &7192965091729477439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4049225901063121564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29614a7e29c74d908050ccbbb69567c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allParties: []
 --- !u!224 &7193983467713960037
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21684,6 +21670,7 @@ GameObject:
   - component: {fileID: 8807617284109474904}
   - component: {fileID: 8807617284109474905}
   - component: {fileID: 8807617284109474906}
+  - component: {fileID: 8807617284109474907}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -21802,6 +21789,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dcd437bc8fe534f84b5fe1b5464268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8807617284109474907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807617284109474900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29614a7e29c74d908050ccbbb69567c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allParties: []
 --- !u!114 &8914210493077052974
 MonoBehaviour:
   m_ObjectHideFlags: 0
