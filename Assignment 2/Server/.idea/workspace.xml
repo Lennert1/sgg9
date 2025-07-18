@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/ServerClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/ServerClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/PartyManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/PartyManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

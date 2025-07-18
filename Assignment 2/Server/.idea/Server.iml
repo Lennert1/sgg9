@@ -17,7 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/DjangoCore" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.13 virtualenv at C:\Users\leoul\Documents\Social Gaming\Project\sgg9\Assignment 2\Server\Server-venv" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.11 (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

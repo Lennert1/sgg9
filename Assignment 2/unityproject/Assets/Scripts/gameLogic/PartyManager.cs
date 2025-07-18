@@ -21,8 +21,7 @@ namespace GeoCoordinatePortable.gameLogic
 
         public void fetchParties()
         {
-            List<Party> parties = new List<Party> { new Party(new User("123", "Toast")), new Party(new User("124", "Toasty")), new Party(new User("125", "Toaster")) };
-            allParties = parties;
+            StartCoroutine(RequestAllParties());
 #warning missing: rest call to fetch parties
         }
 
@@ -36,30 +35,12 @@ namespace GeoCoordinatePortable.gameLogic
 
         public void joinParty(int pid)
         {
-#warning missing: rest call to join party
-            //call to join party and let other members know you joined
-            
-            foreach (var p in allParties)
-            {
-                if (p.pid == pid)
-                {
-                    GameManager.Instance.partyData = p;
-                    p.members.Add(GameManager.Instance.usrData.uid);
-                }
-            }
-            
-            loop = true;
-            StartCoroutine(FetchPartiesLoop());
-
+            StartCoroutine(RequestJoinParty(pid));
         }
 
         public void leaveParty()
         {
-#warning missing: rest call to leave party
-            //call to leave party and let other members know you joined
-            GameManager.Instance.partyData.members.Remove(GameManager.Instance.usrData.uid);
-            GameManager.Instance.partyData = null;
-            loop = false;
+            StartCoroutine(RequestLeaveParty());
         }
 
         
@@ -84,11 +65,156 @@ namespace GeoCoordinatePortable.gameLogic
             }
             yield return null;
         }
-        
+
+        public void Start()
+        {
+            loop = true;
+            StartCoroutine(FetchPartiesLoop());
+        }
         
         private void Awake()
         {
             Instance = this;
+        }
+        
+        
+
+        IEnumerator RequestAllParties()
+        {
+            
+            using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/allParties/", "POST"))
+            {
+                /*
+                
+                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes("");
+
+                // To let Unity know which data has been send in the body of the POST request
+                www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                
+                */
+                
+                // For reading the server response
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                // Tell the server, that a json data was sent
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    
+                    
+                    try
+                    {
+                        List<Party> parties = JsonConvert.DeserializeObject<List<Party>>(www.downloadHandler.text);
+                        allParties = parties;
+                        
+                        Debug.Log($"Parties Count: {parties.Count}");
+                    } catch (JsonException e) 
+                    {
+                        Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"{www.error}");
+                }
+            }
+        }
+        
+        [System.Serializable]
+        public class Change
+        {
+            public int pid;
+            public String uid;
+        }
+        IEnumerator RequestJoinParty(int pid)
+        {
+            
+            using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/joinParty/", "POST"))
+            {
+                Change join = new Change{pid = pid, uid = GameManager.Instance.usrData.uid };
+
+                String jsonData = JsonUtility.ToJson(join);
+                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+                // To let Unity know which data has been send in the body of the POST request
+                www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+                
+                
+                // For reading the server response
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                // Tell the server, that a json data was sent
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    
+                    
+                    try
+                    {
+                        Party party = JsonConvert.DeserializeObject<Party>(www.downloadHandler.text);
+                        GameManager.Instance.partyData = party;
+                        GameManager.Instance.usrData.pid = party.pid;
+                        Debug.Log($"Joined Party with pid: {party.pid}");
+                    } catch (JsonException e) 
+                    {
+                        Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"{www.error}");
+                }
+            }
+        }
+        IEnumerator RequestLeaveParty()
+        {
+            
+            using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/leaveParty/", "POST"))
+            {
+                Change join = new Change{pid = GameManager.Instance.partyData.pid, uid = GameManager.Instance.usrData.uid };
+
+                String jsonData = JsonUtility.ToJson(join);
+                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+                // To let Unity know which data has been send in the body of the POST request
+                www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+                
+                
+                // For reading the server response
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                // Tell the server, that a json data was sent
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    
+                    
+                    try
+                    {
+                        GameManager.Instance.partyData = null;
+                        GameManager.Instance.usrData.pid = 0;
+                        Debug.Log($"Left Party");
+                    } catch (JsonException e) 
+                    {
+                        Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"{www.error}");
+                }
+            }
         }
         
     }

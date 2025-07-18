@@ -170,12 +170,13 @@ def partyById(request, pid):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-#TODO Von Mock Datenback auf echte umschreiben
+#TODO Von Mock Datenback auf echte umschreiben bei ServerClass
 @csrf_exempt
 def allParties(request):
     if request.method == "POST":
         all_parties_data = []
 
+        # TODO Parties aus der Datenbank pls
         for party in Parties:
             party_data = {
                 "pid": party.pid,
@@ -184,14 +185,23 @@ def allParties(request):
             }
             all_parties_data.append(party_data)
 
+        print(all_parties_data)
         return JsonResponse(all_parties_data, safe=False)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 @csrf_exempt
-def joinParty(request, pid, uid):
+def joinParty(request):
     if request.method == "POST":
+        pid, uid = 0, "0"
+        try:
+            data = json.loads(request.body)
+            pid = data.get('pid')
+            uid = data.get('uid')
+        except json.JSONDecodeError:
+            return utilities.server_message_response("Invalid Json!", "400", status=400)
+        # TODO Parties aus der Datenbank pls
         result = Parties.join_party(pid, uid)
 
         if result == "Already":
@@ -213,8 +223,16 @@ def joinParty(request, pid, uid):
 
 
 @csrf_exempt
-def leaveParty(request, pid, uid):
+def leaveParty(request):
     if request.method == "POST":
+        pid, uid = 0, "0"
+        try:
+            data = json.loads(request.body)
+            pid = data.get('pid')
+            uid = data.get('uid')
+        except json.JSONDecodeError:
+            return utilities.server_message_response("Invalid Json!", "400", status=400)
+        # TODO Parties aus der Datenbank pls
         result = Parties.leave_party(pid, uid)
 
         if result == "Already":
