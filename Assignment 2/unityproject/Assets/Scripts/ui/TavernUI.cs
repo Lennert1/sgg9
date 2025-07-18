@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GeoCoordinatePortable.gameLogic;
 using Mapbox.Unity.Map.Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -53,7 +54,7 @@ public class TavernUI : UI
     }
 
     public void PressCreateParty() {
-#warning missing: game logic call to create party
+        PartyManager.Instance.createParty();
         Debug.Log("Created Party!");
 
         notInParty.SetActive(false);
@@ -61,8 +62,8 @@ public class TavernUI : UI
         DisplayParty();
     }
 
-    public void PressJoinParty() {
-#warning missing: game logic call to join party
+    public void PressJoinParty(int pid) {
+        PartyManager.Instance.joinParty(pid);
         Debug.Log("Joined Party!");
 
         notInParty.SetActive(false);
@@ -71,7 +72,7 @@ public class TavernUI : UI
     }
 
     public void PressLeaveParty() {
-#warning missing: game logic call to leave party
+        PartyManager.Instance.leaveParty();
         Debug.Log("Left Party!");
 
         notInParty.SetActive(true);
@@ -81,9 +82,7 @@ public class TavernUI : UI
 
     public void DisplayAvailableParties()
     {
-#warning missing: REST-Call to load all parties from this tavern
-        // for testing purposes only:
-        parties = new List<Party>() { new Party(GameManager.Instance.usrData), new Party(new User(9865, "James")), new Party(new User(2354, "Kirk")), new Party(new User(9834, "Rob")) };
+        parties = PartyManager.Instance.fetchParties();
 
         List<Party> filter = new List<Party>();
         foreach (Party p in parties)
