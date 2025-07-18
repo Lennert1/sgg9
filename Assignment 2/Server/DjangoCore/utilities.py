@@ -20,24 +20,22 @@ from bson import ObjectId
 
 def serialize_card(card):
     return {
-        "id": str(card.id),
-        "type": card.type,
-        "lvl": card.lvl,
-        "count": card.count
+        "type": card["type"],
+        "lvl": card["lvl"],
+        "count": card["count"]
     }
 
 def serialize_character(character):
     return {
-        "id": str(character.id),
-        "type": character.type,
-        "lvl": character.lvl,
-        "baseHP": character.baseHP,
-        "cards": [serialize_card(card) for card in character.cards] if character.cards else []
+        "type": character["type"],
+        "lvl": character["lvl"],
+        "hp": character["hp"],
+        "deck": [serialize_card(card) for card in character["deck"]] if character["deck"] else []
     }
 
 def serialize_user(user):
     return {
-        "id": str(user.id),
+        "uid": str(user.id),
         "name": user.name,
         "lvl": user.lvl,
         "gold": user.gold,

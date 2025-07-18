@@ -12,10 +12,10 @@ class Card(EmbeddedModel):
 
 class Character(EmbeddedModel):
     id = ObjectIdAutoField(primary_key=True)
-    type = models.CharField(max_length = 20)
+    type = models.IntegerField()
     lvl = models.IntegerField()
-    baseHP = models.IntegerField()
-    cards = ArrayField(EmbeddedModelField(Card), null=True, blank=True)
+    hp = models.IntegerField()
+    deck = ArrayField(EmbeddedModelField(Card), null=True, blank=True)
 
 
 class User(models.Model):

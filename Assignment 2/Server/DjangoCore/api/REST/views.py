@@ -88,19 +88,24 @@ def register(request):
 
             user = User.objects.create(
                 name = name,
-                lvl = data.get("lvl"),
-                gold = data.get("gold"),
-                upgradePoints = data.get("upgradePoints"),
-                selectedCharacter = data.get("selectedCharacter"),
+                lvl = 1,
+                gold = 0,
+                upgradePoints = 0,
+                selectedCharacter = 0,
                 cards = data.get("cards"),
                 characters = data.get("characters"),
-                friends = data.get("friends")
+                friends = data.get("friendsUID")
             )
+            print("hier")
             user.save()
             print("Anzahl User in DB:", User.objects.count())
 
-            # TODO: Assign UID that does not exist
-            return JsonResponse(user, status=200)
+            print(user.id)
+
+            user_data = utilities.serialize_user(user)
+            print(user_data)
+            return JsonResponse(user_data)
+
         except Exception as e:
             print(e)
             return utilities.server_message_response("received","STATUS", status=400)
@@ -147,7 +152,7 @@ def userById(request):
             print(user_data)
             return JsonResponse(user_data)
         else:
-            return JsonResponse({'error': 'User not found'}, status=404)
+            return utilities.server_message_response("no user with that uid", "ERROR", status=404)
     #else:
     #    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
