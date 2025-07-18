@@ -62,8 +62,14 @@ public class BattleManager : MonoBehaviour, ICardSelector
                         teamCards = new();
                         for (int i = 0; i < battleArena.playerCards.Count; i++)
                         {
-                            if (battleArena.playerCards[i] != null) teamCards.Add(new Card(battleArena.playerCards[i].type, battleArena.playerCards[i].lvl));
+                            if (battleArena.playerCards[i].type != -1)
+                            {
+                                Card c = new Card(battleArena.playerCards[i].type, battleArena.playerCards[i].lvl);
+                                teamCards.Add(c);
+                                Debug.Log($"Card added to Team Cards of type: {c.type}");
+                            }
                         }
+                        Debug.LogWarning($"Played Cards: {teamCards.Count}");
                         battleArenaUI.DisplayTeamCards(teamCards);
 
                         if (oldState == BattleState.Waiting)
@@ -304,6 +310,11 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
 
         EnemyPlayCards();
+
+        foreach (Card c in battleArena.playerCards)
+        {
+            c.type = -1;
+        }
         
         StartCoroutine(StartEvaluationPhase());
     }

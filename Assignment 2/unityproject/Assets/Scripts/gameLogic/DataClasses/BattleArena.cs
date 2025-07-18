@@ -32,7 +32,7 @@ public class BattleArena
         {
             averageLvl += characters[i].lvl;
             playerChecks.Add(false);
-            playerCards.Add(null);
+            playerCards.Add(new Card(-1));
         }
         averageLvl = averageLvl / characters.Count;
 
@@ -49,7 +49,7 @@ public class BattleArena
         for (int i = 0; i < memberCount; i++)
         {
             playerChecks.Add(false);
-            playerCards.Add(null);
+            playerCards.Add(new Card(-1));
         }
     }
 
