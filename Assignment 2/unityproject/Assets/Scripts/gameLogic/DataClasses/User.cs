@@ -1,7 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -28,7 +29,6 @@ public class User
 
     // ========== //
 
-    [JsonConstructor]
     public User(string uid, string name)
     {
         this.uid = uid;
@@ -53,5 +53,28 @@ public class User
         this.characters = characters;
         this.friendsUID = friendsUID;
 
+    }
+
+    [JsonConstructor]
+    public User(string uid, string name, int gold, int upgradePoints, int selectedCharacter, List<Card> cards, List<Character> characters, List<string> friendsUID)
+    {
+        this.uid = uid;
+        this.name = name;
+        this.gold = gold;
+        this.upgradePoints = upgradePoints;
+        this.selectedCharacter = selectedCharacter;
+        this.cards = cards ?? new List<Card>();
+        this.characters = characters ?? new List<Character>();
+        this.friendsUID = friendsUID ?? new List<string>();
+    }
+
+    public override string ToString()
+    {
+        string charactersStr = string.Join(", ", characters.Select(c => c.ToString()));
+        string cardsStr = string.Join(", ", cards.Select(card => card.ToString()));
+        string friendsStr = string.Join(", ", friendsUID);
+
+        return $"User {{ uid: {uid}, name: {name}, gold: {gold}, upgradePoints: {upgradePoints}, selectedCharacter: {selectedCharacter}, " +
+               $"cards: [{cardsStr}], characters: [{charactersStr}], friendsUID: [{friendsStr}] }}";
     }
 }

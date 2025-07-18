@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
                         {
                             if (battleArena.playerCards[i].type != -1)
                             {
-                                Card c = new Card(battleArena.playerCards[i].type, battleArena.playerCards[i].lvl);
+                                Card c = new Card(battleArena.playerCards[i].type, battleArena.playerCards[i].lvl, 1);
                                 teamCards.Add(c);
                                 Debug.Log($"Card added to Team Cards of type: {c.type}");
                             }
@@ -215,7 +215,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         List<Card> ed = new();
         foreach (int i in es.deck)
         {
-            ed.Add(new Card(i));
+            ed.Add(new Card(i, 1, 1));
         }
         int el = 0;
         foreach (Character c in allCharacters) el += c.lvl;

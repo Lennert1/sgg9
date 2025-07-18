@@ -1,7 +1,8 @@
+using Mapbox.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Mapbox.Json;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -33,19 +34,19 @@ public class Character
             case characterType.Assassin:
                 {
                     baseHP = 70;
-                    deck = new List<Card> { new Card(1), new Card(2), new Card(2), new Card(4) };
+                    deck = new List<Card> { new Card(1, 1, 1), new Card(2, 1, 1), new Card(2, 1, 1), new Card(4, 1, 1) };
                     break;
                 }
             case characterType.Paladin:
                 {
                     baseHP = 240;
-                    deck = new List<Card> { new Card(2), new Card(2), new Card(5), new Card(5) };
+                    deck = new List<Card> { new Card(2, 1, 1), new Card(2, 1, 1), new Card(5, 1, 1), new Card(5, 1, 1) };
                     break;
                 }
             case characterType.Shaman:
                 {
                     baseHP = 140;
-                    deck = new List<Card> { new Card(1), new Card(3), new Card(3), new Card(3) };
+                    deck = new List<Card> { new Card(1, 1, 1), new Card(3, 1, 1), new Card(3, 1, 1), new Card(3, 1, 1) };
                     break;
                 }
             case characterType.Wizard:
@@ -60,9 +61,12 @@ public class Character
     }
 
     [JsonConstructor]
-    public Character()
+    public Character(characterType type, int lvl, int hp, List<Card> deck)
     {
-        deck = new();
+        this.type = type;
+        this.lvl = lvl;
+        this.hp = hp;
+        this.deck = deck ?? new List<Card>(); 
     }
 
     public void SetLevel(int lvl)
@@ -74,6 +78,11 @@ public class Character
     public int GetRequiredUpgradePoints()
     {
         return lvl * lvl + 4;
+    }
+
+    public override string ToString()
+    {
+        return $"Character {{ type: {type}, lvl: {lvl}, hp: {hp}, xp: {xp}, deck: [{string.Join(", ", deck.Select(card => card.ToString()))}] }}";
     }
 }
 

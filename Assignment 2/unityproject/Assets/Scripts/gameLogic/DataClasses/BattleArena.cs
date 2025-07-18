@@ -32,7 +32,7 @@ public class BattleArena
         {
             averageLvl += characters[i].lvl;
             playerChecks.Add(false);
-            playerCards.Add(new Card(-1));
+            playerCards.Add(new Card(-1, 1, 1));
         }
         averageLvl = averageLvl / characters.Count;
 
@@ -49,7 +49,7 @@ public class BattleArena
         for (int i = 0; i < memberCount; i++)
         {
             playerChecks.Add(false);
-            playerCards.Add(new Card(-1));
+            playerCards.Add(new Card(-1, 1, 1));
         }
     }
 
@@ -72,13 +72,13 @@ public class BattleArena
 
         List<Card> cards = new List<Card>();
         int i = rnd.Next(0, GameManager.Instance.RewardPool.Count);
-        cards.Add(new Card(GameManager.Instance.RewardPool[i].type, count: averageLvl));
+        cards.Add(new Card(GameManager.Instance.RewardPool[i].type, 1, count: averageLvl));
 
         if (rnd.NextDouble() < 0.1)
         {
             int j = rnd.Next(0, GameManager.Instance.RewardPool.Count - 1);
             if (j >= i) j++;
-            cards.Add(new Card(GameManager.Instance.RewardPool[j].type, count: averageLvl));
+            cards.Add(new Card(GameManager.Instance.RewardPool[j].type, 1, count: averageLvl));
             cards[1].count = averageLvl;
         }
         return cards;

@@ -44,7 +44,7 @@ public class GameAssetManager : MonoBehaviour
         List<Card> l = new();
         for (int i = 1; i < cards.Count; i++)
         {
-            l.Add(new Card(i));
+            l.Add(new Card(i, 1, 1));
         }
         return l;
     }

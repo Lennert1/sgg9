@@ -1,3 +1,4 @@
+using Mapbox.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,12 +14,15 @@ public class Card
 
     // ========== //
 
-    public Card(int type, int lvl = 1, int count = 1)
+    [JsonConstructor]
+    public Card(int type, int lvl, int count)
     {
         this.type = type;
         this.lvl = lvl;
         this.count = count;
     }
+
+    
 
     public int RequiredCardsForUpgrade()
     {
@@ -28,5 +32,10 @@ public class Card
     public void addCards(int i)
     {
         count += i;
+    }
+
+    public override string ToString()
+    {
+        return $"Card {{ type: {type}, lvl: {lvl}, count: {count} }}";
     }
 }

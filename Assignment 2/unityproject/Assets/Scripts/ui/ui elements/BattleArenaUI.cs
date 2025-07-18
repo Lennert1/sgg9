@@ -89,7 +89,7 @@ public class BattleArenaUI : MiniGameUI
                     teamCardDisplayCenter.gameObject.SetActive(true);
 
                     List<Card> enemyCards = new List<Card>();
-                    for (int i = 0; i < GameManager.Instance.partyData.memberCount - 1; i++) enemyCards.Add(new Card(0));
+                    for (int i = 0; i < GameManager.Instance.partyData.memberCount - 1; i++) enemyCards.Add(new Card(0, 1, 1));
                     DisplayEnemyCards(enemyCards);
                     DisplayTeamCards(new List<Card>());
                     break;

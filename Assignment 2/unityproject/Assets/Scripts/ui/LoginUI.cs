@@ -1,4 +1,5 @@
 ﻿using Mapbox.Json;
+using Mapbox.Map;
 using System.Collections;
 
 using TMPro;
@@ -116,8 +117,8 @@ public class LoginUI : UI
                 {  
                     try
                     {
-                        //User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
-                        User userData = JsonConvert.DeserializeObject<User>(www.downloadHandler.text);
+                        User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
+                        //User userData = JsonConvert.DeserializeObject<User>(www.downloadHandler.text);
                         GameManager.Instance.usrData = userData;
                         LoadUI(mapUI);
                     } catch (JsonException e) 
@@ -136,7 +137,22 @@ public class LoginUI : UI
 
     public void pressButton()
     {
-        GameManager.Instance.LoadUserData("12340");
+        //GameManager.Instance.LoadUserData("12340");
+
+        string json = "{\"uid\":\"687a9657126b0b3d65c4d589\",\"name\":\"user1\",\"gold\":100,\"upgradePoints\":5,\"selectedCharacter\":0,\"cards\":[{\"type\":1,\"lvl\":1,\"count\":2},{\"type\":2,\"lvl\":2,\"count\":3}],\"characters\":[{\"type\":0,\"lvl\":1,\"hp\":70,\"deck\":[{\"type\":1,\"lvl\":1,\"count\":1},{\"type\":2,\"lvl\":1,\"count\":1},{\"type\":2,\"lvl\":1,\"count\":1},{\"type\":4,\"lvl\":1,\"count\":1}]},{\"type\":1,\"lvl\":1,\"hp\":240,\"deck\":[{\"type\":2,\"lvl\":1,\"count\":1},{\"type\":2,\"lvl\":1,\"count\":1},{\"type\":5,\"lvl\":1,\"count\":1},{\"type\":5,\"lvl\":1,\"count\":1}]},{\"type\":2,\"lvl\":1,\"hp\":140,\"deck\":[{\"type\":1,\"lvl\":1,\"count\":1},{\"type\":3,\"lvl\":1,\"count\":1},{\"type\":3,\"lvl\":1,\"count\":1},{\"type\":3,\"lvl\":1,\"count\":1}]}],\"friendsUID\":[]}";
+        try
+        {
+            User userData = JsonUtility.FromJson<User>(json);
+            //User userData = JsonConvert.DeserializeObject<User>(json);
+
+            Debug.Log(userData.ToString());
+  
+        }
+        catch (JsonException e)
+        {
+            Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
+        }
+
     }
 
 

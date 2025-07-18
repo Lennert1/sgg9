@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         List<Card> r = new();
         foreach (int i in rewardPool)
         {
-            r.Add(new Card(i));
+            r.Add(new Card(i, 1, 1));
         }
         RewardPool = r;
 
