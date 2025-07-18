@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Server.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/migrations/0002_alter_user_options_rename_cards_character_deck_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/migrations/0003_user_friends_alter_user_id_alter_user_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/migrations/0004_alter_card_id_alter_character_id_alter_user_id.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/migrations/0005_alter_character_type.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
