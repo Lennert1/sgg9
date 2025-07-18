@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mapbox.Json;
+using System.Collections;
 
 using TMPro;
 using UnityEngine;
@@ -57,15 +58,26 @@ public class LoginUI : UI
 
             yield return www.SendWebRequest();
 
+            string response = www.downloadHandler.text;
+            Debug.Log(response);
+
             if (www.result == UnityWebRequest.Result.Success)
             {
-                string response = www.downloadHandler.text;
-                Debug.Log(response);
                 errorMessage.text = "Registration successful! You can login now!";
             }
             else
             {
-                Debug.LogError("Error: " + www.error);
+                if (www.responseCode == 409)
+                {
+                    errorMessage.text = "User already exists!";
+                }
+                else
+                {
+                    errorMessage.text = "An unknown error was found";
+                    Debug.LogError("Error: " + www.error);
+
+                }
+                    
             }
         }
 
@@ -101,10 +113,18 @@ public class LoginUI : UI
             {
                 MapUI mapUI = GameObject.Find("UI").GetComponentInChildren<MapUI>(true);
                 if (mapUI != null)
-                {
-                    User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
-                    GameManager.Instance.usrData = userData;
-                    LoadUI(mapUI);
+                {  
+                    try
+                    {
+                        //User userData = JsonUtility.FromJson<User>(www.downloadHandler.text);
+                        User userData = JsonConvert.DeserializeObject<User>(www.downloadHandler.text);
+                        GameManager.Instance.usrData = userData;
+                        LoadUI(mapUI);
+                    } catch (JsonException e) 
+                    {
+                        Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
+                    }
+                    
                 }
             }
             else
