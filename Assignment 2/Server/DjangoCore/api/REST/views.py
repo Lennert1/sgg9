@@ -51,21 +51,16 @@ def check_login(request):
         return utilities.server_message_response("Invalid Json!", "400", status = 400)
 
     # Class method. Searches all the instances and returns None if user does not exist
-    user = ServerClass.get_user_by_name(username)
+    print("username: ", username)
+    user = User.objects.filter(name=username).first()
 
     if user is None:
         return utilities.server_message_response("User was not found", "404", status=404)
     else:
-        user_data = {
-            "name": user.username,
-            "uid": user.uid,
-            "lvl": user.level,
-            "gold": user.gold,
-            "armorPoints": user.armorPoints,
-            "cards": [{"type": card[0], "lvl": card[1], "count": card[2]} for card in user.listOfCards]
-        }
-        # Sends a Json Response back to the frontend
-        return JsonResponse(user_data, status=200)
+        print("User: ", username)
+        user_data = utilities.serialize_user(user)
+        print(user_data)
+        return JsonResponse(user_data)
 
 # This method is not finished yet
 # This should add an instance to the ServerClass/ database
@@ -86,15 +81,32 @@ def register(request):
 
             # Create user
 
+            cards = [Card(
+                type=card["type"],
+                lvl=card["lvl"],
+                count=card["count"]
+            ) for card in data.get("cards")]
+
+            characters = [Character(
+                type=character["type"],
+                lvl=character["lvl"],
+                hp=character["hp"],
+                deck=[Card(
+                    type=deck_card["type"],
+                    lvl=deck_card["lvl"],
+                    count=deck_card["count"]
+                ) for deck_card in character["deck"]]
+            ) for character in data.get("characters")]
+
             user = User.objects.create(
-                name = name,
-                lvl = 1,
-                gold = 0,
-                upgradePoints = 0,
-                selectedCharacter = 0,
-                cards = data.get("cards"),
-                characters = data.get("characters"),
-                friends = data.get("friendsUID")
+                name=name,
+                lvl=1,
+                gold=0,
+                upgradePoints=0,
+                selectedCharacter=0,
+                cards=cards,
+                characters=characters,
+                friends=data.get("friendsUID")
             )
             print("hier")
             user.save()

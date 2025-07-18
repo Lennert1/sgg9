@@ -16,21 +16,19 @@ def server_message_json(message, identifier="ERROR", extra_message="server"):
         "identifier": identifier
     })
 
-from bson import ObjectId
-
 def serialize_card(card):
     return {
-        "type": card["type"],
-        "lvl": card["lvl"],
-        "count": card["count"]
+        "type": card.type,
+        "lvl": card.lvl,
+        "count": card.count
     }
 
 def serialize_character(character):
     return {
-        "type": character["type"],
-        "lvl": character["lvl"],
-        "hp": character["hp"],
-        "deck": [serialize_card(card) for card in character["deck"]] if character["deck"] else []
+        "type": character.type,
+        "lvl": character.lvl,
+        "hp": character.hp,
+        "deck": [serialize_card(card) for card in character.deck] if character.deck else []
     }
 
 def serialize_user(user):

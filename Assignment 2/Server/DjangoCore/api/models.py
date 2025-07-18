@@ -15,7 +15,7 @@ class Character(EmbeddedModel):
     type = models.IntegerField()
     lvl = models.IntegerField()
     hp = models.IntegerField()
-    deck = ArrayField(EmbeddedModelField(Card), null=True, blank=True)
+    deck = EmbeddedModelArrayField(embedded_model=Card, null=True, blank=True)
 
 
 class User(models.Model):
@@ -25,8 +25,8 @@ class User(models.Model):
     gold = models.IntegerField()
     upgradePoints = models.IntegerField()
     selectedCharacter = models.IntegerField()
-    cards = ArrayField(EmbeddedModelField(Card), null=True, blank=True)
-    characters = ArrayField(EmbeddedModelField(Character), null=True, blank=True)
+    cards = EmbeddedModelArrayField(embedded_model=Card, null=True, blank=True)
+    characters = EmbeddedModelArrayField(embedded_model=Character, null=True, blank=True)
     friends = ArrayField(models.IntegerField(), null=True, blank=True)
 
     def __str__(self):
