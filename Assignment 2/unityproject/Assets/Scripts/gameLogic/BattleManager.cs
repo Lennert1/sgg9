@@ -199,7 +199,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         //
         allCharacters = new List<Character>();
-        foreach (int id in GameManager.Instance.partyData.members)
+        foreach (string id in GameManager.Instance.partyData.members)
         {
             User p = GameManager.Instance.LoadUserData(id);
             allCharacters.Add(p.characters[p.selectedCharacter]);

@@ -39,7 +39,7 @@ public class LoginUI : UI
     // This function sends the input of the text field to the server, where a new account is created
     IEnumerator SendRegistration()
     {
-        User newUser = new User(-1, userInputField.text);
+        User newUser = new User("-1", userInputField.text);
 
         string jsonData = JsonUtility.ToJson(newUser);
 
@@ -136,7 +136,7 @@ public class LoginUI : UI
 
     public void pressButton()
     {
-        GameManager.Instance.LoadUserData(12340);
+        GameManager.Instance.LoadUserData("12340");
     }
 
 

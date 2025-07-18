@@ -77,6 +77,10 @@ WSGI_APPLICATION = 'DjangoCore.wsgi.application'
 
 DATABASES = {
     'default': django_mongodb_backend.parse_uri("mongodb://localhost:27017", db_name="SSG9"),
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #}
 }
 
 

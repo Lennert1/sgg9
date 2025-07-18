@@ -5,10 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/DjangoCore/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/ServerClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/ServerClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/BattleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/BattleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/DataClasses/Party.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/DataClasses/Party.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/DataClasses/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/DataClasses/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/PartyManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/gameLogic/PartyManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/ui/FriendsUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/ui/FriendsUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/ui/LoginUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/ui/LoginUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/ui/TavernUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/ui/TavernUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/scenes/Map.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/scenes/Map.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,24 +74,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/documents/TUM/BSc I_GE/S4/SGLab/sgg9/Assignment 2/Server&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/documents/TUM/BSc I_GE/S4/SGLab/sgg9/Assignment 2/Server",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\leoul\Documents\Social Gaming\Project\sgg9\Assignment 2\Server\DjangoCore\api\REST" />

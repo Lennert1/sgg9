@@ -15,11 +15,11 @@ public class Party
     }
     public int hp;
     public int shield;
-    public List<int> members;
+    public List<string> members;
     public List<int> memberPoIids;
 
     [JsonConstructor]
-    public Party(int pid, List<int> members, List<int> memberPoIids)
+    public Party(int pid, List<string> members, List<int> memberPoIids)
     {
         this.pid = pid;
         this.members = members;
@@ -27,7 +27,7 @@ public class Party
     }
     public Party(User leader)
     {
-        members = new List<int> { leader.uid };
+        members = new List<string> { leader.uid };
         memberPoIids = new List<int> {0};
         hp = leader.characters[0].hp;
         shield = leader.upgradePoints;

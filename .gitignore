@@ -1,0 +1,5 @@
+# Ignore DOTweenSettings.asset
+Assignment 2/unityproject/Assets/Resources/DOTweenSettings.asset
+
+# Ignore Code Coverage Settings.json
+Assignment 2/unityproject/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json

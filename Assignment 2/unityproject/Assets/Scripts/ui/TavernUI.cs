@@ -82,7 +82,8 @@ public class TavernUI : UI
 
     public void DisplayAvailableParties()
     {
-        parties = PartyManager.Instance.fetchParties();
+        PartyManager.Instance.fetchParties();
+        parties = PartyManager.Instance.allParties;
 
         List<Party> filter = new List<Party>();
         foreach (Party p in parties)

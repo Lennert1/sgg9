@@ -78,10 +78,30 @@ class Parties(Enum):
 
     @classmethod
     def get_party_by_pid(cls, pid):
-        for user in cls:
-            if user.pid == pid:
-                return user
+        for party in cls:
+            if party.pid == pid:
+                return party
         return None
+
+    @classmethod
+    def join_party(cls, pid, uid):
+        for party in cls:
+            if party.pid == pid:
+                if uid in party.members:
+                    return "already"
+                party._members.append(uid)
+                return "Success"
+        return "no Party"
+
+    @classmethod
+    def leave_party(cls, pid, uid):
+        for party in cls:
+            if party.pid == pid:
+                if uid in party.members:
+                    party._members.remove(uid)
+                    return "Success"
+                return "Already"
+        return "no Party"
 
 
 

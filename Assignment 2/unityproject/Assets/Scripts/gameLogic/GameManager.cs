@@ -82,12 +82,13 @@ public class GameManager : MonoBehaviour
 
         // User data is loaded locally when a login happens
         // rmv //
-        usrData = new User(1234, "Pony");
+        usrData = new User("1234", "Pony");
         usrData.pid = 1;
         usrData.gold = 2000;
+        usrData.friendsUID = new List<string> { "12234", "1999" };
         // ** //
 
-        LoadUserData();
+        //LoadUserData();
 
         foreach (UI u in allUIs)
         {
@@ -168,7 +169,7 @@ public class GameManager : MonoBehaviour
     }
 
     // load any User by their ID
-    public User LoadUserData(int id)
+    public User LoadUserData(string id)
     {
         return usrData;
 

@@ -29,7 +29,7 @@ public class TestScript : MonoBehaviour
         user.Add("name", "ramo");
         userRequest.Add("uid", "68793229e204ff397a8131ef");
 
-        User t = new User(1234, "Pony", new List<Card>() { new Card(3, 1, 1), new Card(17, 1, 4), new Card(4, 3, 1) }, new List<Character>(), new List<int>());
+        User t = new User("1234", "Pony", new List<Card>() { new Card(3, 1, 1), new Card(17, 1, 4), new Card(4, 3, 1) }, new List<Character>(), new List<string>());
         usr = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(t));
 
         RestServerCaller.Instance.GenericSendCall("api/login/", t);
