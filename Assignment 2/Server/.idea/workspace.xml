@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24698ceb-28b7-4154-b19c-e8fd65e01b86" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/ServerClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/ServerClass.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoCore/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/utilities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/Scripts/TestScript.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../unityproject/Assets/scenes/gameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../unityproject/Assets/scenes/gameScene.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +44,9 @@
     &quot;second&quot;: &quot;88585512-5dd2-4d50-9fc7-2a01b0db08f4&quot;
   }
 }</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
@@ -81,7 +83,6 @@
   <component name="RunManager">
     <configuration name="Server" type="Python.DjangoServer" factoryName="Django server">
       <module name="Server" />
-      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -139,5 +140,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

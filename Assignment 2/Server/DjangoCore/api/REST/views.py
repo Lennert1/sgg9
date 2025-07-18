@@ -164,9 +164,72 @@ def partyById(request, pid):
                 # I dunno where this is even used
                 "memberPoIids": []
             }
-            return JsonResponse(party_data)
+            return JsonResponse(party_data, status=200)
         else:
             return JsonResponse({'error': 'Party not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+#TODO Von Mock Datenback auf echte umschreiben
+@csrf_exempt
+def allParties(request):
+    if request.method == "POST":
+        all_parties_data = []
+
+        for party in Parties:
+            party_data = {
+                "pid": party.pid,
+                "members": [member for member in party.members],
+                "memberPoIids": [poi for poi in party.memberPOI]
+            }
+            all_parties_data.append(party_data)
+
+        return JsonResponse(all_parties_data, safe=False)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+@csrf_exempt
+def joinParty(request, pid, uid):
+    if request.method == "POST":
+        result = Parties.join_party(pid, uid)
+
+        if result == "Already":
+            return JsonResponse({'error': 'User already in Party'}, status=404)
+        elif result == "Success":
+            party = Parties.get_party_by_pid(pid)
+            party_data = {
+                "pid": party.pid,
+                "members": [member for member in party.members],
+                # I dunno where this is even used
+                "memberPoIids": []
+            }
+            return JsonResponse(party_data, status=200)
+        elif result == "no Party":
+            return JsonResponse({'error': f"No Party with pid {pid}"}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+
+@csrf_exempt
+def leaveParty(request, pid, uid):
+    if request.method == "POST":
+        result = Parties.leave_party(pid, uid)
+
+        if result == "Already":
+            return JsonResponse({'error': 'User not in Party'}, status=404)
+        elif result == "Success":
+            party = Parties.get_party_by_pid(pid)
+            party_data = {
+                "pid": party.pid,
+                "members": [member for member in party.members],
+                # I dunno where this is even used
+                "memberPoIids": []
+            }
+            return JsonResponse(party_data, status=200)
+        elif result == "no Party":
+            return JsonResponse({'error': f"No Party with pid {pid}"}, status=404)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 

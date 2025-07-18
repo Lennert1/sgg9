@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Mapbox.Json;
-using Random = System.Random;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Networking;
+using System;
+using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.Networking;
+using WebSocketSharp;
+
 
 namespace GeoCoordinatePortable.gameLogic
 {
-    public class PartyManager
+    public class PartyManager : MonoBehaviour
     {
+        private bool loop = false;
         public static PartyManager Instance { get; private set; }
         
-        private List<Party> allParties;
+        public List<Party> allParties;
 
-        public List<Party> fetchParties()
+        public void fetchParties()
         {
-            List<Party> parties = new List<Party>();
+            List<Party> parties = new List<Party> { new Party(new User("123", "Toast")), new Party(new User("124", "Toasty")), new Party(new User("125", "Toaster")) };
             allParties = parties;
 #warning missing: rest call to fetch parties
-            return parties;
         }
 
         public void createParty()
@@ -44,6 +48,9 @@ namespace GeoCoordinatePortable.gameLogic
                 }
             }
             
+            loop = true;
+            StartCoroutine(FetchPartiesLoop());
+
         }
 
         public void leaveParty()
@@ -52,18 +59,37 @@ namespace GeoCoordinatePortable.gameLogic
             //call to leave party and let other members know you joined
             GameManager.Instance.partyData.members.Remove(GameManager.Instance.usrData.uid);
             GameManager.Instance.partyData = null;
+            loop = false;
         }
 
-        //called if you're in a party and someone else used joinParty(yourPartyid)
-        public void otherJoined(string uid)
+        
+        IEnumerator FetchPartiesLoop()
         {
-            GameManager.Instance.partyData.members.Add(uid);
-        }
+            while (loop)
+            {
+                yield return StartCoroutine(FetchAllParties());
 
-        //called if you're in a party and someone in your Party used leaveParty()
-        public void otherLeft(string uid)
-        {
-            GameManager.Instance.partyData.members.Remove(uid);
+                // Warte 5 Sekunden, bevor die nächste Anfrage gesendet wird
+                yield return new WaitForSeconds(5f);
+            }
         }
+        
+        IEnumerator FetchAllParties()
+        {
+            Debug.Log("fetching all parties");
+            TavernUI tavernUI = GameObject.Find("UI").GetComponentInChildren<TavernUI>(true);
+            if (tavernUI != null)
+            {
+                tavernUI.DisplayAvailableParties();
+            }
+            yield return null;
+        }
+        
+        
+        private void Awake()
+        {
+            Instance = this;
+        }
+        
     }
 }

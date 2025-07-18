@@ -18120,10 +18120,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54683a45cd08a7a45b6cd34f5c962170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeUI: {fileID: 122829357}
+  activeUI: {fileID: 1220223454}
   allUIs:
-  - {fileID: 122829357}
   - {fileID: 1220223454}
+  - {fileID: 122829357}
   - {fileID: 1488783194072946698}
   - {fileID: 2105194308480045843}
   - {fileID: 5610214105595263930}
@@ -18139,13 +18139,13 @@ MonoBehaviour:
     upgradePoints: 0
     cards: []
     characters: []
-    friendsUID: 
+    friendsUID: []
     selectedCharacter: 0
   partyData:
     pid: 0
     hp: 0
     shield: 0
-    members: 
+    members: []
     memberPoIids: 
   currentPoiID: 0
   rewardPool: 070000000a0000000c0000000e0000000f00000010000000120000000100000002000000030000000400000005000000
@@ -19479,6 +19479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4032442749290392818}
   - component: {fileID: 7192965091729477438}
+  - component: {fileID: 7192965091729477439}
   m_Layer: 0
   m_Name: TavernUI
   m_TagString: Untagged
@@ -20805,6 +20806,19 @@ MonoBehaviour:
   partyPrefab: {fileID: 5470456940106659153, guid: 2500d437f211b354b965b5493afa33ba, type: 3}
   playerDisplayTransform: {fileID: 945921617}
   playerPrefab: {fileID: 7674451809490385814, guid: 1b499877400fc694bbd485f391d518db, type: 3}
+--- !u!114 &7192965091729477439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4049225901063121564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29614a7e29c74d908050ccbbb69567c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allParties: []
 --- !u!224 &7193983467713960037
 RectTransform:
   m_ObjectHideFlags: 0
