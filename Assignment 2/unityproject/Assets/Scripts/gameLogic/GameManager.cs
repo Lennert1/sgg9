@@ -85,9 +85,10 @@ public class GameManager : MonoBehaviour
         usrData = new User(1234, "Pony");
         usrData.pid = 1;
         usrData.gold = 2000;
+        usrData.friendsUID = new List<int> { 12234, 1999 };
         // ** //
 
-        LoadUserData();
+        //LoadUserData();
 
         foreach (UI u in allUIs)
         {
