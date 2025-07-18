@@ -17131,8 +17131,9 @@ MonoBehaviour:
     upgradePoints: 0
     cards: []
     characters: []
+    friendsUID: 
     selectedCharacter: 0
-  usrParty:
+  partyData:
     pid: 0
     hp: 0
     shield: 0
@@ -17386,7 +17387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1265646958908124901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18476,7 +18477,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &4083774698738579142
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20729,12 +20730,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ceb0bbc0eb54ad18abe17093ce51051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleState: 0
   allCharacters: []
-  partyShield: 0
-  partyHp: 0
-  maxPartyHp: 0
-  bossHp: 0
-  maxBossHp: 0
+  updateInterval: 1
 --- !u!114 &8807617284109474905
 MonoBehaviour:
   m_ObjectHideFlags: 0

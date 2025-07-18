@@ -28,7 +28,7 @@ public class Party
     public Party(User leader)
     {
         members = new List<int> { leader.uid };
-        memberPoIids = new List<int>();
+        memberPoIids = new List<int> {0};
         hp = leader.characters[0].hp;
         shield = leader.upgradePoints;
     }

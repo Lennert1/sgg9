@@ -25,7 +25,7 @@ namespace GeoCoordinatePortable.gameLogic
         public void createParty()
         {
             Party party = new Party(GameManager.Instance.usrData);
-            GameManager.Instance.usrParty = party;
+            GameManager.Instance.partyData = party;
             
 #warning missing: rest call to register party
         }
@@ -39,7 +39,7 @@ namespace GeoCoordinatePortable.gameLogic
             {
                 if (p.pid == pid)
                 {
-                    GameManager.Instance.usrParty = p;
+                    GameManager.Instance.partyData = p;
                     p.members.Add(GameManager.Instance.usrData.uid);
                 }
             }
@@ -50,20 +50,20 @@ namespace GeoCoordinatePortable.gameLogic
         {
 #warning missing: rest call to leave party
             //call to leave party and let other members know you joined
-            GameManager.Instance.usrParty.members.Remove(GameManager.Instance.usrData.uid);
-            GameManager.Instance.usrParty = null;
+            GameManager.Instance.partyData.members.Remove(GameManager.Instance.usrData.uid);
+            GameManager.Instance.partyData = null;
         }
 
         //called if you're in a party and someone else used joinParty(yourPartyid)
         public void otherJoined(int uid)
         {
-            GameManager.Instance.usrParty.members.Add(uid);
+            GameManager.Instance.partyData.members.Add(uid);
         }
 
         //called if you're in a party and someone in your Party used leaveParty()
         public void otherLeft(int uid)
         {
-            GameManager.Instance.usrParty.members.Remove(uid);
+            GameManager.Instance.partyData.members.Remove(uid);
         }
     }
 }

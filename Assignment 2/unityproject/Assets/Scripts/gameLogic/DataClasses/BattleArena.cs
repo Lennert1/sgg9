@@ -17,6 +17,8 @@ public class BattleArena
     public int rewardUpgradePoints;
 
     [Space]
+    public int teamHP;
+    public int TeamShield;
     public List<bool> playerChecks = new();
     public List<Card> playerCards = new();
     public List<Card> enemyCards = new();
@@ -29,6 +31,8 @@ public class BattleArena
         for (int i = 0; i < characters.Count; i++)
         {
             averageLvl += characters[i].lvl;
+            playerChecks.Add(false);
+            playerCards.Add(null);
         }
         averageLvl = averageLvl / characters.Count;
 
@@ -38,6 +42,21 @@ public class BattleArena
 
         rewardCards = calculateCards(averageLvl);
         rewardUpgradePoints = (int)((0.1 * averageLvl + 0.9) * 10);
+    }
+
+    public BattleArena(int memberCount)
+    {
+        for (int i = 0; i < memberCount; i++)
+        {
+            playerChecks.Add(false);
+            playerCards.Add(null);
+        }
+    }
+
+    [JsonConstructor]
+    public BattleArena()
+    {
+
     }
 
     private List<Card> calculateCards(int averageLvl)
@@ -63,11 +82,5 @@ public class BattleArena
             cards[1].count = averageLvl;
         }
         return cards;
-    }
-
-    [JsonConstructor]
-    public BattleArena()
-    {
-
     }
 }

@@ -111,7 +111,7 @@ public class TavernUI : UI
     public void DisplayParty()
     {
         GameManager.Instance.LoadPartyData();
-        Party party = GameManager.Instance.usrParty;
+        Party party = GameManager.Instance.partyData;
 
         playerDisplay = new();
         for (int i = 0; i < party.memberCount; i++)

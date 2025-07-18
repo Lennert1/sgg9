@@ -15,133 +15,193 @@ public class BattleManager : MonoBehaviour, ICardSelector
     public Dungeon dungeon;
     private BattleArena battleArena;
     private BattleArenaUI battleArenaUI;
-    public Enemy enemy;
     
     //uid, character, PoIID
     public List<Tuple<int, Character, int>> readyList = new List<Tuple<int,Character, int>>();
     private Character selectedCharacter;
     public List<Character> allCharacters;
-
-    public int partyShield;
-    
-    public int partyHp;
-    public int maxPartyHp;
-    
-    public int bossHp;
-    public int maxBossHp;
     //uid, card
     private List<KeyValuePair<int, Card>> chosenCards = new List<KeyValuePair<int, Card>>();
     private List<Card> draw = new List<Card>();
     private List<Card> enemyCards = new();
+    private List<Card> teamCards = new();
 
     private bool playerTurn = true;
-    
-    
+
+
+    #region update data
+
+    private bool running;
+    [SerializeField] private float updateInterval = 1.0f;
+    private int playerIndex;
+
+    private IEnumerator UpdateData()
+    {
+        while (running)
+        {
+            BattleState oldState = battleArena.battleState;
+            battleArena = GameManager.Instance.LoadBattleArena();
+
+            switch (battleArena.battleState)
+            {
+                case BattleState.Waiting:
+                    {
+                        if (playerIndex == 0)
+                        {
+                            CheckReady();
+                        }
+                        break;
+                    }
+                case BattleState.Initial:
+                    {
+                        Debug.LogWarning("A BattleArena shouldn't be in BattleState.Initial");
+                        break;
+                    }
+                case BattleState.SelectCard:
+                    {
+                        teamCards = new();
+                        for (int i = 0; i < battleArena.playerCards.Count; i++)
+                        {
+                            if (battleArena.playerCards[i] != null) teamCards.Add(new Card(battleArena.playerCards[i].type, battleArena.playerCards[i].lvl));
+                        }
+                        battleArenaUI.DisplayTeamCards(teamCards);
+
+                        if (oldState == BattleState.Waiting)
+                        {
+                            if (playerIndex != 0) allReady(battleArena);
+                        }
+                        if (oldState == BattleState.EvaluateRound)
+                        {
+                            Draw();
+                        }
+                        else
+                        {
+                            if (playerIndex == 0)
+                            {
+                                if (teamCards.Count >= GameManager.Instance.partyData.memberCount)
+                                {
+                                    EvaluateTeamCards();
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case BattleState.EvaluateRound:
+                    {
+                        if (playerIndex != 0 && oldState != BattleState.EvaluateRound)
+                        {
+                            battleArenaUI.SwitchToEvaluation(battleArena.playerCards, battleArena.enemyCards, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
+                        }
+                        break;
+                    }
+                case BattleState.Lose:
+                    {
+                        if (playerIndex != 0 && oldState != BattleState.Lose)
+                        {
+                            battleArenaUI.SwitchToEvaluation(battleArena.playerCards, battleArena.enemyCards, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
+                            battleArenaUI.SwitchToLossScreen();
+                            running = false;
+                        }
+                        break;
+                    }
+                case BattleState.Win:
+                    {
+                        if (playerIndex != 0 && oldState != BattleState.Lose)
+                        {
+                            battleArenaUI.SwitchToEvaluation(battleArena.playerCards, battleArena.enemyCards, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
+                            battleArenaUI.SwitchToWinScreen();
+                            running = false;
+                        }
+                        break;
+                    }
+                case BattleState.Rewards:
+                    {
+                        Debug.LogWarning("A BattleArena shouldn't be in BattleState.Rewards");
+                        break;
+                    }
+                default: Debug.LogError($"wtf is BattleState.{battleArena.battleState}"); break;
+            }
+
+            // === //
+
+            yield return new WaitForSeconds(updateInterval);
+        }
+    }
+
+
     #region readyFunctions
     public void Ready()
     {
-        
         Debug.Log("Pressed Ready");
-        //Falls man Leader ist, wird ready gecheckt
-        if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
-        {
-            readyList.Add(new Tuple<int, Character, int>(GameManager.Instance.usrData.uid, GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter], GameManager.Instance.currentPoiID));
-            selectedCharacter = GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter];
-            GameManager.Instance.UpdateCardDeckLevels();
-            CheckReady();
-        }
-        else
-        {
-            /*schickt ready an den Leader und "ausgewählten" Character
+        GameManager.Instance.LoadUserData();
+        GameManager.Instance.LoadPartyData();
 
-            schickeAnLeader(int uid, Character c, int PoIID);
-
-            */
+        for (int i = 0; i < GameManager.Instance.partyData.memberCount; i++) {
+            if (GameManager.Instance.partyData.members[i] == GameManager.Instance.usrData.uid)
+            {
+                playerIndex = i;
+                break;
+            }
         }
-        
-        
+
+        selectedCharacter = GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter];
+        GameManager.Instance.UpdateCardDeckLevels();
+
+        if (GameManager.Instance.LoadBattleArena() == null)
+        {
+            battleArena = new(GameManager.Instance.partyData.memberCount);
+            battleArena.playerChecks[playerIndex] = true;
+            battleArena.battleState = BattleState.Waiting;
+            GameManager.Instance.SaveBattleArena(battleArena);
+        } else {
+            GameManager.Instance.UpdatePlayerFlags(playerIndex, true);
+
+            //Falls man Leader ist, wird ready gecheckt
+            if (GameManager.Instance.usrData.uid == GameManager.Instance.partyData.members[0]) CheckReady();
+        }
+
+        running = true;
+        StartCoroutine(UpdateData());
     }
 
-    //Wird gecallt wenn sich wer anderes ready macht. Wird nur beim Leader aufgerufen
-    public void OtherReady(int uid, Character c, int PoIID)
-    {
-        readyList.Add(new Tuple<int, Character, int>(uid, c, PoIID));
-        CheckReady();
-    }
+    #endregion
     
     public void Unready()
-    {        
-        //Falls man selbst Leader ist
-        if (GameManager.Instance.usrData.pid == GameManager.Instance.usrParty.members[0])
-        {
-            readyList.Remove(new Tuple<int, Character, int>(GameManager.Instance.usrData.pid,
-                GameManager.Instance.usrData.characters[0], GameManager.Instance.currentPoiID));
-        }
-        else
-        {
-            /*schickt an den Leader das man nicht ready ist (soll auch mit exit button aufgerufen werden)
-             
-             schickeAnLeader(int uid);
-             
-             */
-        }
-
-        
-    }
-    
-        //Wenn sich andere unready machen
-        //Wird vom Leader gecallt falls man an einem anderen PoI ist
-    public void OtherUnready(int uid)
     {
-        if (GameManager.Instance.usrData.pid != GameManager.Instance.usrParty.members[0])
-        {
-            //Klickt exit Button
-            return;
-        }
-        
-        foreach (var tuple in readyList)
-        {
-            if (tuple.Item1 != uid)
-            {
-                readyList.Remove(tuple);
-            }
-
-            return;
-        }
+        GameManager.Instance.UpdatePlayerFlags(playerIndex, false);
     }
-    
+
     public void CheckReady()
     {
 
         Debug.Log("Ready Check");
-        //wenn jeder ready ist und beim selben PoI generiert der Leader das dungeon
-        if (readyList.Count == GameManager.Instance.usrParty.memberCount)
-        {
-            int PoIID = GameManager.Instance.currentPoiID;
 
-            foreach (var tuple in readyList)
+        bool ar = true;
+        for (int i = 0; i < battleArena.playerChecks.Count; i++)
+        {
+            if (!battleArena.playerChecks[i] || GameManager.Instance.partyData.memberPoIids[i] != GameManager.Instance.partyData.memberPoIids[0])
             {
-                if (tuple.Item3 != PoIID)
-                {
-                    readyList.Remove(tuple);
-                    /*
-                     ruft OtherUnready() bei Partymitglied beim falschen PoI auf
-                     */
-                    return;
-                }
+                ar = false;
+                break;
             }
-            
-            allReady();
         }
+        if (ar) allReady();
     }
+
     //Beim Leader
     private void allReady()
     {
         //
         allCharacters = new List<Character>();
-        foreach (var tuple in readyList)
+        foreach (int id in GameManager.Instance.partyData.members)
         {
-            allCharacters.Add(tuple.Item2);
+            User p = GameManager.Instance.LoadUserData(id);
+            allCharacters.Add(p.characters[p.selectedCharacter]);
+        }
+        int teamHP = 0;
+        foreach (Character c in allCharacters)
+        {
+            teamHP += c.hp;
         }
 
         int et = new Random().Next(GameAssetManager.Instance.Enemies.Count - 1);
@@ -156,48 +216,29 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
         Enemy e = new Enemy(et, ed, es.baseHP, el);
         battleArena = new BattleArena(allCharacters, e);
-        dungeon = new Dungeon();
+        dungeon = new Dungeon(0);
         dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
-        
-        Debug.Log(battleArena.enemy.hp);
-        /* schicke dungeon an die anderen
-         
-         schickeDungeon();
-         
-         */
-        
-        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
-        StartBattle(battleArena);
-    }
-    //Bei nicht-Leadern
-    public void allReady(Dungeon dungeon)
-    {
-        this.dungeon = dungeon;
-        battleArena = JsonConvert.DeserializeObject<BattleArena>(dungeon.miniGameJson);
-        
-        battleArenaUI = (BattleArenaUI) ((DungeonUI) GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
-        StartBattle(battleArena);
-    }
-    #endregion
-    
-    
-    public void StartBattle(BattleArena battleArena)
-    {
-        partyShield = GameManager.Instance.usrParty.shield;
-        partyHp = 0;
-        foreach (int i in GameManager.Instance.usrParty.members)
-        {
-            User t = GameManager.Instance.LoadUserData(i);
-            partyHp += t.characters[t.selectedCharacter].hp;
-        }
-        maxPartyHp = partyHp;
-        enemy = battleArena.enemy;
-        bossHp = enemy.hp;
-        maxBossHp = enemy.hp;
-        
-        Debug.Log($"Battle Started! Party HP: {partyHp}, Boss HP: {bossHp}");
+
+        battleArena.teamHP = teamHP;
+        battleArena.TeamShield = 0;
+
+        battleArena.battleState = BattleState.SelectCard;
+
+        GameManager.Instance.SaveBattleArena(battleArena);
+
+        battleArenaUI = (BattleArenaUI)((DungeonUI)GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
+        battleArenaUI.InitiateBattleArena(battleArena);
+
         Draw();
     }
+    //Bei nicht-Leadern
+    public void allReady(BattleArena battleArena)
+    {
+        battleArenaUI = (BattleArenaUI)((DungeonUI)GameManager.Instance.allUIs[6]).StartMiniGame(dungeon); //¯\_(ツ)_/¯
+        battleArenaUI.InitiateBattleArena(battleArena);
+        Draw();
+    }
+    #endregion
 
     
     #region CardPlay
@@ -205,7 +246,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         if (selectedCharacter.deck.Count < 4)
         {
-            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, partyHp, partyShield, bossHp);
+            battleArenaUI.SwitchToCardSelector(selectedCharacter.deck, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
         }
         else
         {
@@ -229,7 +270,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
             }
             Debug.Log("Cards:\n" + s);
 
-            battleArenaUI.SwitchToCardSelector(draw, partyHp, partyShield, bossHp);
+            battleArenaUI.SwitchToCardSelector(draw, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
 
         }
     }
@@ -237,121 +278,67 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     public void SelectCard(int p)
     {
-        if (!playerTurn) return; 
-        
-        foreach (var card in chosenCards.Where(card => card.Key == GameManager.Instance.usrData.uid))
-            {
-                chosenCards.Remove(card);
-                chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
-                return;
-            }
+        if (!playerTurn) return;
 
-        chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, draw[p]));
+        Debug.Log($"Selected Card at index: {p}");
 
-        /*
-         Schicke Karte an andere
-         */
-        
-        CheckCards();
-    }
-    //Wird gecallt wenn jemand anderes eine Karte ausgewählt hat
-    public void OtherSelectCard(int uid, Card selectedCard)
-    {
-        foreach (var card in chosenCards.Where(card => card.Key == uid))
-        {
-            chosenCards.Remove(card);
-            chosenCards.Add(new KeyValuePair<int, Card>(GameManager.Instance.usrData.uid, selectedCard));
-            return;
-        }
-        
-        chosenCards.Add(new KeyValuePair<int, Card>(uid, selectedCard));
-        
-        CheckCards();
+#warning remove following line as soon as the call after it is fully implemented!
+        battleArena.playerCards[playerIndex] = draw[p];
+        GameManager.Instance.UpdatePlayerCard(playerIndex, draw[p]);
     }
     
-    private void CheckCards()
+    private void EvaluateTeamCards()
     {
-        if (chosenCards.Count != GameManager.Instance.usrParty.memberCount)
-        {
-            Debug.Log("Some Players have not chosen cards!");
-            return;
-        }
-
         playerTurn = false;
         Debug.Log("Playing Players cards");
-     
-        foreach (var kvp in chosenCards)
+
+        foreach (Card c in teamCards)
         {
-            Card card = kvp.Value;
-            ApplyCardEffectToBoss(card);
+            ApplyCardEffectToBoss(c);
         }
      
-        if (bossHp <= 0)
+        if (battleArena.enemy.hp <= 0)
         {
             EndBattle(true);
             return;
         }
-             
-        //Leader Berechnet Gegnerkarte(n) und schickt sie an Teammitglieder
-             
-        if (GameManager.Instance.usrData.uid == GameManager.Instance.usrParty.members[0])
-        {
-            EnemyPlayCards();
-        }
+
+        EnemyPlayCards();
+        
+        StartCoroutine(StartEvaluationPhase());
     }
 
     
     private void EnemyPlayCards()
     {
         Debug.Log("Playing Enemies cards");
-        enemyCards = new(enemy.deck);
+        enemyCards = new(battleArena.enemy.deck);
         Random r = new();
         while (enemyCards.Count > 3)
         {
             enemyCards.RemoveAt(r.Next(enemyCards.Count));
         }
-        /* Schickt Gegnerkarte an Teammitglieder
-
-        schickeKarten(List<Card> cards);
-
-         */
 
         ApplyCardEffectToParty(enemyCards);
 
-        if (partyHp <= 0)
+        if (battleArena.teamHP <= 0)
         {
             EndBattle(false);
             return;
         }
-
-        Debug.Log("Next round");
-        StartCoroutine(StartEvaluationPhase());
-    }
-    
-    private void EnemyPlayCards(List<Card> cards)
-    {
-        Debug.Log("Playing Enemies cards");
-        
-        ApplyCardEffectToParty(cards);
-
-        if (partyHp <= 0)
-        {
-            EndBattle(false);
-            return;
-        }
-
-        Debug.Log("Next round");
-        StartCoroutine(StartEvaluationPhase());
     }
 
     public IEnumerator StartEvaluationPhase()
     {
-        List<Card> teamCards = new();
-        foreach (var kvp in chosenCards) teamCards.Add(kvp.Value);
-        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, partyHp, partyShield, bossHp);
+        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
+
+        battleArena.playerCards = teamCards;
+        battleArena.enemyCards = enemyCards;
+        battleArena.battleState = BattleState.EvaluateRound;
+        GameManager.Instance.SaveBattleArena(battleArena);
+
         yield return new WaitForSeconds(10);
         playerTurn = true;
-        chosenCards.Clear();
         Draw();
     }
 
@@ -362,9 +349,9 @@ public class BattleManager : MonoBehaviour, ICardSelector
         int damage = scriptable.GetDamage(card.lvl);
         int healing = scriptable.GetHealing(card.lvl);
         int shield = scriptable.GetShield(card.lvl);
-        bossHp -= damage;
-        partyHp += healing;
-        partyShield += shield;
+        battleArena.enemy.hp -= damage;
+        battleArena.teamHP += healing;
+        battleArena.TeamShield += shield;
 
         Debug.Log($"Dealt {damage} damage to Boss\nHealed for {healing} HP\nAdded {shield} Shield");
     }
@@ -378,27 +365,27 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
             int damage = scriptable.GetDamage(card.lvl);
             int healing = scriptable.GetHealing(card.lvl);
-            if (partyShield > damage)
+            if (battleArena.TeamShield > damage)
             {
-                partyShield -= damage;
+                battleArena.TeamShield -= damage;
             }
             else
             {
-                damage -= partyShield;
-                partyShield = 0;
-                partyHp -= damage;
+                damage -= battleArena.TeamShield;
+                battleArena.TeamShield = 0;
+                battleArena.teamHP -= damage;
                 shieldBreak = true;
             }
 
-            partyHp -= damage;
-            bossHp += healing;
+            battleArena.teamHP -= damage;
+            battleArena.enemy.hp += healing;
             if (shieldBreak)
             {
                 Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
             }
             else
             {
-                if (partyShield > 0)
+                if (battleArena.TeamShield > 0)
                 {
                     Debug.Log($"Boss dealt {damage} damage to Party's Shield\nBoss healed for {healing} HP");
                 }
@@ -410,25 +397,28 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
     }
     #endregion
-    
-    
+
+
     //Defeat screen oder rewards hier
     private void EndBattle(bool victory)
     {
-        List<Card> teamCards = new();
-        foreach (var kvp in chosenCards) teamCards.Add(kvp.Value);
-        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, partyHp, partyShield, bossHp);
-        playerTurn = false;
+
         if (victory)
         {
             Debug.Log("Victory!");
+            battleArena.battleState = BattleState.Win;
+            GameManager.Instance.SaveBattleArena(battleArena);
             battleArenaUI.SwitchToWinScreen();
         }
         else
         {
             Debug.Log("Defeat!");
+            battleArena.battleState = BattleState.Lose;
+            GameManager.Instance.SaveBattleArena(battleArena);
             battleArenaUI.SwitchToLossScreen();
         }
+
+        GameManager.Instance.SaveBattleArena(battleArena);
     }
 
     public void CollectRewards()
@@ -452,18 +442,9 @@ public class BattleManager : MonoBehaviour, ICardSelector
     dungeon = null;
     battleArena = null;
     battleArenaUI = null;
-    enemy = null;
     readyList.Clear();
     selectedCharacter = null;
     allCharacters = null;
-
-    partyShield = 0;
-    
-    partyHp = 0;
-    maxPartyHp = 0;
-    
-    bossHp = 0;
-    maxBossHp = 0;
     
     chosenCards.Clear();
     draw.Clear();

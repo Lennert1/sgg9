@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleArenaUI : MiniGameUI, ICardSelector
+public class BattleArenaUI : MiniGameUI
 {
     #region general
 
@@ -50,21 +50,19 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
     {
         base.InitiateMiniGame(ui, d);
 
-        cardSelectors = new List<ICardSelector> { this, BattleManager.Instance };
+        cardSelectors = new List<ICardSelector> { BattleManager.Instance };
 
-        data = JsonConvert.DeserializeObject<BattleArena>(d.miniGameJson);
+        SwitchState(BattleState.Initial);
+    }
+
+    public void InitiateBattleArena(BattleArena battleArena)
+    {
+        data = battleArena;
 
         enemyDisplay.GetComponent<Image>().sprite = GameAssetManager.Instance.ReadEnemy(data.enemy.enemyType).sprite;
 
         bossHpBar.maxValue = data.enemy.hp;
         bossDmgBar.maxValue = data.enemy.hp;
-
-        SwitchState(BattleState.Initial);
-    }
-
-    public void SelectCard(int p)
-    {
-        Debug.Log("Selected Card: " + p);
     }
 
     #region control methods
@@ -91,7 +89,7 @@ public class BattleArenaUI : MiniGameUI, ICardSelector
                     teamCardDisplayCenter.gameObject.SetActive(true);
 
                     List<Card> enemyCards = new List<Card>();
-                    for (int i = 0; i < GameManager.Instance.usrParty.memberCount - 1; i++) enemyCards.Add(new Card(0));
+                    for (int i = 0; i < GameManager.Instance.partyData.memberCount - 1; i++) enemyCards.Add(new Card(0));
                     DisplayEnemyCards(enemyCards);
                     DisplayTeamCards(new List<Card>());
                     break;

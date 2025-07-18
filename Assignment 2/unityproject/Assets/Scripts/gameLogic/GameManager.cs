@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     private MiniGameUI activeMiniGameUI;
 
     public User usrData;
-    public Party usrParty;
+    public Party partyData;
 
     // == 0 if not entered any PoI
     // Assigning eventIDs with following system: 1 to 99 == dungeon, 100 to 199 == taverns, 200 to 299 == shops
@@ -187,7 +187,8 @@ public class GameManager : MonoBehaviour
     public void LoadPartyData()
     {
         // for testing purposes only:
-        usrParty = new Party(usrData);
+        partyData = new Party(usrData);
+        partyData.memberPoIids[0] = currentPoiID;
 
 #warning missing
 
@@ -203,17 +204,18 @@ public class GameManager : MonoBehaviour
         // get partyID and save battleArena to corresponding data base entry
     }
 
-    public BattleArena LoadBattleArena(int partyID) {
+    public BattleArena LoadBattleArena() {
 #warning missing
+        // get partyID and load battleArena to corresponding data base entry
         return tBattleArena;
     }
 
-    public void UpdatePlayerFlags(int partyID, int index, bool value) {
-        // update the bool at the index in playerChecks[] in the BattleArena entry corresponding to the partyID
+    public void UpdatePlayerFlags(int index, bool value) {
+        // get partyID and update the bool at the index in playerChecks[] in the corresponding BattleArena entry
     }
 
-    public void AddPlayerCard(int partyID, Card card) {
-        // add the card to playerCards[] in the BattleArena entry corresponding to the partyID
+    public void UpdatePlayerCard(int index, Card card) {
+        // get partyID and update the card at the index in playerCards[] in the corresponding BattleArena entry
     }
 
     #endregion
@@ -250,14 +252,15 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        usrParty = JsonUtility.FromJson<Party>(response.message);
+        partyData = JsonUtility.FromJson<Party>(response.message);
         //Debug.Log(usrParty);
     }
 
     public void BattleArenaCallback(ServerMessage response) {
         if (response.IsError())
         {
-            Debug.Log("Error");
+            Debug.Log("Battle Arena doesn't exist yet...");
+            tBattleArena = null;
             return;
         }
 
