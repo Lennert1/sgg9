@@ -54,7 +54,7 @@ class ServerClass(Enum):
                 return user
         return None
 
-
+nextpid = 3
 class Parties(Enum):
     PARTY1 = (1, [12340, 5678], [])
     PARTY2 = (2, [5678], [])
@@ -102,6 +102,13 @@ class Parties(Enum):
                     return "Success"
                 return "Already"
         return "no Party"
+
+    @classmethod
+    def create_party(cls, uid):
+        #TODO Party in Datenbank einfügen
+        party = (nextpid, [uid], [])
+        nextpid += 1
+        return -2
 
 
 

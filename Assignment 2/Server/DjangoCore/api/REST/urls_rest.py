@@ -15,5 +15,6 @@ urlpatterns = [
 
     path("allParties/", views.allParties, name="allParties"),
     path("joinParty/", views.joinParty, name="joinParty"),
-    path("leaveParty/", views.leaveParty, name="leaveParty")
+    path("leaveParty/", views.leaveParty, name="leaveParty"),
+    path("createParty/", views.createParty, name="createParty")
 ]

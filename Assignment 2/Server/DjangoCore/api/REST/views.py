@@ -270,4 +270,34 @@ def leaveParty(request):
 
 
 
+@csrf_exempt
+def createParty(request):
+    if request.method == "POST":
+        uid = 0
+        try:
+            data = json.loads(request.body)
+            uid = data.get('uid')
+        except json.JSONDecodeError:
+            return utilities.server_message_response("Invalid Json!", "400", status=400)
+        # TODO Party in Datenbank einfügen
+        result = Parties.create_party(uid)
+
+        if result > 0:
+            party = Parties.get_party_by_pid(result)
+            party_data = {
+                "pid": party.pid,
+                "members": [member for member in party.members],
+                # I dunno where this is even used
+                "memberPoIids": []
+            }
+            return JsonResponse(party_data, status=200)
+        elif result == -1:
+            return JsonResponse({'error': f"Couldn't create Party"}, status=404)
+        elif result == -2:
+            return JsonResponse({'error': f"Not yet implemented on Server"}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+
 

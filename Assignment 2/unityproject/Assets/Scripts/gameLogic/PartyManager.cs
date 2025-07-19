@@ -22,15 +22,15 @@ namespace GeoCoordinatePortable.gameLogic
         public void fetchParties()
         {
             StartCoroutine(RequestAllParties());
-#warning missing: rest call to fetch parties
         }
 
         public void createParty()
         {
             Party party = new Party(GameManager.Instance.usrData);
             GameManager.Instance.partyData = party;
-            
-#warning missing: rest call to register party
+            StartCoroutine(RequestCreateParty());
+            Debug.Log("Using Mock Party");
+#warning missing: Server Implementation
         }
 
         public void joinParty(int pid)
@@ -129,6 +129,12 @@ namespace GeoCoordinatePortable.gameLogic
             public int pid;
             public String uid;
         }
+        
+        [System.Serializable]
+        public class UID
+        {
+            public String uid;
+        }
         IEnumerator RequestJoinParty(int pid)
         {
             
@@ -205,6 +211,50 @@ namespace GeoCoordinatePortable.gameLogic
                         GameManager.Instance.partyData = null;
                         GameManager.Instance.usrData.pid = 0;
                         Debug.Log($"Left Party");
+                    } catch (JsonException e) 
+                    {
+                        Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"{www.error}");
+                }
+            }
+        }
+        IEnumerator RequestCreateParty()
+        {
+            
+            using (UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:8000/api/createParty/", "POST"))
+            {
+                UID create = new UID{uid = GameManager.Instance.usrData.uid };
+
+                String jsonData = JsonUtility.ToJson(create);
+                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+                // To let Unity know which data has been send in the body of the POST request
+                www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+                
+                
+                // For reading the server response
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                // Tell the server, that a json data was sent
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    
+                    
+                    try
+                    {
+                        Party party = JsonConvert.DeserializeObject<Party>(www.downloadHandler.text);
+                        GameManager.Instance.partyData = party;
+                        GameManager.Instance.usrData.pid = party.pid;
+                        Debug.Log($"Created Party with pid: {party.pid}");
                     } catch (JsonException e) 
                     {
                         Debug.Log("Das Json konnte nicht in einen User umgewandelt werden! Liegt das richtige Format vor?");
