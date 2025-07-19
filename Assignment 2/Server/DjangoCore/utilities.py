@@ -43,3 +43,12 @@ def serialize_user(user):
         "characters": [serialize_character(c) for c in user.characters] if user.characters else [],
         "friends": user.friends if user.friends else []
     }
+
+def serialize_party(party):
+    return {
+        "pid": party.pid,
+        "hp": party.hp,
+        "shield": party.shield,
+        "members": party.members if party.members else [],
+        "PoIIDs": party.PoIIDs if party.PoIIDs else [],
+    }

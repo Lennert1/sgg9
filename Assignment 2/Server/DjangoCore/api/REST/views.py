@@ -138,10 +138,39 @@ def updateData(request):
             print(data)
             print(uid)
 
-            # Send the updated data to the database
+            # update user entries
+            cards = [Card(
+                type=card["type"],
+                lvl=card["lvl"],
+                count=card["count"]
+            ) for card in data.get("cards")]
 
-            return utilities.server_message_response("received", "STATUS", status=200)
+            characters = [Character(
+                type=character["type"],
+                lvl=character["lvl"],
+                hp=character["hp"],
+                deck=[Card(
+                    type=deck_card["type"],
+                    lvl=deck_card["lvl"],
+                    count=deck_card["count"]
+                ) for deck_card in character["deck"]]
+            ) for character in data.get("characters")]
+
+            user = User.objects.filter(id=ObjectId(uid)).first()
+            user.name = data.get("name")
+            user.lvl = int(data.get("lvl"))
+            user.gold = int(data.get("gold"))
+            user.upgradePoints = int(data.get("upgradePoints"))
+            user.selectedCharacter = int(data.get("selectedCharacter"))
+            user.cards = cards
+            user.characters = characters
+            user.friends = data.get("friendsUID")
+            user.save()
+
+            user_data = utilities.serialize_user(user)
+            return JsonResponse(user_data)
         except Exception as e:
+            print(e)
             return utilities.server_message_response("received", "STATUS", status=400)
     else:
         return utilities.server_message_response("received", "STATUS", status=405)
@@ -170,24 +199,22 @@ def userById(request):
 
 
 @csrf_exempt
-def partyById(request, pid):
+def partyById(request):
     if request.method == "POST":
-        # Search for user
-        party = Parties.get_party_by_pid(pid)
+        data = json.loads(request.body)
+        pid = ObjectId(data.get("pid"))
+        # Search for party
+        party = Party.objects.filter(id=ObjectId(pid)).first()
         if party is not None:
-            party_data = {
-                "pid": party.pid,
-                "members": [ member for member in party.members],
-                # I dunno where this is even used
-                "memberPoIids": []
-            }
+            #helper function in utility
+            party_data = utilities.serialize_party(party)
             return JsonResponse(party_data, status=200)
         else:
             return JsonResponse({'error': 'Party not found'}, status=404)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-#TODO Von Mock Datenback auf echte umschreiben bei ServerClass
+
 @csrf_exempt
 def allParties(request):
     if request.method == "POST":
@@ -211,29 +238,24 @@ def allParties(request):
 @csrf_exempt
 def joinParty(request):
     if request.method == "POST":
-        pid, uid = 0, "0"
         try:
             data = json.loads(request.body)
             pid = data.get('pid')
-            uid = data.get('uid')
+            uid = ObjectId(data.get('uid'))
         except json.JSONDecodeError:
             return utilities.server_message_response("Invalid Json!", "400", status=400)
-        # TODO Parties aus der Datenbank pls
-        result = Parties.join_party(pid, uid)
 
-        if result == "Already":
-            return JsonResponse({'error': 'User already in Party'}, status=404)
-        elif result == "Success":
-            party = Parties.get_party_by_pid(pid)
-            party_data = {
-                "pid": party.pid,
-                "members": [member for member in party.members],
-                # I dunno where this is even used
-                "memberPoIids": []
-            }
+        party = Party.objects.filter(id=ObjectId(pid)).first()
+        if party is not None:
+            members = party.members
+            members.add(uid)
+            party.members = members
+            party.save()
+            party_data = utilities.serialize_party(party)
             return JsonResponse(party_data, status=200)
-        elif result == "no Party":
-            return JsonResponse({'error': f"No Party with pid {pid}"}, status=404)
+        else:
+            return utilities.server_message_response("Party not found", "ERROR", status=404)
+
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -242,29 +264,21 @@ def joinParty(request):
 @csrf_exempt
 def leaveParty(request):
     if request.method == "POST":
-        pid, uid = 0, "0"
         try:
             data = json.loads(request.body)
             pid = data.get('pid')
-            uid = data.get('uid')
+            uid = ObjectId(data.get('uid'))
         except json.JSONDecodeError:
             return utilities.server_message_response("Invalid Json!", "400", status=400)
-        # TODO Parties aus der Datenbank pls
-        result = Parties.leave_party(pid, uid)
 
-        if result == "Already":
-            return JsonResponse({'error': 'User not in Party'}, status=404)
-        elif result == "Success":
-            party = Parties.get_party_by_pid(pid)
-            party_data = {
-                "pid": party.pid,
-                "members": [member for member in party.members],
-                # I dunno where this is even used
-                "memberPoIids": []
-            }
-            return JsonResponse(party_data, status=200)
-        elif result == "no Party":
-            return JsonResponse({'error': f"No Party with pid {pid}"}, status=404)
+        party = Party.objects.filter(id=ObjectId(pid)).first()
+        if party is not None:
+            members = party.members
+            members.remove(uid)
+            party.members = members
+            party.save()
+
+        return utilities.server_message_response("leaveParty successful", "STATUS", status=200)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -273,28 +287,22 @@ def leaveParty(request):
 @csrf_exempt
 def createParty(request):
     if request.method == "POST":
-        uid = 0
         try:
             data = json.loads(request.body)
-            uid = data.get('uid')
+            uid = ObjectId(data.get('uid'))
+            PoIID = data.get('PoIID')
         except json.JSONDecodeError:
             return utilities.server_message_response("Invalid Json!", "400", status=400)
-        # TODO Party in Datenbank einfügen
-        result = Parties.create_party(uid)
 
-        if result > 0:
-            party = Parties.get_party_by_pid(result)
-            party_data = {
-                "pid": party.pid,
-                "members": [member for member in party.members],
-                # I dunno where this is even used
-                "memberPoIids": []
-            }
-            return JsonResponse(party_data, status=200)
-        elif result == -1:
-            return JsonResponse({'error': f"Couldn't create Party"}, status=404)
-        elif result == -2:
-            return JsonResponse({'error': f"Not yet implemented on Server"}, status=404)
+        party = Party(
+            hp = 0,
+            shield = 0,
+            members=[uid],
+            PoIIDs = [PoIID]
+        )
+        party.save()
+        party_data = utilities.serialize_party(party)
+        return JsonResponse(party_data, status=200)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
