@@ -18,18 +18,6 @@ public class Enemy
         this.lvl = lvl;
         this.hp = (int)((0.9 + (0.1 * lvl)) * hp);
     }
-    public Enemy(int type, int lvl = 1)
-    {
-        enemyType = type;
-        hp = lvl * 100;
-        CreateDeck();
-        this.lvl = lvl;
-    }
-
-    public void CreateDeck()
-    {
-        deck = new();
-    }
     
     [JsonConstructor]
     public Enemy()
