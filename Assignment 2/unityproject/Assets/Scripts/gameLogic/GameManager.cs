@@ -20,13 +20,6 @@ public class GameManager : MonoBehaviour
     }
     private static GameManager instance;
 
-    private API _api;
-
-    public API GetAPI() {
-        return _api;
-    }
-
-
 
     #region fields
 
@@ -70,8 +63,6 @@ public class GameManager : MonoBehaviour
     {
         if (instance != null) Debug.LogError("Multiple Instances of GameManager!");
         else instance = this;
-
-        _api = GameObject.Find("UI").GetComponent<API>();
 
         List<Card> r = new();
         foreach (int i in rewardPool)
