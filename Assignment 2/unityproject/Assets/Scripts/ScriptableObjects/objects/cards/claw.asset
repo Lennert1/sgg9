@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 9
   sprite: {fileID: 21300000, guid: a21cf4d13e28ee444bea0bc1faecaaa6, type: 3}
-  baseDamage: 55
+  baseDamage: 35
   baseHealing: 0
   baseShield: 0
   modifier: 0
