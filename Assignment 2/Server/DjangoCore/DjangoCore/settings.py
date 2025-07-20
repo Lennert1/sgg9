@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 import django_mongodb_backend
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,11 +77,14 @@ WSGI_APPLICATION = 'DjangoCore.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': django_mongodb_backend.parse_uri("mongodb://localhost:27017", db_name="SSG9"),
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': BASE_DIR / 'db.sqlite3',
-    #}
+    'default': {
+        'ENGINE': 'django_mongodb_backend',
+        'NAME': 'sgg9',  # dein DB-Name
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb+srv://lennertmay:<GXqnT2GGdxTkAU77>@cluster0.trm0iwy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+        }
+    }
 }
 
 
