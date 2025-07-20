@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mapbox.Json;
 using UnityEngine;
 
+[Serializable]
 public class Enemy
 {
     public int enemyType;
@@ -18,10 +20,10 @@ public class Enemy
         this.lvl = lvl;
         this.hp = (int)((0.9 + (0.1 * lvl)) * hp);
     }
-    
+
     [JsonConstructor]
     public Enemy()
     {
-        
+
     }
 }

@@ -24,6 +24,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private List<Card> draw = new List<Card>();
     private List<Card> enemyCards = new();
     private List<Card> teamCards = new();
+    private int enemyMaxHP ;
 
 
     #region update data
@@ -63,10 +64,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
                             {
                                 Card c = new Card(battleArena.playerCards[i].type, battleArena.playerCards[i].lvl, 1);
                                 teamCards.Add(c);
-                                Debug.Log($"Card added to Team Cards of type: {c.type}");
                             }
                         }
-                        Debug.LogWarning($"Played Cards: {teamCards.Count}");
                         battleArenaUI.DisplayTeamCards(teamCards);
 
                         if (oldState == BattleState.Waiting)
@@ -135,7 +134,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     #region readyFunctions
     public void Ready()
     {
-        Debug.Log("Pressed Ready");
         GameManager.Instance.LoadUserData();
         GameManager.Instance.LoadPartyData();
 
@@ -176,9 +174,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
     public void CheckReady()
     {
-
-        Debug.Log("Ready Check");
-
         bool ar = true;
         for (int i = 0; i < battleArena.playerChecks.Count; i++)
         {
@@ -221,6 +216,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
         battleArena = new BattleArena(allCharacters, e);
         dungeon = new Dungeon(0);
         dungeon.miniGameJson = JsonConvert.SerializeObject(battleArena);
+
+        enemyMaxHP = e.hp;
 
         battleArena.teamHP = teamHP;
         battleArena.TeamShield = 0;
@@ -274,7 +271,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
             Debug.Log("Cards:\n" + s);
 
             battleArenaUI.SwitchToCardSelector(draw, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
-
         }
     }
 
@@ -283,8 +279,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     {
         if (battleArena.battleState != BattleState.SelectCard) return;
 
-        Debug.Log($"Selected Card at index: {p}");
-
 #warning remove following line as soon as the call after it is fully implemented!
         battleArena.playerCards[playerIndex] = draw[p];
         GameManager.Instance.UpdatePlayerCard(playerIndex, draw[p]);
@@ -292,8 +286,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     private void EvaluateTeamCards()
     {
-        Debug.Log("Playing Players cards");
-
         foreach (Card c in teamCards)
         {
             ApplyCardEffectToBoss(c);
@@ -318,7 +310,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     private void EnemyPlayCards()
     {
-        Debug.Log("Playing Enemies cards");
         enemyCards = new(battleArena.enemy.deck);
         Random r = new();
         while (enemyCards.Count > 3)
@@ -346,6 +337,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
         yield return new WaitForSeconds(10);
         battleArena.battleState = BattleState.SelectCard;
+        foreach (Card c in battleArena.playerCards) c.type = -1;
         GameManager.Instance.SaveBattleArena(battleArena);
         Draw();
     }
@@ -360,8 +352,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
         battleArena.enemy.hp -= damage;
         battleArena.teamHP += healing;
         battleArena.TeamShield += shield;
-
-        Debug.Log($"Dealt {damage} damage to Boss\nHealed for {healing} HP\nAdded {shield} Shield");
     }
 
     private void ApplyCardEffectToParty(List<Card> cards)
@@ -387,6 +377,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
 
             battleArena.teamHP -= damage;
             battleArena.enemy.hp += healing;
+            if (battleArena.enemy.hp > enemyMaxHP) battleArena.enemy.hp = enemyMaxHP;
             if (shieldBreak)
             {
                 Debug.Log($"Boss broke the shield and dealt {damage} damage to Party\nBoss healed for {healing} HP");
@@ -415,14 +406,12 @@ public class BattleManager : MonoBehaviour, ICardSelector
         battleArena.outOfUse = true;
         if (victory)
         {
-            Debug.Log("Victory!");
             battleArena.battleState = BattleState.Win;
             GameManager.Instance.SaveBattleArena(battleArena);
             battleArenaUI.SwitchToWinScreen();
         }
         else
         {
-            Debug.Log("Defeat!");
             battleArena.battleState = BattleState.Lose;
             GameManager.Instance.SaveBattleArena(battleArena);
             battleArenaUI.SwitchToLossScreen();
