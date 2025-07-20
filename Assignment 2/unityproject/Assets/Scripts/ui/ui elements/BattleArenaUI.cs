@@ -247,7 +247,7 @@ public class BattleArenaUI : MiniGameUI
     }
 
     public void ExitArena() {
-        GameManager.Instance.SetUIActive(GameManager.Instance.allUIs[1]); // ¯\_(ツ)_/¯
+        GameManager.Instance.SetUIActive(GameManager.Instance.allUIs[0]); // ¯\_(ツ)_/¯
     }
 
     public void CollectRewards() {
