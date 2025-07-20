@@ -35,7 +35,7 @@ public class GameAssetManager : MonoBehaviour
 
     public CardScriptableObject ReadCard(int id)
     {
-        if (id < cards.Count) return cards[id];
+        if (id < cards.Count && id >= 0) return cards[id];
         else return defaultCard;
     }
 
@@ -51,7 +51,7 @@ public class GameAssetManager : MonoBehaviour
 
     public EnemyScriptableObject ReadEnemy(int id)
     {
-        if (id < enemies.Count) return enemies[id];
+        if (id < enemies.Count && id >= 0) return enemies[id];
         else return null;
     }
 

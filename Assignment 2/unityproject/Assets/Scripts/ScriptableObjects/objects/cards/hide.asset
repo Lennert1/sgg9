@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 13
   sprite: {fileID: 21300000, guid: 8968d2873aea549419d4696830b1db3a, type: 3}
   baseDamage: 0
-  baseHealing: 120
+  baseHealing: 250
   baseShield: 0
   modifier: 0
   modifierValue: 1
