@@ -45,7 +45,7 @@ namespace gamelogic.ServerClasses
         {
             StartCoroutine(GetUserByID(id, onSuccess));
         }*/
-        public void GetUserByIdRequestCall(int id, Action<User> onSuccess)
+        public void GetUserByIdRequestCall(string id, Action<User> onSuccess)
         {
             StartCoroutine(GetUserByID(id, onSuccess));
         }
@@ -133,25 +133,39 @@ namespace gamelogic.ServerClasses
 
         // Corresponding method for Game manager LoadUserData(id) function
         // Every loaded user is first stored in loadedUser variable cuz Idk how to make that better
-        private IEnumerator GetUserByID(int id, Action<User> onSuccess)
+        private IEnumerator GetUserByID(string id, Action<User> onSuccess)
         {
-            string url = "http://127.0.0.1:8000/api/userById/" + id + "/";
-            UnityWebRequest request = UnityWebRequest.Get(url);
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
+            IdData idData = new IdData
             {
-                string json = request.downloadHandler.text;
-                Debug.Log("Response: " + json);
+                uid = id
+            };
+            string jsonData = JsonUtility.ToJson(idData);
 
-                // To json
-                User user = JsonUtility.FromJson<User>(json);
-                onSuccess?.Invoke(user);
-            }
-            else
+            string url = "http://127.0.0.1:8000/api/userById/";
+
+            using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
             {
-                Debug.LogError("Error: " + request.error);
-                onSuccess?.Invoke(null);
+                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+                // To let Unity know which data has been send in the body of the POST request
+                www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+                // For reading the server response
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                // Tell the server, that a json data was sent
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    Debug.Log("Response: " + www.downloadHandler.text);
+                }
+                else
+                {
+                    Debug.LogError("Error: " + www.error);
+                }
             }
         }
 
@@ -188,5 +202,11 @@ namespace gamelogic.ServerClasses
         }
 
 
+    }
+
+    [Serializable]
+    public class IdData
+    {
+        public string uid;
     }
 }
