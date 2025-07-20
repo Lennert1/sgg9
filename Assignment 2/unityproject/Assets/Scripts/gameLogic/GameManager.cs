@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     #region fields
 
     /* allUIs Indices:
-    0: LoginUI
-    1: MapUI
+    0: MapUI
+    1: LoginUI
     2: Profile
     3: Inventory
     4: CharacterMenu
@@ -203,10 +203,12 @@ public class GameManager : MonoBehaviour
     }
 
     public void UpdatePlayerFlags(int index, bool value) {
+#warning missing
         // get partyID and update the bool at the index in playerChecks[] in the corresponding BattleArena entry
     }
 
     public void UpdatePlayerCard(int index, Card card) {
+#warning missing
         // get partyID and update the card at the index in playerCards[] in the corresponding BattleArena entry
     }
 
