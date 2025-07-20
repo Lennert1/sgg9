@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
     #region data memory
 
     private User tUser;
-    private User loadedUser;
     private BattleArena tBattleArena;
 
     #endregion
@@ -162,13 +161,10 @@ public class GameManager : MonoBehaviour
     // load any User by their ID
     public User LoadUserData(string id)
     {
-        return usrData;
+        //return usrData;
 
-#warning missing
-
-        // Correct method
-        /*RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);
-        return loadedUser;*/
+        RestServerCaller.Instance.GetUserByIdRequestCall(id, SetLoadedUser);
+        return tUser;
     }
 
     public void SaveUserData()
@@ -268,7 +264,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("User could not been found!");
             return;
         }
-        loadedUser = user;
+        tUser = user;
     }
 
     #endregion
