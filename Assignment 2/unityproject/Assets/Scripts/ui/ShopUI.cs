@@ -25,7 +25,7 @@ public class ShopUI : UI
     int STRENGTH_PRICE = 20; */
 
     Dictionary<int, int> priceMap = new Dictionary<int, int>{
-        { 1, 10 }, { 2, 20 }, { 3, 25 }, { 4, 15 }, { 5, 10 }, { 6, 20 }
+        { 1, 10 }, { 2, 20 }, { 3, 25 }, { 4, 15 }, { 5, 10 }, { 16, 20 }
     };
 
     int shopLVL = 4;
@@ -128,7 +128,7 @@ public class ShopUI : UI
 
     public void BuyStrengthPotionButtonClicked()
     {
-        BuyItem(6);
+        BuyItem(16);
     }
 
 }

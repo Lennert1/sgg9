@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ad66d866f01c748b4eb73398de59e0, type: 3}
   m_Name: mace
   m_EditorClassIdentifier: 
-  id: 6
+  id: 16
   sprite: {fileID: 21300000, guid: dc06f5bbc951f1d4a8c72c7525efeb67, type: 3}
-  baseDamage: 180
+  baseDamage: 140
   baseHealing: 0
   baseShield: 0
   modifier: 0

@@ -34,19 +34,19 @@ public class Character
             case characterType.Assassin:
                 {
                     baseHP = 70;
-                    deck = new List<Card> { new Card(1, 1, 1), new Card(2, 1, 1), new Card(2, 1, 1), new Card(4, 1, 1) };
+                    deck = new List<Card> { new Card(1, 1, 1), new Card(10, 1, 1), new Card(18, 1, 1), new Card(4, 1, 1) };
                     break;
                 }
             case characterType.Paladin:
                 {
                     baseHP = 240;
-                    deck = new List<Card> { new Card(2, 1, 1), new Card(2, 1, 1), new Card(5, 1, 1), new Card(5, 1, 1) };
+                    deck = new List<Card> { new Card(2, 1, 1), new Card(16, 1, 1), new Card(5, 1, 1), new Card(5, 1, 1) };
                     break;
                 }
             case characterType.Shaman:
                 {
                     baseHP = 140;
-                    deck = new List<Card> { new Card(1, 1, 1), new Card(3, 1, 1), new Card(3, 1, 1), new Card(3, 1, 1) };
+                    deck = new List<Card> { new Card(15, 1, 1), new Card(3, 1, 1), new Card(3, 1, 1), new Card(3, 1, 1) };
                     break;
                 }
             case characterType.Wizard:
