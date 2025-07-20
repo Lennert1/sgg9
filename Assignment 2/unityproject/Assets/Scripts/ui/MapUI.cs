@@ -1,4 +1,5 @@
 
+using Mapbox.Examples;
 using Mapbox.Unity.Location;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,15 @@ public class MapUI : UI
 
     [SerializeField] private TextMeshProUGUI joinLabel;
 
+    [SerializeField] GameObject playerPrefab;
+    private GameObject playerInstance;
+    [SerializeField] CameraFollow cameraFollowScript;
+
+    //[SerializeField] private EventSpawner eventSpawner;
+
+    [SerializeField] GameObject markerContainer;
+
+
     /* Ensures that eventPanelInRange and eventPanelNOTInRange cannot be active at the same time */
     bool isEventPanelActive = false;
 
@@ -26,12 +36,31 @@ public class MapUI : UI
     {
         base.SetActive(b);
         // Load User data to the UI
-        User userData = GameManager.Instance.usrData;
-        if (userData != null)
+        if (b)
         {
-            levelText.text = "LVL " + userData.lvl.ToString();
-            usernameText.text = userData.name;
+            User userData = GameManager.Instance.usrData;
+            if (userData != null)
+            {
+                levelText.text = "LVL " + userData.lvl.ToString();
+                usernameText.text = userData.name;
+            }
+
+            if (playerInstance == null)
+            {
+                playerInstance = Instantiate(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                cameraFollowScript.SetPlayer(playerInstance.transform);
+                Debug.Log("Player Target instantiated!");
+            }
+
+            var spawnScripts = GameObject.Find("EventSpawner").GetComponents<SpawnOnMap>();
+
+            foreach (var script in spawnScripts)
+            {
+                script.enabled = true;
+            }
+
         }
+
     }
 
     /* If the user is in range while clicking on a event pointer, they can start the event */

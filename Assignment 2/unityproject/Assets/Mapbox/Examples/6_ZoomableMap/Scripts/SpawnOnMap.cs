@@ -3,7 +3,6 @@
 	using UnityEngine;
 	using Mapbox.Utils;
 	using Mapbox.Unity.Map;
-	using Mapbox.Unity.MeshGeneration.Factories;
 	using Mapbox.Unity.Utilities;
 	using System.Collections.Generic;
 
@@ -27,8 +26,11 @@
 
 		[SerializeField] Transform markerContainer;
 
+		bool spawned = false;
+
 		void Start()
 		{
+			if (spawned) return;
 			_locations = new Vector2d[_locationStrings.Length];
 			_spawnedObjects = new List<GameObject>();
 			for (int i = 0; i < _locationStrings.Length; i++)

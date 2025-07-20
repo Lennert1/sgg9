@@ -33,4 +33,11 @@ public class CameraFollow : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(60f, 0f, 0f);
         lastPlayerPosition = playerTargetTransform.position;
     }
+
+    public void SetPlayer(Transform newPlayerTransform)
+    {
+        playerTargetTransform = newPlayerTransform;
+        lastPlayerPosition = newPlayerTransform.position;
+    }
+
 }
