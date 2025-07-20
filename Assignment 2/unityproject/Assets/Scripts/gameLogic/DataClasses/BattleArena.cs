@@ -8,6 +8,7 @@ using UnityEngine;
 public class BattleArena
 {
     public int partyID;
+    public bool outOfUse;
 
     [Space]
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Mapbox.Json;
 using Random = System.Random;
@@ -153,7 +152,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
         selectedCharacter = GameManager.Instance.usrData.characters[GameManager.Instance.usrData.selectedCharacter];
         GameManager.Instance.UpdateCardDeckLevels();
 
-        if (GameManager.Instance.LoadBattleArena() == null)
+        if (GameManager.Instance.LoadBattleArena() == null || GameManager.Instance.LoadBattleArena().outOfUse)
         {
             battleArena = new(GameManager.Instance.partyData.memberCount);
             battleArena.playerChecks[playerIndex] = true;
@@ -413,7 +412,9 @@ public class BattleManager : MonoBehaviour, ICardSelector
     //Defeat screen oder rewards hier
     private void EndBattle(bool victory)
     {
-
+        battleArenaUI.SwitchToEvaluation(teamCards, enemyCards, battleArena.teamHP, battleArena.TeamShield, battleArena.enemy.hp);
+        running = false;
+        battleArena.outOfUse = true;
         if (victory)
         {
             Debug.Log("Victory!");
@@ -428,8 +429,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
             GameManager.Instance.SaveBattleArena(battleArena);
             battleArenaUI.SwitchToLossScreen();
         }
-
-        GameManager.Instance.SaveBattleArena(battleArena);
     }
 
     public void CollectRewards()
