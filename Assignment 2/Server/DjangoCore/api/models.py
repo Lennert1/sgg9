@@ -47,7 +47,7 @@ class Party(models.Model):
     pid = ObjectIdAutoField(primary_key=True)
     hp = models.IntegerField()
     shield = models.IntegerField()
-    members = ArrayField(ObjectIdField, null=True, blank=True)
+    members = ArrayField(ObjectIdField(), null=True, blank=True)
     PoIIds = ArrayField(models.IntegerField(), null=True, blank=True)
 
 

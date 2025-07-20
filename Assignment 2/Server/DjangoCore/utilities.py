@@ -31,6 +31,14 @@ def serialize_character(character):
         "deck": [serialize_card(card) for card in character.deck] if character.deck else []
     }
 
+def serialize_enemy(enemy):
+    return {
+        "enemyType": enemy.type,
+        "lvl": enemy.lvl,
+        "hp": enemy.hp,
+        "deck": [serialize_card(card) for card in enemy.deck] if enemy.deck else []
+    }
+
 def serialize_user(user):
     return {
         "uid": str(user.id),
@@ -52,3 +60,18 @@ def serialize_party(party):
         "members": party.members if party.members else [],
         "PoIIDs": party.PoIIDs if party.PoIIDs else [],
     }
+
+def serialize_battle_arena(battleArena):
+    return {
+        "partyID": battleArena.pid,
+        "enemy": serialize_enemy(battleArena.enemy),
+        "rewardGold": battleArena.rewardGold,
+        "rewardCards": [serialize_card(card)for card in battleArena.rewardCards] if battleArena.rewardCards else [],
+        "rewardUpgradePoints": battleArena.rewardUpgradePoints,
+        "teamHP": battleArena.teamHP,
+        "teamShield": battleArena.teamShield,
+        "playerChecks": battleArena.playerChecks,
+        "playerCards": [serialize_card(card) for card in battleArena.playerCards] if battleArena.playerCards else [],
+        "enemyCards": [serialize_card(card) for card in battleArena.enemyCards] if battleArena.enemyCards else [],
+        "battleState": battleArena.battleState,
+        }

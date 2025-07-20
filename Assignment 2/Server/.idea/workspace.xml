@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/urls_rest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/REST/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCore/api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/api/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoCore/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCore/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -134,7 +135,8 @@
       <workItem from="1752673599185" duration="6475000" />
       <workItem from="1752752965136" duration="14140000" />
       <workItem from="1752842944625" duration="10757000" />
-      <workItem from="1752940637654" duration="4504000" />
+      <workItem from="1752940637654" duration="4656000" />
+      <workItem from="1753016589823" duration="4509000" />
     </task>
     <servers />
   </component>

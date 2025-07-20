@@ -7,6 +7,7 @@ from ServerClass import ServerClass, Parties, ServerUtility
 import json
 import utilities
 from api.models import *
+from utilities import serialize_party
 
 
 # Create your views here.
@@ -220,13 +221,9 @@ def allParties(request):
     if request.method == "POST":
         all_parties_data = []
 
-        # TODO Parties aus der Datenbank pls
-        for party in Parties:
-            party_data = {
-                "pid": party.pid,
-                "members": [member for member in party.members],
-                "memberPoIids": [poi for poi in party.memberPOI]
-            }
+        all_parties = Party.objects.filter()
+        for party in all_parties:
+            party_data = serialize_party(party)
             all_parties_data.append(party_data)
 
         print(all_parties_data)
@@ -248,7 +245,7 @@ def joinParty(request):
         party = Party.objects.filter(id=ObjectId(pid)).first()
         if party is not None:
             members = party.members
-            members.add(uid)
+            members.append(uid)
             party.members = members
             party.save()
             party_data = utilities.serialize_party(party)
@@ -307,5 +304,85 @@ def createParty(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
+####################################-Battle Arena-########################################
+@csrf_exempt
+def getBattleArena(request):
+    try:
+        data = json.loads(request.body)
+        pid = ObjectId(data.get('pid'))
+    except json.JSONDecodeError:
+        return utilities.server_message_response("Invalid Json!", "400", status=400)
+
+    battleArena = BattleArena.objects.get(pid=ObjectId(pid))
+    ba_data = utilities.serialize_battle_arena(battleArena)
+    return JsonResponse(ba_data, status=200)
 
 
+@csrf_exempt
+def updateBattleArena(request):
+    try:
+        data = json.loads(request.body)
+        pid = ObjectId(data.get('pid'))
+    except json.JSONDecodeError:
+        return utilities.server_message_response("Invalid Json!", "400", status=400)
+
+    battleArena = BattleArena.objects.get(pid=ObjectId(pid))
+
+
+
+
+@csrf_exempt
+def createBattleArena(request):
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return utilities.server_message_response("Invalid Json!", "400", status=400)
+
+    en = data.get("enemy")
+    enemy = Enemy(
+        type = en["type"],
+        lvl = en["level"],
+        hp = en["hp"],
+        deck = [Card(
+            type=deck_card["type"],
+            lvl=deck_card["lvl"],
+            count=deck_card["count"]
+        ) for deck_card in en["deck"]]
+    )
+
+    rewardCards = [Card(
+        type = card["type"],
+        lvl = card["level"],
+        count = card["count"]
+    )for card in data.get("rewardCards")]
+
+    playerCards = [Card(
+        type=card["type"],
+        lvl=card["level"],
+        count=card["count"]
+    )for card in data.get("playerCards")]
+
+    enemyCards = [Card(
+        type=card["type"],
+        lvl=card["level"],
+        count=card["count"]
+    ) for card in data.get("enemyCards")]
+
+    battleArena = BattleArena.objects.create(
+        pid = ObjectId(data.get('pid')),
+        enemy = enemy,
+        rewardGold = data.get("rewardGold"),
+        rewardCards = rewardCards,
+        rewardUpgradePoints = data.get("rewardUpgradePoints"),
+        teamHP = data.get("teamHP"),
+        teamShield = data.get("teamShield"),
+        playerChecks = data.get("playerChecks"),
+        playerCards = playerCards,
+        enemyCards = enemyCards,
+        battleState = data.get("battleState")
+    )
+    battleArena.save()
+
+    ba_data = utilities.serialize_battle_arena(battleArena)
+    return JsonResponse(ba_data, status=200)

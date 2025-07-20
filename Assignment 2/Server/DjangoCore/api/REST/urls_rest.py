@@ -16,5 +16,8 @@ urlpatterns = [
     path("allParties/", views.allParties, name="allParties"),
     path("joinParty/", views.joinParty, name="joinParty"),
     path("leaveParty/", views.leaveParty, name="leaveParty"),
-    path("createParty/", views.createParty, name="createParty")
+    path("createParty/", views.createParty, name="createParty"),
+    path("getBattleArena/", views.getBattleArena, name="getBattleArena"),
+    path("updateBattleArena/", views.updateBattleArena, name="updateBattleArena"),
+    path("createBattleArena/", views.createBattleArena, name="createBattleArena"),
 ]
