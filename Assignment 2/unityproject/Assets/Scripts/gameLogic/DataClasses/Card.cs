@@ -20,9 +20,7 @@ public class Card
         this.type = type;
         this.lvl = lvl;
         this.count = count;
-    }
-
-    
+    }    
 
     public int RequiredCardsForUpgrade()
     {

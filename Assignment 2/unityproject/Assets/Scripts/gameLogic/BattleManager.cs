@@ -25,8 +25,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     private List<Card> enemyCards = new();
     private List<Card> teamCards = new();
 
-    private bool playerTurn = true;
-
 
     #region update data
 
@@ -255,11 +253,11 @@ public class BattleManager : MonoBehaviour, ICardSelector
         }
         else
         {
-            this.draw = new List<Card>();
+            draw = new List<Card>();
 
             foreach (Card card in selectedCharacter.deck)
             {
-                draw.Add(card);
+                draw.Add(new Card(card.type, card.lvl, 1));
             }
             Random random = new Random();
 
@@ -283,7 +281,7 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     public void SelectCard(int p)
     {
-        if (!playerTurn) return;
+        if (battleArena.battleState != BattleState.SelectCard) return;
 
         Debug.Log($"Selected Card at index: {p}");
 
@@ -294,7 +292,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     private void EvaluateTeamCards()
     {
-        playerTurn = false;
         Debug.Log("Playing Players cards");
 
         foreach (Card c in teamCards)
@@ -348,7 +345,8 @@ public class BattleManager : MonoBehaviour, ICardSelector
         GameManager.Instance.SaveBattleArena(battleArena);
 
         yield return new WaitForSeconds(10);
-        playerTurn = true;
+        battleArena.battleState = BattleState.SelectCard;
+        GameManager.Instance.SaveBattleArena(battleArena);
         Draw();
     }
 
@@ -458,8 +456,6 @@ public class BattleManager : MonoBehaviour, ICardSelector
     
     chosenCards.Clear();
     draw.Clear();
-
-    playerTurn = true;
         
     }
 }
